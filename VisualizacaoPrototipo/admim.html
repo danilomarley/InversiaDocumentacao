@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResolvAI — Painel Administrativo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {
+    --pri: #7B5EA7; --pri-lt: #EFE8FC; --pri-dk: #5B3F87;
+    --dk: #0F1C2E; --bg: #F4F2F7; --wh: #FFFFFF;
+    --mu: #6B727F; --bo: #E5E7EB; --su: #10B981; --su-lt: #ECFDF5;
+    --wa: #F59E0B; --wa-lt: #FFFBEB; --da: #EF4444; --da-lt: #FEE2E2;
+    --bl: #3B82F6; --bl-lt: #EFF6FF;
+    --sd: #1A2D48; --gr: #FAFAFA;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar { width: 260px; min-width: 260px; background: var(--dk); height: 100vh; display: flex; flex-direction: column; padding: 24px 0; }
+  .sidebar-logo { display: flex; align-items: center; gap: 12px; padding: 0 24px 32px; }
+  .logo-icon { width: 40px; height: 40px; background: var(--pri); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #fff; }
+  .logo-text strong { color: #fff; font-size: 15px; display: block; letter-spacing: -0.3px; }
+  .logo-text span { color: var(--pri); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .nav-section { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: rgba(255,255,255,0.3); padding: 16px 24px 8px; font-weight: 600; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 24px; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 13px; transition: all 0.15s; border-left: 3px solid transparent; }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.9); }
+  .nav-item.active { background: rgba(123,94,167,0.15); color: #C4B5FD; border-left-color: var(--pri); font-weight: 600; }
+  .nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+  .nav-item .badge-nav { margin-left: auto; background: var(--da); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
+  .sidebar-bottom { margin-top: auto; padding: 16px 20px; }
+  .back-link { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.4); font-size: 12px; cursor: pointer; padding: 8px 4px; transition: color 0.15s; text-decoration: none; margin-bottom: 12px; }
+  .back-link:hover { color: rgba(255,255,255,0.8); }
+  .user-badge { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+  .user-avatar { width: 36px; height: 36px; background: var(--pri); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .user-info strong { display: block; color: #fff; font-size: 12px; }
+  .user-info span { color: var(--mu); font-size: 10px; }
+
+  /* MAIN */
+  .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-header { margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; }
+  .page-header div h1 { font-size: 22px; font-weight: 700; color: var(--dk); }
+  .page-header div p { color: var(--mu); font-size: 13px; margin-top: 4px; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; font-family: inherit; }
+  .btn:hover { opacity: 0.88; }
+  .btn-pri { background: var(--pri); color: #fff; }
+  .btn-green { background: var(--su); color: #fff; }
+  .btn-red { background: var(--da-lt); color: var(--da); }
+  .btn-warn { background: var(--wa-lt); color: #92400E; }
+  .btn-ghost { background: var(--wh); color: var(--mu); border: 1px solid var(--bo); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 6px; }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .badge-green { background: var(--su-lt); color: var(--su); }
+  .badge-red { background: var(--da-lt); color: var(--da); }
+  .badge-yellow { background: var(--wa-lt); color: #92400E; }
+  .badge-purple { background: var(--pri-lt); color: var(--pri); }
+  .badge-blue { background: var(--bl-lt); color: var(--bl); }
+  .badge-gray { background: #F3F4F6; color: var(--mu); }
+
+  /* KPI */
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+  .kpi-card { background: var(--wh); border-radius: 12px; padding: 20px; border-left: 4px solid var(--pri); position: relative; }
+  .kpi-card .num { font-size: 26px; font-weight: 700; color: var(--dk); margin-bottom: 4px; }
+  .kpi-card .label { font-size: 11px; color: var(--mu); text-transform: uppercase; letter-spacing: 0.4px; }
+  .kpi-card .delta { font-size: 11px; margin-top: 8px; font-weight: 600; }
+  .kpi-card.kpi-su { border-left-color: var(--su); }
+  .kpi-card.kpi-wa { border-left-color: var(--wa); }
+  .kpi-card.kpi-da { border-left-color: var(--da); }
+  .kpi-card.kpi-bl { border-left-color: var(--bl); }
+  .delta-up { color: var(--su); }
+  .delta-down { color: var(--da); }
+
+  /* CHARTS */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .chart-card { background: var(--wh); border-radius: 12px; padding: 20px; }
+  .chart-card h3 { font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 16px; }
+
+  /* Funnel */
+  .funnel { display: flex; flex-direction: column; gap: 8px; }
+  .funnel-step { display: flex; align-items: center; gap: 14px; }
+  .funnel-bar { height: 32px; border-radius: 6px; display: flex; align-items: center; padding: 0 12px; font-size: 12px; font-weight: 600; color: #fff; transition: width 0.6s ease; }
+  .funnel-label { font-size: 12px; color: var(--mu); min-width: 90px; text-align: right; }
+  .funnel-val { font-size: 12px; font-weight: 700; color: var(--dk); min-width: 40px; }
+
+  /* BAR CHART */
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
+  .bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .bar { border-radius: 4px 4px 0 0; width: 100%; cursor: pointer; transition: opacity 0.15s; }
+  .bar:hover { opacity: 0.8; }
+  .bar-label { font-size: 9px; color: var(--mu); }
+  .bar-val { font-size: 9px; font-weight: 700; color: var(--dk); }
+
+  /* ALERTS */
+  .alerts-section { margin-bottom: 24px; }
+  .alerts-section h3 { font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 12px; }
+  .alert-row { display: flex; gap: 12px; }
+  .alert-card { flex: 1; background: var(--wh); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; border-left: 4px solid var(--wa); cursor: pointer; transition: box-shadow 0.15s; }
+  .alert-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .alert-card.alert-red { border-left-color: var(--da); }
+  .alert-card.alert-purple { border-left-color: var(--pri); }
+  .alert-card .alert-icon { font-size: 20px; flex-shrink: 0; }
+  .alert-card .alert-text { font-size: 13px; color: var(--dk); }
+  .alert-card .alert-text strong { font-weight: 600; }
+  .alert-card .alert-count { font-size: 18px; font-weight: 700; color: var(--dk); margin-left: auto; flex-shrink: 0; }
+
+  /* HEATMAP */
+  .heatmap-card { background: var(--wh); border-radius: 12px; padding: 20px; }
+  .heatmap-card h3 { font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 16px; }
+  .heatmap-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .heat-cell { border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; transition: transform 0.15s; }
+  .heat-cell:hover { transform: scale(1.04); }
+  .heat-cell .region { font-size: 11px; font-weight: 600; color: var(--dk); margin-bottom: 4px; }
+  .heat-cell .heat-vals { font-size: 10px; color: var(--mu); }
+  .heat-high { background: #FEE2E2; }
+  .heat-med { background: #FEF3C7; }
+  .heat-low { background: #D1FAE5; }
+  .heat-legend { display: flex; gap: 16px; margin-top: 12px; justify-content: center; }
+  .heat-legend span { font-size: 10px; color: var(--mu); display: flex; align-items: center; gap: 4px; }
+  .heat-legend .dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  /* TABLES */
+  .table-card { background: var(--wh); border-radius: 12px; overflow: hidden; }
+  .table-toolbar { padding: 16px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--bo); }
+  .search-input { border: 1px solid var(--bo); border-radius: 8px; padding: 8px 14px; font-size: 13px; outline: none; font-family: inherit; color: var(--dk); background: var(--gr); min-width: 240px; }
+  .search-input:focus { border-color: var(--pri); background: #fff; }
+  .filter-pills { display: flex; gap: 6px; margin-left: auto; }
+  .pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--bo); background: var(--wh); color: var(--mu); transition: all 0.15s; }
+  .pill.active { background: var(--pri); color: #fff; border-color: var(--pri); }
+  .pill:hover:not(.active) { border-color: var(--pri); color: var(--pri); }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--mu); text-transform: uppercase; letter-spacing: 0.4px; padding: 12px 16px; background: var(--gr); border-bottom: 1px solid var(--bo); }
+  .data-table td { padding: 14px 16px; font-size: 13px; color: var(--dk); border-bottom: 1px solid var(--bo); vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #FAFAFF; }
+  .data-table .actions-cell { display: flex; gap: 6px; }
+
+  /* RISK INDICATOR */
+  .risk-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .risk-green { background: var(--su); }
+  .risk-yellow { background: var(--wa); }
+  .risk-red { background: var(--da); }
+
+  /* DISPUTE PANEL */
+  .dispute-detail { display: none; background: var(--wh); border-radius: 12px; margin-top: 16px; overflow: hidden; }
+  .dispute-detail.active { display: block; }
+  .dispute-header { padding: 16px 20px; background: var(--pri-lt); border-bottom: 1px solid var(--bo); display: flex; align-items: center; justify-content: space-between; }
+  .dispute-header h3 { font-size: 15px; font-weight: 700; color: var(--pri-dk); }
+  .dispute-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+  .dispute-col { padding: 20px; border-right: 1px solid var(--bo); }
+  .dispute-col:last-child { border-right: none; }
+  .dispute-col h4 { font-size: 12px; font-weight: 700; color: var(--pri); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .dispute-col .content { font-size: 13px; color: var(--dk); line-height: 1.7; }
+  .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .evidence-thumb { background: var(--gr); border-radius: 8px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .dispute-actions { padding: 16px 20px; border-top: 1px solid var(--bo); display: flex; gap: 10px; align-items: center; }
+  .notes-area { width: 100%; border: 1px solid var(--bo); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 60px; margin: 12px 20px; outline: none; color: var(--dk); }
+  .notes-area:focus { border-color: var(--pri); }
+
+  /* LEGAL SECTION */
+  .case-card { background: var(--wh); border-radius: 12px; padding: 20px; margin-bottom: 14px; border-left: 4px solid var(--pri); }
+  .case-card h4 { font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 6px; }
+  .case-meta { display: flex; gap: 16px; font-size: 12px; color: var(--mu); margin-bottom: 12px; flex-wrap: wrap; }
+  .case-meta span { display: flex; align-items: center; gap: 4px; }
+  .case-docs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .doc-chip { background: var(--gr); border: 1px solid var(--bo); border-radius: 6px; padding: 6px 12px; font-size: 11px; color: var(--dk); display: flex; align-items: center; gap: 4px; }
+  .timeline-list { border-left: 2px solid var(--pri-lt); padding-left: 16px; margin-top: 12px; }
+  .timeline-item { position: relative; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--bo); }
+  .timeline-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .timeline-item::before { content: ''; position: absolute; left: -21px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--pri); }
+  .timeline-item .t-date { font-size: 11px; color: var(--mu); margin-bottom: 2px; }
+  .timeline-item .t-text { font-size: 13px; color: var(--dk); }
+
+  /* NETWORK ANALYSIS */
+  .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .metric-card { background: var(--wh); border-radius: 12px; padding: 18px; text-align: center; }
+  .metric-card .m-val { font-size: 28px; font-weight: 700; color: var(--pri); }
+  .metric-card .m-label { font-size: 11px; color: var(--mu); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .metric-card .m-delta { font-size: 11px; margin-top: 6px; font-weight: 600; }
+  .gap-table { margin-top: 24px; }
+  .gap-table h3 { font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 12px; }
+
+  /* DONUT */
+  .donut-wrapper { display: flex; gap: 20px; align-items: center; }
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--dk); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ESCROW CARD */
+  .escrow-card { background: linear-gradient(135deg, var(--pri-dk), var(--pri)); border-radius: 12px; padding: 20px; color: #fff; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; }
+  .escrow-card .escrow-val { font-size: 32px; font-weight: 800; }
+  .escrow-card .escrow-label { font-size: 12px; opacity: 0.8; }
+  .escrow-card .escrow-info { margin-left: auto; text-align: right; font-size: 12px; opacity: 0.7; }
+
+  /* Status select */
+  .status-select { border: 1px solid var(--bo); border-radius: 6px; padding: 6px 10px; font-size: 12px; font-family: inherit; outline: none; background: var(--wh); color: var(--dk); cursor: pointer; }
+  .status-select:focus { border-color: var(--pri); }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">R</div>
+    <div class="logo-text"><strong>ResolvAI</strong><span>Administrador</span></div>
+  </div>
+
+  <div class="nav-section">Principal</div>
+  <div class="nav-item active" onclick="goTo('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
+
+  <div class="nav-section">Gestao</div>
+  <div class="nav-item" onclick="goTo('prestadores',this)"><span class="icon">👥</span> Prestadores <span class="badge-nav">5</span></div>
+  <div class="nav-item" onclick="goTo('contratos',this)"><span class="icon">📋</span> Contratos</div>
+
+  <div class="nav-section">Suporte</div>
+  <div class="nav-item" onclick="goTo('disputas',this)"><span class="icon">⚖️</span> Disputas <span class="badge-nav">3</span></div>
+  <div class="nav-item" onclick="goTo('juridico',this)"><span class="icon">📁</span> Juridico</div>
+
+  <div class="nav-section">Inteligencia</div>
+  <div class="nav-item" onclick="goTo('rede',this)"><span class="icon">🗺️</span> Analise de Rede</div>
+
+  <div class="sidebar-bottom">
+    <a href="index.html" class="back-link">← Voltar ao Menu</a>
+    <div class="user-badge">
+      <div class="user-avatar">A</div>
+      <div class="user-info"><strong>Admin ResolvAI</strong><span>Super Admin</span></div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- ==================== A1: DASHBOARD ==================== -->
+<div id="page-dashboard" class="page active">
+  <div class="page-header">
+    <div><h1>Dashboard</h1><p>Visao geral da plataforma — maio de 2026</p></div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="num">1.284</div><div class="label">Pedidos criados</div><div class="delta delta-up">↑ 142 esta semana</div></div>
+    <div class="kpi-card kpi-bl"><div class="num">3.847</div><div class="label">Propostas enviadas</div><div class="delta delta-up">↑ 18% vs. abril</div></div>
+    <div class="kpi-card kpi-su"><div class="num">530</div><div class="label">Contratos assinados</div><div class="delta delta-up">↑ 24% este mes</div></div>
+    <div class="kpi-card kpi-wa"><div class="num">R$ 142.600</div><div class="label">Total em Escrow</div><div class="delta delta-up">87 contratos ativos</div></div>
+    <div class="kpi-card"><div class="num">8.7</div><div class="label">NPS atual</div><div class="delta delta-up">↑ 0.3 vs. abril</div></div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Funil de Conversao</h3>
+      <div class="funnel">
+        <div class="funnel-step"><div class="funnel-label">Pedidos</div><div class="funnel-bar" style="width:100%;background:var(--pri)">1.284</div></div>
+        <div class="funnel-step"><div class="funnel-label">Propostas</div><div class="funnel-bar" style="width:82%;background:#9B7FCC">3.847</div></div>
+        <div class="funnel-step"><div class="funnel-label">Contratos</div><div class="funnel-bar" style="width:41%;background:var(--bl)">530</div></div>
+        <div class="funnel-step"><div class="funnel-label">Concluidos</div><div class="funnel-bar" style="width:35%;background:var(--su)">443</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Pedidos por Semana</h3>
+      <div class="bar-chart">
+        <div class="bar-wrap"><div class="bar-val">142</div><div class="bar" style="height:48%;background:var(--pri)"></div><div class="bar-label">Sem 1</div></div>
+        <div class="bar-wrap"><div class="bar-val">189</div><div class="bar" style="height:64%;background:var(--pri)"></div><div class="bar-label">Sem 2</div></div>
+        <div class="bar-wrap"><div class="bar-val">221</div><div class="bar" style="height:75%;background:var(--pri)"></div><div class="bar-label">Sem 3</div></div>
+        <div class="bar-wrap"><div class="bar-val">295</div><div class="bar" style="height:100%;background:var(--su)"></div><div class="bar-label">Sem 4</div></div>
+        <div class="bar-wrap"><div class="bar-val">198</div><div class="bar" style="height:67%;background:var(--pri)"></div><div class="bar-label">Sem 5</div></div>
+        <div class="bar-wrap"><div class="bar-val">239</div><div class="bar" style="height:81%;background:var(--pri)"></div><div class="bar-label">Atual</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alerts-section">
+    <h3>Alertas</h3>
+    <div class="alert-row">
+      <div class="alert-card alert-red" onclick="goTo('contratos',document.querySelectorAll('.nav-item')[2])">
+        <div class="alert-icon">⏰</div>
+        <div class="alert-text"><strong>Contratos vencendo em 48h</strong><br><span style="font-size:11px;color:var(--mu)">Sem confirmacao de conclusao</span></div>
+        <div class="alert-count">4</div>
+      </div>
+      <div class="alert-card" onclick="goTo('disputas',document.querySelectorAll('.nav-item')[3])">
+        <div class="alert-icon">⚖️</div>
+        <div class="alert-text"><strong>Disputas abertas</strong><br><span style="font-size:11px;color:var(--mu)">Aguardando mediacao</span></div>
+        <div class="alert-count">3</div>
+      </div>
+      <div class="alert-card alert-purple" onclick="goTo('prestadores',document.querySelectorAll('.nav-item')[1])">
+        <div class="alert-icon">👤</div>
+        <div class="alert-text"><strong>Prestadores pendentes</strong><br><span style="font-size:11px;color:var(--mu)">Aguardando aprovacao</span></div>
+        <div class="alert-count">5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="heatmap-card">
+    <h3>Mapa de Calor — Oferta vs. Demanda por Regiao</h3>
+    <div class="heatmap-grid">
+      <div class="heat-cell heat-high"><div class="region">Aldeota</div><div class="heat-vals">87 pedidos / 12 prest.</div></div>
+      <div class="heat-cell heat-high"><div class="region">Meireles</div><div class="heat-vals">64 pedidos / 8 prest.</div></div>
+      <div class="heat-cell heat-med"><div class="region">Fatima</div><div class="heat-vals">45 pedidos / 14 prest.</div></div>
+      <div class="heat-cell heat-low"><div class="region">Benfica</div><div class="heat-vals">22 pedidos / 18 prest.</div></div>
+      <div class="heat-cell heat-med"><div class="region">Papicu</div><div class="heat-vals">38 pedidos / 10 prest.</div></div>
+      <div class="heat-cell heat-high"><div class="region">Centro</div><div class="heat-vals">71 pedidos / 9 prest.</div></div>
+      <div class="heat-cell heat-low"><div class="region">Montese</div><div class="heat-vals">18 pedidos / 15 prest.</div></div>
+      <div class="heat-cell heat-med"><div class="region">Parquelândia</div><div class="heat-vals">33 pedidos / 11 prest.</div></div>
+      <div class="heat-cell heat-low"><div class="region">Edson Queiroz</div><div class="heat-vals">15 pedidos / 12 prest.</div></div>
+      <div class="heat-cell heat-high"><div class="region">Cocó</div><div class="heat-vals">52 pedidos / 7 prest.</div></div>
+    </div>
+    <div class="heat-legend">
+      <span><div class="dot" style="background:#FEE2E2"></div> Alta demanda / Baixa oferta</span>
+      <span><div class="dot" style="background:#FEF3C7"></div> Equilibrado</span>
+      <span><div class="dot" style="background:#D1FAE5"></div> Oferta adequada</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== A2: GESTAO DE PRESTADORES ==================== -->
+<div id="page-prestadores" class="page">
+  <div class="page-header">
+    <div><h1>Gestao de Prestadores</h1><p>Curadoria, verificacao e gerenciamento de prestadores</p></div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-toolbar">
+      <input class="search-input" placeholder="Buscar por nome ou CPF/CNPJ...">
+      <div class="filter-pills">
+        <div class="pill active" onclick="setFilterP(this)">Todos (347)</div>
+        <div class="pill" onclick="setFilterP(this)">Pendentes (5)</div>
+        <div class="pill" onclick="setFilterP(this)">Verificados (312)</div>
+        <div class="pill" onclick="setFilterP(this)">Rejeitados (22)</div>
+        <div class="pill" onclick="setFilterP(this)">Suspensos (8)</div>
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Prestador</th><th>Categoria</th><th>Regiao</th><th>Status</th><th>Pre-Validacao IA</th><th>Avaliacao</th><th>Cadastro</th><th>Acoes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Carlos Impermeabilizacoes</strong><br><span style="font-size:11px;color:var(--mu)">CPF: ***.456.***-12</span></td>
+          <td><span class="badge badge-purple">Impermeabilizacao</span></td>
+          <td>Aldeota, Meireles</td>
+          <td><span class="badge badge-green">Verificado</span></td>
+          <td><span style="color:var(--su);font-size:12px;font-weight:600">✓ Documentos OK</span></td>
+          <td>⭐ 4.9 (127)</td>
+          <td style="font-size:12px;color:var(--mu)">Out 2025</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Ver</button><button class="btn btn-sm btn-red">Suspender</button></td>
+        </tr>
+        <tr>
+          <td><strong>Fix Construcoes</strong><br><span style="font-size:11px;color:var(--mu)">CNPJ: 12.345.678/0001-90</span></td>
+          <td><span class="badge badge-blue">Hidraulica</span></td>
+          <td>Fatima, Centro</td>
+          <td><span class="badge badge-green">Verificado</span></td>
+          <td><span style="color:var(--su);font-size:12px;font-weight:600">✓ Documentos OK</span></td>
+          <td>⭐ 4.7 (89)</td>
+          <td style="font-size:12px;color:var(--mu)">Fev 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Ver</button><button class="btn btn-sm btn-red">Suspender</button></td>
+        </tr>
+        <tr style="background:#FFFBF0">
+          <td><strong>Silva Pinturas</strong><br><span style="font-size:11px;color:var(--mu)">CPF: ***.789.***-34</span></td>
+          <td><span class="badge badge-yellow">Pintura</span></td>
+          <td>Papicu</td>
+          <td><span class="badge badge-yellow">Pendente</span></td>
+          <td><span style="color:var(--wa);font-size:12px;font-weight:600">⚠ Requer revisao</span></td>
+          <td>—</td>
+          <td style="font-size:12px;color:var(--mu)">Mai 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-green">Aprovar</button><button class="btn btn-sm btn-warn">Solicitar</button><button class="btn btn-sm btn-red">Rejeitar</button></td>
+        </tr>
+        <tr style="background:#FFFBF0">
+          <td><strong>Eletro Rapido</strong><br><span style="font-size:11px;color:var(--mu)">CPF: ***.321.***-56</span></td>
+          <td><span class="badge" style="background:#FFF7ED;color:#C2410C">Eletrica</span></td>
+          <td>Montese</td>
+          <td><span class="badge badge-yellow">Pendente</span></td>
+          <td><span style="color:var(--su);font-size:12px;font-weight:600">✓ Documentos OK</span></td>
+          <td>—</td>
+          <td style="font-size:12px;color:var(--mu)">Mai 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-green">Aprovar</button><button class="btn btn-sm btn-red">Rejeitar</button></td>
+        </tr>
+        <tr style="background:#FFFBF0">
+          <td><strong>Marcos Encanamentos</strong><br><span style="font-size:11px;color:var(--mu)">CPF: ***.654.***-78</span></td>
+          <td><span class="badge badge-blue">Hidraulica</span></td>
+          <td>Coco, Aldeota</td>
+          <td><span class="badge badge-yellow">Pendente</span></td>
+          <td><span style="color:var(--wa);font-size:12px;font-weight:600">⚠ Requer revisao</span></td>
+          <td>—</td>
+          <td style="font-size:12px;color:var(--mu)">Mai 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-green">Aprovar</button><button class="btn btn-sm btn-warn">Solicitar</button><button class="btn btn-sm btn-red">Rejeitar</button></td>
+        </tr>
+        <tr>
+          <td><strong>Reforma Express</strong><br><span style="font-size:11px;color:var(--mu)">CNPJ: 98.765.432/0001-10</span></td>
+          <td><span class="badge badge-purple">Alvenaria</span></td>
+          <td>Benfica</td>
+          <td><span class="badge badge-red">Suspenso</span></td>
+          <td><span style="color:var(--mu);font-size:12px">—</span></td>
+          <td>⭐ 3.2 (54)</td>
+          <td style="font-size:12px;color:var(--mu)">Jan 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Ver</button><button class="btn btn-sm btn-green">Reativar</button></td>
+        </tr>
+        <tr style="background:#FFFBF0">
+          <td><strong>Pedro Telhados</strong><br><span style="font-size:11px;color:var(--mu)">CPF: ***.987.***-01</span></td>
+          <td><span class="badge badge-purple">Impermeabilizacao</span></td>
+          <td>Edson Queiroz</td>
+          <td><span class="badge badge-yellow">Pendente</span></td>
+          <td><span style="color:var(--su);font-size:12px;font-weight:600">✓ Documentos OK</span></td>
+          <td>—</td>
+          <td style="font-size:12px;color:var(--mu)">Mai 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-green">Aprovar</button><button class="btn btn-sm btn-red">Rejeitar</button></td>
+        </tr>
+        <tr style="background:#FFFBF0">
+          <td><strong>Ana Limpeza Pro</strong><br><span style="font-size:11px;color:var(--mu)">CPF: ***.111.***-22</span></td>
+          <td><span class="badge badge-gray">Limpeza</span></td>
+          <td>Parquelandia</td>
+          <td><span class="badge badge-yellow">Pendente</span></td>
+          <td><span style="color:var(--wa);font-size:12px;font-weight:600">⚠ Requer revisao</span></td>
+          <td>—</td>
+          <td style="font-size:12px;color:var(--mu)">Mai 2026</td>
+          <td class="actions-cell"><button class="btn btn-sm btn-green">Aprovar</button><button class="btn btn-sm btn-warn">Solicitar</button><button class="btn btn-sm btn-red">Rejeitar</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== A3: MONITORAMENTO DE CONTRATOS ==================== -->
+<div id="page-contratos" class="page">
+  <div class="page-header">
+    <div><h1>Monitoramento de Contratos</h1><p>Acompanhe todos os contratos ativos e seus prazos</p></div>
+  </div>
+
+  <div class="escrow-card">
+    <div>
+      <div class="escrow-label">Valor Total em Escrow</div>
+      <div class="escrow-val">R$ 142.600</div>
+    </div>
+    <div class="escrow-info">
+      87 contratos ativos<br>
+      R$ 1.639 valor medio
+    </div>
+  </div>
+
+  <div style="background:var(--da-lt);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="setFilterC(document.querySelectorAll('#page-contratos .pill')[4])">
+    <span style="font-size:18px">⚠️</span>
+    <span style="font-size:13px;color:var(--da);font-weight:600">4 contratos vencem em 48h sem confirmacao de conclusao</span>
+    <span style="margin-left:auto;font-size:12px;color:var(--da)">Ver todos →</span>
+  </div>
+
+  <div class="table-card">
+    <div class="table-toolbar">
+      <input class="search-input" placeholder="Buscar por ID, cliente ou prestador...">
+      <div class="filter-pills">
+        <div class="pill active" onclick="setFilterC(this)">Todos (87)</div>
+        <div class="pill" onclick="setFilterC(this)">Ativos (52)</div>
+        <div class="pill" onclick="setFilterC(this)">Aguardando (18)</div>
+        <div class="pill" onclick="setFilterC(this)">Concluidos (443)</div>
+        <div class="pill" onclick="setFilterC(this)">Em Risco (4)</div>
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr><th>ID</th><th>Cliente</th><th>Prestador</th><th>Valor</th><th>Prazo</th><th>Risco</th><th>Status</th><th>Acoes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#CT-0891</td>
+          <td>Ygor Chagas</td>
+          <td>Carlos Impermeabilizacoes</td>
+          <td style="font-weight:600">R$ 2.800</td>
+          <td style="font-size:12px">15/Mai/2026</td>
+          <td><span class="risk-dot risk-green"></span>OK</td>
+          <td><span class="badge badge-blue">Ativo</span></td>
+          <td><button class="btn btn-sm btn-ghost">Detalhes</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#CT-0887</td>
+          <td>Ana Lima</td>
+          <td>Fix Construcoes</td>
+          <td style="font-weight:600">R$ 1.500</td>
+          <td style="font-size:12px">12/Mai/2026</td>
+          <td><span class="risk-dot risk-yellow"></span>&lt; 48h</td>
+          <td><span class="badge badge-yellow">Aguardando</span></td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Detalhes</button><button class="btn btn-sm btn-pri">Lembrete</button></td>
+        </tr>
+        <tr style="background:#FEF2F2">
+          <td style="font-weight:600;color:var(--pri)">#CT-0882</td>
+          <td>Roberto Alves</td>
+          <td>Reforma Express</td>
+          <td style="font-weight:600">R$ 4.200</td>
+          <td style="font-size:12px;color:var(--da);font-weight:600">10/Mai — VENCIDO</td>
+          <td><span class="risk-dot risk-red"></span>Vencido</td>
+          <td><span class="badge badge-red">Em Disputa</span></td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Detalhes</button><button class="btn btn-sm btn-red">Disputa</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#CT-0878</td>
+          <td>Mariana Costa</td>
+          <td>Carlos Impermeabilizacoes</td>
+          <td style="font-weight:600">R$ 3.100</td>
+          <td style="font-size:12px">20/Mai/2026</td>
+          <td><span class="risk-dot risk-green"></span>OK</td>
+          <td><span class="badge badge-blue">Ativo</span></td>
+          <td><button class="btn btn-sm btn-ghost">Detalhes</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#CT-0875</td>
+          <td>Pedro Santos</td>
+          <td>Fix Construcoes</td>
+          <td style="font-weight:600">R$ 950</td>
+          <td style="font-size:12px">11/Mai/2026</td>
+          <td><span class="risk-dot risk-yellow"></span>&lt; 48h</td>
+          <td><span class="badge badge-yellow">Aguardando</span></td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Detalhes</button><button class="btn btn-sm btn-pri">Lembrete</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#CT-0870</td>
+          <td>Julia Mendes</td>
+          <td>Silva Pinturas</td>
+          <td style="font-weight:600">R$ 1.800</td>
+          <td style="font-size:12px">18/Mai/2026</td>
+          <td><span class="risk-dot risk-green"></span>OK</td>
+          <td><span class="badge badge-blue">Ativo</span></td>
+          <td><button class="btn btn-sm btn-ghost">Detalhes</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#CT-0865</td>
+          <td>Lucas Ferreira</td>
+          <td>Eletro Rapido</td>
+          <td style="font-weight:600">R$ 680</td>
+          <td style="font-size:12px;color:var(--da);font-weight:600">09/Mai — VENCIDO</td>
+          <td><span class="risk-dot risk-red"></span>Vencido</td>
+          <td><span class="badge badge-yellow">Aguardando</span></td>
+          <td class="actions-cell"><button class="btn btn-sm btn-ghost">Detalhes</button><button class="btn btn-sm btn-pri">Lembrete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== A4: CENTRAL DE DISPUTAS ==================== -->
+<div id="page-disputas" class="page">
+  <div class="page-header">
+    <div><h1>Central de Disputas</h1><p>Mediacao de conflitos com evidencias completas — prazo de 30 dias</p></div>
+  </div>
+
+  <div class="table-card" style="margin-bottom:16px">
+    <div class="table-toolbar">
+      <input class="search-input" placeholder="Buscar por ID ou partes envolvidas...">
+      <div class="filter-pills">
+        <div class="pill active">Todos (8)</div>
+        <div class="pill">Abertos (3)</div>
+        <div class="pill">Em Analise (2)</div>
+        <div class="pill">Resolvidos (2)</div>
+        <div class="pill">Escalados (1)</div>
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Ticket</th><th>Cliente</th><th>Prestador</th><th>Valor</th><th>Abertura</th><th>Dias Restantes</th><th>Status</th><th>Acoes</th></tr>
+      </thead>
+      <tbody>
+        <tr style="cursor:pointer" onclick="toggleDispute('d1')">
+          <td style="font-weight:600;color:var(--da)">#DSP-042</td>
+          <td>Roberto Alves</td>
+          <td>Reforma Express</td>
+          <td style="font-weight:600">R$ 4.200</td>
+          <td style="font-size:12px">02/Mai/2026</td>
+          <td><span style="color:var(--da);font-weight:700">21 dias</span></td>
+          <td><span class="badge badge-red">Aberto</span></td>
+          <td><button class="btn btn-sm btn-pri">Analisar</button></td>
+        </tr>
+        <tr style="cursor:pointer" onclick="toggleDispute('d2')">
+          <td style="font-weight:600;color:var(--wa)">#DSP-041</td>
+          <td>Carla Souza</td>
+          <td>Fix Construcoes</td>
+          <td style="font-weight:600">R$ 1.800</td>
+          <td style="font-size:12px">28/Abr/2026</td>
+          <td><span style="color:var(--wa);font-weight:700">17 dias</span></td>
+          <td><span class="badge badge-yellow">Em Analise</span></td>
+          <td><button class="btn btn-sm btn-pri">Analisar</button></td>
+        </tr>
+        <tr style="cursor:pointer" onclick="toggleDispute('d3')">
+          <td style="font-weight:600;color:var(--da)">#DSP-040</td>
+          <td>Fernando Lima</td>
+          <td>Silva Pinturas</td>
+          <td style="font-weight:600">R$ 2.500</td>
+          <td style="font-size:12px">01/Mai/2026</td>
+          <td><span style="color:var(--da);font-weight:700">20 dias</span></td>
+          <td><span class="badge badge-red">Aberto</span></td>
+          <td><button class="btn btn-sm btn-pri">Analisar</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--su)">#DSP-038</td>
+          <td>Marcos Pereira</td>
+          <td>Carlos Imp.</td>
+          <td style="font-weight:600">R$ 3.600</td>
+          <td style="font-size:12px">10/Abr/2026</td>
+          <td><span style="color:var(--su)">— Resolvido</span></td>
+          <td><span class="badge badge-green">Resolvido</span></td>
+          <td><button class="btn btn-sm btn-ghost">Ver</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--pri)">#DSP-035</td>
+          <td>Maria Oliveira</td>
+          <td>Reforma Express</td>
+          <td style="font-weight:600">R$ 5.800</td>
+          <td style="font-size:12px">01/Abr/2026</td>
+          <td><span style="color:var(--pri)">— Escalado</span></td>
+          <td><span class="badge badge-purple">Escalado</span></td>
+          <td><button class="btn btn-sm btn-ghost">Ver</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Dispute detail panel (shown on click) -->
+  <div id="dispute-d1" class="dispute-detail">
+    <div class="dispute-header">
+      <h3>#DSP-042 — Roberto Alves vs. Reforma Express</h3>
+      <span class="badge badge-red">Aberto — 21 dias restantes</span>
+    </div>
+    <div class="dispute-cols">
+      <div class="dispute-col">
+        <h4>Escopo Original (IA)</h4>
+        <div class="content">
+          <strong>Impermeabilizacao de laje</strong><br><br>
+          Descricao: Laje de 45m2 com infiltracao em 3 pontos identificados. Necessita remocao do revestimento antigo, aplicacao de manta asfaltica e acabamento.<br><br>
+          Urgencia: Alta<br>
+          Localizacao: Aldeota, Fortaleza<br>
+          Valor contratado: R$ 4.200
+        </div>
+        <div class="evidence-grid">
+          <div class="evidence-thumb">📷</div>
+          <div class="evidence-thumb">📷</div>
+          <div class="evidence-thumb">📷</div>
+          <div class="evidence-thumb">🎥</div>
+        </div>
+      </div>
+      <div class="dispute-col">
+        <h4>Historico de Chat</h4>
+        <div class="content">
+          <div style="background:var(--gr);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><strong>Roberto:</strong> O servico ficou com manchas escuras em dois pontos da laje.</div>
+          <div style="background:var(--pri-lt);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><strong>Reforma Express:</strong> Isso e normal do material, sai em 15 dias.</div>
+          <div style="background:var(--gr);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><strong>Roberto:</strong> Ja passaram 20 dias e continua igual. Nao vou confirmar.</div>
+          <div style="background:var(--da-lt);border-radius:8px;padding:10px;font-size:12px"><strong>Sistema:</strong> Disputa aberta automaticamente — prazo de confirmacao expirado.</div>
+        </div>
+      </div>
+      <div class="dispute-col">
+        <h4>Smart Contract</h4>
+        <div class="content">
+          <strong>Contrato #CT-0882</strong><br><br>
+          Partes: Roberto Alves (contratante) e Reforma Express (prestador)<br><br>
+          Prazo: 7 dias uteis<br>
+          Garantia: 90 dias — cobertura para infiltracao reincidente e defeitos de material<br><br>
+          Valor: R$ 4.200 (retido em escrow)<br>
+          Assinado: 28/Abr/2026
+        </div>
+      </div>
+    </div>
+    <textarea class="notes-area" placeholder="Notas internas do mediador (visiveis apenas para admins)..."></textarea>
+    <div class="dispute-actions">
+      <button class="btn btn-green" onclick="alert('Escrow liberado para o prestador')">Liberar Escrow</button>
+      <button class="btn btn-red" onclick="alert('Reembolso enviado ao cliente')">Reembolsar Cliente</button>
+      <button class="btn btn-warn" onclick="alert('Reembolso parcial processado')">Reembolso Parcial</button>
+      <button class="btn btn-pri" onclick="alert('Caso escalado para o juridico')">Escalar para Juridico</button>
+      <span style="margin-left:auto;font-size:11px;color:var(--mu)">Decisao requer justificativa</span>
+    </div>
+  </div>
+
+  <div id="dispute-d2" class="dispute-detail">
+    <div class="dispute-header">
+      <h3>#DSP-041 — Carla Souza vs. Fix Construcoes</h3>
+      <span class="badge badge-yellow">Em Analise — 17 dias restantes</span>
+    </div>
+    <div class="dispute-cols">
+      <div class="dispute-col">
+        <h4>Escopo Original (IA)</h4>
+        <div class="content">
+          <strong>Reparo hidraulico — Vazamento</strong><br><br>
+          Vazamento no registro do banheiro com infiltracao na parede adjacente. Necessita troca do registro e reparo no reboco.<br><br>
+          Urgencia: Media<br>
+          Valor: R$ 1.800
+        </div>
+      </div>
+      <div class="dispute-col">
+        <h4>Historico de Chat</h4>
+        <div class="content">
+          <div style="background:var(--gr);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><strong>Carla:</strong> O vazamento voltou 3 dias apos o reparo.</div>
+          <div style="background:var(--pri-lt);border-radius:8px;padding:10px;font-size:12px"><strong>Fix Construcoes:</strong> Posso ir verificar semana que vem.</div>
+        </div>
+      </div>
+      <div class="dispute-col">
+        <h4>Smart Contract</h4>
+        <div class="content">
+          <strong>Contrato #CT-0879</strong><br><br>
+          Garantia: 60 dias — cobertura para vazamento reincidente<br>
+          Valor: R$ 1.800 em escrow<br>
+          Assinado: 20/Abr/2026
+        </div>
+      </div>
+    </div>
+    <textarea class="notes-area" placeholder="Notas internas do mediador..."></textarea>
+    <div class="dispute-actions">
+      <button class="btn btn-green">Liberar Escrow</button>
+      <button class="btn btn-red">Reembolsar Cliente</button>
+      <button class="btn btn-warn">Reembolso Parcial</button>
+      <button class="btn btn-pri">Escalar para Juridico</button>
+    </div>
+  </div>
+
+  <div id="dispute-d3" class="dispute-detail">
+    <div class="dispute-header">
+      <h3>#DSP-040 — Fernando Lima vs. Silva Pinturas</h3>
+      <span class="badge badge-red">Aberto — 20 dias restantes</span>
+    </div>
+    <div class="dispute-cols">
+      <div class="dispute-col">
+        <h4>Escopo Original (IA)</h4>
+        <div class="content">
+          <strong>Pintura interna — 3 comodos</strong><br><br>
+          Pintura completa de sala, quarto e cozinha com tinta acrilica fosca. Inclui preparacao de parede.<br><br>
+          Valor: R$ 2.500
+        </div>
+      </div>
+      <div class="dispute-col">
+        <h4>Historico de Chat</h4>
+        <div class="content">
+          <div style="background:var(--gr);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><strong>Fernando:</strong> A cor aplicada esta diferente da combinada. Deveria ser Branco Neve mas ficou amarelado.</div>
+          <div style="background:var(--pri-lt);border-radius:8px;padding:10px;font-size:12px"><strong>Silva Pinturas:</strong> E a mesma tinta, a iluminacao que muda a percepcao.</div>
+        </div>
+      </div>
+      <div class="dispute-col">
+        <h4>Smart Contract</h4>
+        <div class="content">
+          <strong>Contrato #CT-0880</strong><br><br>
+          Garantia: 30 dias — cobertura para descascamento e cor diferente da especificada<br>
+          Valor: R$ 2.500 em escrow
+        </div>
+      </div>
+    </div>
+    <textarea class="notes-area" placeholder="Notas internas do mediador..."></textarea>
+    <div class="dispute-actions">
+      <button class="btn btn-green">Liberar Escrow</button>
+      <button class="btn btn-red">Reembolsar Cliente</button>
+      <button class="btn btn-warn">Reembolso Parcial</button>
+      <button class="btn btn-pri">Escalar para Juridico</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== A5: GESTAO JURIDICA ==================== -->
+<div id="page-juridico" class="page">
+  <div class="page-header">
+    <div><h1>Gestao Juridica</h1><p>Casos escalados com documentacao completa para resolucao judicial</p></div>
+    <button class="btn btn-pri" onclick="alert('Pacote juridico exportado como PDF')">📄 Exportar Todos (PDF)</button>
+  </div>
+
+  <div class="case-card" style="border-left-color:var(--wa)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h4>#DSP-035 — Maria Oliveira vs. Reforma Express</h4>
+      <select class="status-select" onchange="alert('Status atualizado — partes notificadas')">
+        <option selected>Em andamento</option>
+        <option>Resolvido judicialmente</option>
+        <option>Arquivado</option>
+      </select>
+    </div>
+    <div class="case-meta">
+      <span>💰 Valor: <strong>R$ 5.800</strong></span>
+      <span>📅 Escalado em: 01/Mai/2026</span>
+      <span>⚖️ Motivo: Servico nao concluido apos 30 dias de mediacao</span>
+      <span>👤 Mediador: Admin ResolvAI</span>
+    </div>
+    <div class="case-docs">
+      <div class="doc-chip">📋 Smart Contract</div>
+      <div class="doc-chip">💬 Historico de Chat</div>
+      <div class="doc-chip">📝 Escopo Original</div>
+      <div class="doc-chip">📷 Fotos (7)</div>
+      <div class="doc-chip">📝 Notas do Mediador</div>
+      <div class="doc-chip">📊 Historico de Acoes</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <button class="btn btn-sm btn-pri" onclick="alert('PDF gerado com toda a documentacao')">Exportar Pacote Juridico (PDF)</button>
+      <button class="btn btn-sm btn-ghost">Ver Documentos</button>
+    </div>
+    <h4 style="font-size:13px;font-weight:700;color:var(--pri);margin-bottom:8px">Timeline do Caso</h4>
+    <div class="timeline-list">
+      <div class="timeline-item"><div class="t-date">01/Abr/2026</div><div class="t-text">Disputa aberta — cliente alegou servico incompleto</div></div>
+      <div class="timeline-item"><div class="t-date">03/Abr/2026</div><div class="t-text">Mediacao iniciada — evidencias coletadas</div></div>
+      <div class="timeline-item"><div class="t-date">10/Abr/2026</div><div class="t-text">Prestador contatado — sem resposta em 7 dias</div></div>
+      <div class="timeline-item"><div class="t-date">20/Abr/2026</div><div class="t-text">Segunda tentativa de contato — prestador alega problemas pessoais</div></div>
+      <div class="timeline-item"><div class="t-date">01/Mai/2026</div><div class="t-text">Prazo de 30 dias expirado — caso escalado para juridico automaticamente</div></div>
+      <div class="timeline-item"><div class="t-date">05/Mai/2026</div><div class="t-text">Pacote juridico enviado ao escritorio parceiro</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h4>#DSP-028 — Paulo Ribeiro vs. Express Reparos</h4>
+      <select class="status-select">
+        <option>Em andamento</option>
+        <option selected>Resolvido judicialmente</option>
+        <option>Arquivado</option>
+      </select>
+    </div>
+    <div class="case-meta">
+      <span>💰 Valor: <strong>R$ 3.200</strong></span>
+      <span>📅 Escalado em: 15/Mar/2026</span>
+      <span>⚖️ Motivo: Dano ao imovel durante servico</span>
+      <span>✅ Resolucao: Reembolso total + indenizacao</span>
+    </div>
+    <div class="case-docs">
+      <div class="doc-chip">📋 Smart Contract</div>
+      <div class="doc-chip">💬 Historico de Chat</div>
+      <div class="doc-chip">📝 Escopo Original</div>
+      <div class="doc-chip">📷 Fotos (12)</div>
+      <div class="doc-chip">⚖️ Sentenca</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <button class="btn btn-sm btn-pri">Exportar Pacote (PDF)</button>
+      <button class="btn btn-sm btn-ghost">Ver Documentos</button>
+    </div>
+    <h4 style="font-size:13px;font-weight:700;color:var(--pri);margin-bottom:8px">Timeline do Caso</h4>
+    <div class="timeline-list">
+      <div class="timeline-item"><div class="t-date">10/Fev/2026</div><div class="t-text">Disputa aberta — dano a parede durante instalacao hidraulica</div></div>
+      <div class="timeline-item"><div class="t-date">12/Mar/2026</div><div class="t-text">Mediacao sem acordo — prestador recusou responsabilidade</div></div>
+      <div class="timeline-item"><div class="t-date">15/Mar/2026</div><div class="t-text">Escalado para juridico</div></div>
+      <div class="timeline-item"><div class="t-date">10/Abr/2026</div><div class="t-text">Audiencia realizada — acordo judicial firmado</div></div>
+      <div class="timeline-item"><div class="t-date">25/Abr/2026</div><div class="t-text">Reembolso total + R$ 800 indenizacao processados</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== A6: ANALISE DE REDE E CRESCIMENTO ==================== -->
+<div id="page-rede" class="page">
+  <div class="page-header">
+    <div><h1>Analise de Rede e Crescimento</h1><p>Inteligencia para equilibrar oferta e demanda na plataforma</p></div>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-card"><div class="m-val">72%</div><div class="m-label">Retencao Prestadores</div><div class="m-delta delta-up">↑ 5pp vs. trimestre</div></div>
+    <div class="metric-card"><div class="m-val">84%</div><div class="m-label">Retencao Clientes</div><div class="m-delta delta-up">↑ 3pp vs. trimestre</div></div>
+    <div class="metric-card"><div class="m-val">4.2%</div><div class="m-label">Taxa Desintermediacao</div><div class="m-delta delta-down">↓ 1.1pp (melhorando)</div></div>
+    <div class="metric-card"><div class="m-val">R$ 89.4k</div><div class="m-label">GMV Mensal</div><div class="m-delta delta-up">↑ 24% vs. abril</div></div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Mapa de Calor — Demanda vs. Oferta</h3>
+      <div class="heatmap-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="heat-cell heat-high"><div class="region">Aldeota</div><div class="heat-vals">87 ped. / 12 prest.</div></div>
+        <div class="heat-cell heat-high"><div class="region">Meireles</div><div class="heat-vals">64 ped. / 8 prest.</div></div>
+        <div class="heat-cell heat-high"><div class="region">Centro</div><div class="heat-vals">71 ped. / 9 prest.</div></div>
+        <div class="heat-cell heat-high"><div class="region">Coco</div><div class="heat-vals">52 ped. / 7 prest.</div></div>
+        <div class="heat-cell heat-med"><div class="region">Fatima</div><div class="heat-vals">45 ped. / 14 prest.</div></div>
+        <div class="heat-cell heat-med"><div class="region">Papicu</div><div class="heat-vals">38 ped. / 10 prest.</div></div>
+        <div class="heat-cell heat-med"><div class="region">Parquelandia</div><div class="heat-vals">33 ped. / 11 prest.</div></div>
+        <div class="heat-cell heat-low"><div class="region">Benfica</div><div class="heat-vals">22 ped. / 18 prest.</div></div>
+        <div class="heat-cell heat-low"><div class="region">Montese</div><div class="heat-vals">18 ped. / 15 prest.</div></div>
+        <div class="heat-cell heat-low"><div class="region">Edson Queiroz</div><div class="heat-vals">15 ped. / 12 prest.</div></div>
+        <div class="heat-cell heat-high"><div class="region">Luciano Cavalcante</div><div class="heat-vals">42 ped. / 5 prest.</div></div>
+        <div class="heat-cell heat-med"><div class="region">Cambeba</div><div class="heat-vals">28 ped. / 9 prest.</div></div>
+      </div>
+      <div class="heat-legend" style="margin-top:12px">
+        <span><div class="dot" style="background:#FEE2E2"></div> Gap critico</span>
+        <span><div class="dot" style="background:#FEF3C7"></div> Equilibrado</span>
+        <span><div class="dot" style="background:#D1FAE5"></div> Oferta adequada</span>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Desintermediacao — Sinais de Alerta</h3>
+      <div style="margin-bottom:16px">
+        <div class="bar-chart" style="height:120px">
+          <div class="bar-wrap"><div class="bar-val">8.1%</div><div class="bar" style="height:81%;background:var(--da)"></div><div class="bar-label">Jan</div></div>
+          <div class="bar-wrap"><div class="bar-val">6.5%</div><div class="bar" style="height:65%;background:var(--wa)"></div><div class="bar-label">Fev</div></div>
+          <div class="bar-wrap"><div class="bar-val">5.8%</div><div class="bar" style="height:58%;background:var(--wa)"></div><div class="bar-label">Mar</div></div>
+          <div class="bar-wrap"><div class="bar-val">5.3%</div><div class="bar" style="height:53%;background:var(--wa)"></div><div class="bar-label">Abr</div></div>
+          <div class="bar-wrap"><div class="bar-val">4.2%</div><div class="bar" style="height:42%;background:var(--su)"></div><div class="bar-label">Mai</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mu);line-height:1.7">
+        <strong style="color:var(--dk)">Indicadores monitorados:</strong><br>
+        • Chats que param apos troca de contato externo<br>
+        • Prestadores inativos apos primeiro servico<br>
+        • Clientes que nao retornam apos conclusao
+      </div>
+    </div>
+  </div>
+
+  <div class="gap-table">
+    <h3>Gaps de Oferta — Regioes Prioritarias para Recrutamento</h3>
+    <div class="table-card" style="margin-top:12px">
+      <table class="data-table">
+        <thead>
+          <tr><th>Regiao</th><th>Categoria</th><th>Pedidos (mes)</th><th>Prestadores</th><th>Ratio</th><th>Gap</th><th>Acao</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600">Aldeota</td>
+            <td><span class="badge badge-purple">Impermeabilizacao</span></td>
+            <td>87</td>
+            <td>12</td>
+            <td style="color:var(--da);font-weight:600">7.3:1</td>
+            <td><span class="badge badge-red">Critico</span></td>
+            <td><button class="btn btn-sm btn-pri" onclick="alert('Campanha de recrutamento configurada para Aldeota — Impermeabilizacao')">Recrutar</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">Meireles</td>
+            <td><span class="badge badge-blue">Hidraulica</span></td>
+            <td>64</td>
+            <td>8</td>
+            <td style="color:var(--da);font-weight:600">8.0:1</td>
+            <td><span class="badge badge-red">Critico</span></td>
+            <td><button class="btn btn-sm btn-pri" onclick="alert('Campanha de recrutamento configurada para Meireles — Hidraulica')">Recrutar</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">Luciano Cavalcante</td>
+            <td><span class="badge badge-yellow">Pintura</span></td>
+            <td>42</td>
+            <td>5</td>
+            <td style="color:var(--da);font-weight:600">8.4:1</td>
+            <td><span class="badge badge-red">Critico</span></td>
+            <td><button class="btn btn-sm btn-pri" onclick="alert('Campanha de recrutamento configurada')">Recrutar</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">Centro</td>
+            <td><span class="badge" style="background:#FFF7ED;color:#C2410C">Eletrica</span></td>
+            <td>71</td>
+            <td>9</td>
+            <td style="color:var(--wa);font-weight:600">7.9:1</td>
+            <td><span class="badge badge-yellow">Alto</span></td>
+            <td><button class="btn btn-sm btn-pri" onclick="alert('Campanha de recrutamento configurada')">Recrutar</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">Coco</td>
+            <td><span class="badge badge-purple">Impermeabilizacao</span></td>
+            <td>52</td>
+            <td>7</td>
+            <td style="color:var(--wa);font-weight:600">7.4:1</td>
+            <td><span class="badge badge-yellow">Alto</span></td>
+            <td><button class="btn btn-sm btn-pri" onclick="alert('Campanha de recrutamento configurada')">Recrutar</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">Papicu</td>
+            <td><span class="badge badge-blue">Hidraulica</span></td>
+            <td>38</td>
+            <td>10</td>
+            <td style="color:var(--mu)">3.8:1</td>
+            <td><span class="badge badge-green">OK</span></td>
+            <td><button class="btn btn-sm btn-ghost">Monitorar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+function goTo(pageId, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  if (navEl) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+}
+
+function setFilterP(el) {
+  el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setFilterC(el) {
+  if (el) {
+    el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+  }
+}
+
+function toggleDispute(id) {
+  var panel = document.getElementById('dispute-' + id);
+  if (panel) {
+    panel.classList.toggle('active');
+  }
+}
+</script>
+</body>
+</html>

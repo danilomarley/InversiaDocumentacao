@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResolvAI — Escolha sua Visao</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0F1C2E;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .logo-icon {
+    width: 56px; height: 56px;
+    background: #FF5C1A;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 800; color: #fff;
+  }
+  .logo-text {
+    font-size: 32px; font-weight: 800; color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .logo-text span { color: #FF5C1A; }
+  .tagline {
+    font-size: 16px; color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 13px; color: rgba(255,255,255,0.35);
+  }
+  .cards {
+    display: flex; gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 960px;
+  }
+  .role-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 36px 32px;
+    width: 280px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .role-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .role-card.blue:hover { box-shadow: 0 12px 40px rgba(37,99,235,0.25); border-color: rgba(37,99,235,0.4); }
+  .role-card.orange:hover { box-shadow: 0 12px 40px rgba(255,92,26,0.25); border-color: rgba(255,92,26,0.4); }
+  .role-card.purple:hover { box-shadow: 0 12px 40px rgba(123,94,167,0.25); border-color: rgba(123,94,167,0.4); }
+  .role-icon {
+    width: 72px; height: 72px;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  .blue .role-icon { background: rgba(37,99,235,0.15); }
+  .orange .role-icon { background: rgba(255,92,26,0.15); }
+  .purple .role-icon { background: rgba(123,94,167,0.15); }
+  .role-card h2 {
+    font-size: 18px; font-weight: 700; color: #fff;
+    margin-bottom: 6px;
+  }
+  .role-card .role-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    border-radius: 4px;
+    padding: 3px 10px;
+  }
+  .blue .role-label { color: #60A5FA; background: rgba(37,99,235,0.12); }
+  .orange .role-label { color: #FB923C; background: rgba(255,92,26,0.12); }
+  .purple .role-label { color: #C4B5FD; background: rgba(123,94,167,0.12); }
+  .role-card p {
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .role-card .platform {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .role-card .screens {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    margin-top: 6px;
+  }
+  .btn-group {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+  .role-btn {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .role-btn:hover { opacity: 0.85; }
+  .role-btn-solid.blue { background: #2563EB; }
+  .role-btn-solid.orange { background: #FF5C1A; }
+  .role-btn-solid.purple { background: #7B5EA7; }
+  .role-btn-outline.blue { background: transparent; border: 1.5px solid #2563EB; color: #60A5FA; }
+  .role-btn-outline.orange { background: transparent; border: 1.5px solid #FF5C1A; color: #FB923C; }
+  .role-btn-outline.purple { background: transparent; border: 1.5px solid #7B5EA7; color: #C4B5FD; }
+  .role-btn-outline:hover { opacity: 0.85; }
+  .footer {
+    margin-top: 48px;
+    text-align: center;
+    color: rgba(255,255,255,0.2);
+    font-size: 12px;
+  }
+  .footer span { color: #FF5C1A; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo-row">
+    <div class="logo-icon">R</div>
+    <div class="logo-text">Resolv<span>AI</span></div>
+  </div>
+  <div class="tagline">Conectando quem precisa a quem resolve.</div>
+  <div class="subtitle">Selecione a visao do prototipo para explorar</div>
+</div>
+
+<div class="cards">
+
+  <div class="role-card blue" style="cursor:default">
+    <div class="role-icon">🏠</div>
+    <div class="role-label">Mobile + Web</div>
+    <h2>Contratante</h2>
+    <p>Descreva seu problema, receba propostas e contrate com seguranca usando IA.</p>
+    <div class="platform">📱 11 telas mobile &nbsp;·&nbsp; 💻 11 telas web</div>
+    <div class="btn-group" onclick="event.stopPropagation()">
+      <a href="cliente.html" class="role-btn role-btn-solid blue">📱 Mobile</a>
+      <a href="cliente-web.html" class="role-btn role-btn-outline blue">💻 Web</a>
+    </div>
+  </div>
+
+  <div class="role-card orange" style="cursor:default">
+    <div class="role-icon">🔧</div>
+    <div class="role-label">Mobile + Web</div>
+    <h2>Prestador</h2>
+    <p>Encontre oportunidades, envie propostas e gerencie seus servicos.</p>
+    <div class="platform">📱 9 telas mobile &nbsp;·&nbsp; 💻 9 telas web</div>
+    <div class="btn-group" onclick="event.stopPropagation()">
+      <a href="fornecedor.html" class="role-btn role-btn-solid orange">📱 Mobile</a>
+      <a href="fornecedor-web.html" class="role-btn role-btn-outline orange">💻 Web</a>
+    </div>
+  </div>
+
+  <a href="admim.html" class="role-card purple">
+    <div class="role-icon">📊</div>
+    <div class="role-label">Web Desktop</div>
+    <h2>Administrador</h2>
+    <p>Gerencie a plataforma, monitore contratos e medie disputas.</p>
+    <div class="platform">💻 Painel Web</div>
+    <div class="screens">6 telas</div>
+    <div class="btn-group">
+      <div class="role-btn role-btn-solid purple">💻 Acessar Painel Admin</div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  Prototipo Academico — <span>ResolvAI</span> 2026
+</div>
+
+</body>
+</html>

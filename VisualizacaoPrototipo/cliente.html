@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResolvAI — Visao Cliente (Mobile)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {
+    --pri: #2563EB; --pri-lt: #EFF6FF; --pri-dk: #1E40AF;
+    --dk: #0F1C2E; --bg: #F0F4FF; --wh: #FFFFFF;
+    --mu: #6B727F; --bo: #E5E7EB; --su: #10B981; --su-lt: #ECFDF5;
+    --wa: #F4B811; --wa-lt: #FFFBEB; --da: #EF4444; --da-lt: #FEE2E2;
+    --vi: #7B5EA7; --vi-lt: #EFE8FC;
+    --gr: #F8FAFC; --or: #FF5C1A; --or-lt: #FFF7EB;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Inter',-apple-system,sans-serif;
+    background:#1a1a2e;
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .back-link {
+    position:fixed; top:20px; left:20px;
+    color:rgba(255,255,255,0.5); font-size:13px; text-decoration:none;
+    display:flex; align-items:center; gap:6px; z-index:999;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color:#fff; }
+
+  /* PHONE FRAME */
+  .phone-frame {
+    width:375px; height:812px;
+    background:var(--bg);
+    border-radius:44px;
+    box-shadow: 0 0 0 10px #1a1a2e, 0 0 0 12px #333, 0 30px 80px rgba(0,0,0,0.5);
+    position:relative;
+    overflow:hidden;
+  }
+  .status-bar {
+    height:44px; background:var(--wh);
+    display:flex; align-items:flex-end; justify-content:space-between;
+    padding:0 24px 6px;
+    font-size:12px; font-weight:600; color:var(--dk);
+    position:absolute; top:0; left:0; right:0; z-index:20;
+  }
+  .status-bar .time { font-weight:700; }
+  .status-bar .icons { display:flex; gap:4px; font-size:11px; }
+  .screen-content {
+    position:absolute; top:44px; bottom:64px;
+    left:0; right:0;
+    overflow-y:auto; overflow-x:hidden;
+  }
+  .screen-content::-webkit-scrollbar { width:0; }
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* TOP BAR (sub-screens) */
+  .top-bar {
+    background:var(--wh); padding:14px 16px;
+    display:flex; align-items:center; gap:10px;
+    border-bottom:1px solid var(--bo);
+    position:sticky; top:0; z-index:10;
+  }
+  .top-bar .back { font-size:18px; cursor:pointer; color:var(--pri); background:none; border:none; padding:0; }
+  .top-bar h2 { font-size:16px; font-weight:700; color:var(--dk); flex:1; }
+  .top-bar .subtitle { font-size:11px; color:var(--mu); margin-top:2px; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position:absolute; bottom:0; left:0; right:0;
+    height:64px; background:var(--wh);
+    border-top:1px solid var(--bo);
+    display:flex; z-index:20;
+    padding-bottom:8px;
+    border-radius:0 0 44px 44px;
+  }
+  .nav-tab {
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:2px; cursor:pointer; border:none; background:none;
+    color:var(--mu); font-size:10px; font-weight:500;
+    transition: color 0.15s;
+  }
+  .nav-tab .tab-icon { font-size:20px; }
+  .nav-tab.active { color:var(--pri); font-weight:700; }
+
+  /* UTILITIES */
+  .px { padding-left:16px; padding-right:16px; }
+  .btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:6px; padding:12px 20px; border-radius:10px;
+    font-size:14px; font-weight:600; cursor:pointer; border:none;
+    transition: opacity 0.15s; font-family:inherit;
+  }
+  .btn:hover { opacity:0.85; }
+  .btn-pri { background:var(--pri); color:#fff; }
+  .btn-pri-lt { background:var(--pri-lt); color:var(--pri); }
+  .btn-ghost { background:var(--gr); color:var(--mu); border:1px solid var(--bo); }
+  .btn-su { background:var(--su); color:#fff; }
+  .btn-da { background:var(--da-lt); color:var(--da); }
+  .btn-full { width:100%; }
+  .btn-sm { padding:8px 14px; font-size:12px; border-radius:8px; }
+  .badge { display:inline-block; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; }
+  .badge-pri { background:var(--pri-lt); color:var(--pri); }
+  .badge-su { background:var(--su-lt); color:var(--su); }
+  .badge-wa { background:var(--wa-lt); color:#B45309; }
+  .badge-da { background:var(--da-lt); color:var(--da); }
+  .badge-vi { background:var(--vi-lt); color:var(--vi); }
+  .card { background:var(--wh); border-radius:14px; padding:16px; }
+  .section-title { font-size:15px; font-weight:700; color:var(--dk); margin-bottom:10px; }
+  .divider { height:1px; background:var(--bo); margin:16px 0; }
+
+  /* ========== C1: ONBOARDING ========== */
+  #page-onboarding { background:var(--wh); min-height:100%; }
+  #page-onboarding.active { display:flex; flex-direction:column; }
+  .onb-slides { flex:1; position:relative; overflow:hidden; }
+  .onb-slide { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 32px; text-align:center; opacity:0; transition:opacity 0.4s,transform 0.4s; transform:translateX(60px); }
+  .onb-slide.active { opacity:1; transform:translateX(0); }
+  .onb-illust { width:180px; height:180px; border-radius:24px; display:flex; align-items:center; justify-content:center; font-size:64px; margin-bottom:28px; }
+  .onb-slide h2 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:10px; }
+  .onb-slide p { font-size:14px; color:var(--mu); line-height:1.6; }
+  .onb-bottom { padding:20px 24px 32px; display:flex; flex-direction:column; gap:10px; }
+  .onb-dots { display:flex; justify-content:center; gap:8px; margin-bottom:16px; }
+  .onb-dot { width:8px; height:8px; border-radius:50%; background:var(--bo); transition:all 0.3s; }
+  .onb-dot.active { width:24px; border-radius:4px; background:var(--pri); }
+  .onb-skip { text-align:center; font-size:12px; color:var(--mu); cursor:pointer; margin-top:4px; }
+
+  /* ========== C2: HOME ========== */
+  .home-hero {
+    background:linear-gradient(135deg, var(--pri), var(--pri-dk));
+    margin:16px; border-radius:16px; padding:22px 20px;
+  }
+  .home-hero h2 { color:#fff; font-size:18px; font-weight:700; margin-bottom:4px; }
+  .home-hero p { color:rgba(255,255,255,0.75); font-size:12px; margin-bottom:16px; }
+  .home-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 16px 16px; }
+  .home-stat { background:var(--wh); border-radius:12px; padding:14px 12px; text-align:center; }
+  .home-stat .num { font-size:22px; font-weight:700; color:var(--pri); }
+  .home-stat .lbl { font-size:10px; color:var(--mu); margin-top:2px; }
+  .order-card {
+    background:var(--wh); border-radius:12px; padding:14px 16px;
+    margin:0 16px 8px; display:flex; align-items:center; gap:12px;
+    border-left:4px solid transparent;
+  }
+  .order-card .info { flex:1; }
+  .order-card .info strong { display:block; font-size:13px; color:var(--dk); margin-bottom:2px; }
+  .order-card .info span { font-size:11px; color:var(--mu); }
+  .order-card .time { font-size:10px; color:var(--mu); }
+  .tip-box { background:var(--pri-lt); border-radius:12px; padding:14px 16px; margin:12px 16px; font-size:12px; color:var(--pri-dk); }
+
+  /* ========== C3: CHAT IA ========== */
+  .chat-wrap { display:flex; flex-direction:column; min-height:100%; }
+  .chat-progress { padding:12px 16px 0; }
+  .chat-progress-bar { height:6px; background:var(--bo); border-radius:3px; overflow:hidden; }
+  .chat-progress-fill { height:100%; background:var(--pri); border-radius:3px; transition:width 0.5s; }
+  .chat-progress-label { font-size:10px; color:var(--mu); margin-top:4px; text-align:right; }
+  .chat-msgs { flex:1; padding:12px 16px; display:flex; flex-direction:column; gap:10px; overflow-y:auto; }
+  .msg { max-width:80%; padding:12px 14px; border-radius:14px; font-size:13px; line-height:1.5; }
+  .msg.ai { background:var(--wh); color:var(--dk); align-self:flex-start; border:1px solid var(--bo); border-bottom-left-radius:4px; }
+  .msg.user { background:var(--pri); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+  .msg.ai-final { background:var(--su-lt); border:1px solid #A7F3D0; color:var(--dk); align-self:flex-start; border-bottom-left-radius:4px; }
+  .chat-chips { display:flex; gap:8px; flex-wrap:wrap; padding:0 16px 8px; }
+  .chip { padding:8px 14px; border-radius:20px; font-size:12px; font-weight:500; background:var(--pri-lt); color:var(--pri); cursor:pointer; border:1px solid transparent; transition:all 0.15s; }
+  .chip:hover { border-color:var(--pri); }
+  .chat-input-bar {
+    padding:10px 16px 12px; background:var(--wh);
+    border-top:1px solid var(--bo);
+    display:flex; gap:8px; align-items:center;
+  }
+  .chat-input {
+    flex:1; border:1px solid var(--bo); border-radius:20px;
+    padding:10px 16px; font-size:13px; color:var(--dk);
+    outline:none; font-family:inherit; background:var(--gr);
+  }
+  .chat-input:focus { border-color:var(--pri); background:var(--wh); }
+  .chat-btn-icon {
+    width:38px; height:38px; border-radius:50%; border:none;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; cursor:pointer; transition:opacity 0.15s;
+  }
+  .chat-btn-icon:hover { opacity:0.8; }
+
+  /* ========== C4: ESCOPO ========== */
+  .scope-section { padding:16px; }
+  .scope-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
+  .scope-field { margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--bo); }
+  .scope-field:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .scope-field label { display:block; font-size:10px; font-weight:600; color:var(--mu); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .scope-field p { font-size:13px; color:var(--dk); line-height:1.5; }
+  .scope-field .edit-link { font-size:11px; color:var(--pri); cursor:pointer; float:right; margin-top:-16px; }
+  .urgency-banner { background:var(--wa-lt); border-radius:12px; padding:12px 16px; margin:0 16px 12px; display:flex; align-items:center; gap:10px; }
+  .urgency-banner .icon { font-size:24px; }
+  .urgency-banner strong { font-size:13px; color:#B45309; display:block; }
+  .urgency-banner p { font-size:11px; color:#92400E; }
+  .photo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .photo-thumb { height:64px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-weight:600; }
+
+  /* ========== C5: PROPOSTAS ========== */
+  .filter-scroll { display:flex; gap:8px; padding:12px 16px; overflow-x:auto; }
+  .filter-scroll::-webkit-scrollbar { display:none; }
+  .filter-pill { padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600; white-space:nowrap; cursor:pointer; background:var(--wh); color:var(--mu); border:1px solid var(--bo); transition:all 0.15s; flex-shrink:0; }
+  .filter-pill.active { background:var(--pri-lt); color:var(--pri); border-color:var(--pri); }
+  .prop-card {
+    background:var(--wh); border-radius:14px; padding:16px;
+    margin:0 16px 10px;
+  }
+  .prop-top { display:flex; gap:12px; margin-bottom:10px; }
+  .prop-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
+  .prop-info h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:2px; }
+  .prop-info .meta { font-size:11px; color:var(--mu); }
+  .prop-details { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+  .prop-detail-item { text-align:center; }
+  .prop-detail-item .val { font-size:15px; font-weight:700; color:var(--pri); }
+  .prop-detail-item .lbl { font-size:10px; color:var(--mu); }
+  .prop-actions { display:flex; gap:8px; }
+  .prop-actions .btn { flex:1; }
+  .compare-bar { position:sticky; bottom:0; background:var(--pri); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; display:none; }
+  .compare-bar span { color:#fff; font-size:13px; font-weight:600; }
+
+  /* ========== C6: DETALHE PROPOSTA ========== */
+  .prov-profile { padding:16px; }
+  .prov-header { background:var(--wh); border-radius:14px; padding:18px; display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
+  .prov-avatar-lg { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#fff; flex-shrink:0; }
+  .prov-detail h2 { font-size:16px; font-weight:700; color:var(--dk); margin-bottom:2px; }
+  .prov-detail .rating { font-size:12px; color:var(--mu); margin-bottom:6px; }
+  .prov-badges { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+  .prov-proposal-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
+  .prov-proposal-card .big-price { font-size:28px; font-weight:700; color:var(--pri); margin:8px 0; }
+  .include-list { list-style:none; margin-top:8px; }
+  .include-list li { font-size:12px; color:var(--dk); padding:4px 0; display:flex; gap:6px; }
+  .include-list li::before { content:"✓"; color:var(--su); font-weight:700; }
+  .portfolio-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+  .portfolio-img { height:72px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-weight:600; }
+  .review-item { background:var(--wh); border-radius:10px; padding:12px; margin-bottom:8px; }
+  .review-item .reviewer { font-size:12px; font-weight:700; color:var(--dk); }
+  .review-item .stars { font-size:12px; color:var(--wa); margin:2px 0; }
+  .review-item .text { font-size:12px; color:var(--mu); }
+
+  /* ========== C7: COMPARAR ========== */
+  .compare-scroll { overflow-x:auto; padding:16px; }
+  .compare-scroll::-webkit-scrollbar { display:none; }
+  .compare-table { display:flex; gap:10px; min-width:max-content; }
+  .compare-col { width:160px; flex-shrink:0; }
+  .compare-col .col-header { background:var(--wh); border-radius:12px 12px 0 0; padding:14px; text-align:center; }
+  .compare-col .col-avatar { width:48px; height:48px; border-radius:50%; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:#fff; }
+  .compare-col .col-name { font-size:13px; font-weight:700; color:var(--dk); }
+  .compare-col .col-rating { font-size:11px; color:var(--mu); margin-top:2px; }
+  .compare-row { background:var(--wh); padding:10px 14px; border-top:1px solid var(--bo); text-align:center; }
+  .compare-row .row-label { font-size:9px; color:var(--mu); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px; }
+  .compare-row .row-val { font-size:14px; font-weight:700; color:var(--dk); }
+  .compare-row.best .row-val { color:var(--su); }
+  .compare-col .col-footer { background:var(--wh); border-radius:0 0 12px 12px; padding:12px; }
+
+  /* ========== C8: CHAT PRESTADOR ========== */
+  .chat-prov-header {
+    background:var(--wh); padding:12px 16px;
+    display:flex; align-items:center; gap:12px;
+    border-bottom:1px solid var(--bo);
+    position:sticky; top:0; z-index:10;
+  }
+  .chat-prov-header .back { font-size:18px; cursor:pointer; color:var(--pri); background:none; border:none; }
+  .chat-prov-header .avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
+  .chat-prov-header .info { flex:1; }
+  .chat-prov-header .info strong { font-size:14px; color:var(--dk); display:block; }
+  .chat-prov-header .info span { font-size:11px; color:var(--su); }
+  .system-msg { background:var(--pri-lt); border-radius:10px; padding:10px 14px; margin:12px 16px; font-size:12px; color:var(--pri-dk); text-align:center; }
+  .checklist { padding:0 16px; margin-bottom:12px; }
+  .checklist-item { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--wh); border-radius:10px; margin-bottom:6px; cursor:pointer; }
+  .checklist-check { width:20px; height:20px; border-radius:6px; border:2px solid var(--bo); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--wh); transition:all 0.15s; flex-shrink:0; }
+  .checklist-item.done .checklist-check { background:var(--su); border-color:var(--su); color:#fff; }
+  .checklist-item span { font-size:13px; color:var(--dk); }
+  .chat-contract-btn { padding:12px 16px; background:var(--wh); border-top:1px solid var(--bo); }
+
+  /* ========== C9: SMART CONTRACT ========== */
+  .contract-section { padding:16px; }
+  .contract-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
+  .contract-parties { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .contract-party { text-align:center; }
+  .contract-party .avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; margin:0 auto 6px; }
+  .contract-party .name { font-size:12px; font-weight:600; color:var(--dk); }
+  .contract-party .role { font-size:10px; color:var(--mu); }
+  .contract-arrow { font-size:20px; color:var(--bo); }
+  .contract-terms { margin-top:12px; }
+  .contract-term { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--bo); }
+  .contract-term:last-child { border-bottom:none; }
+  .contract-term .icon { font-size:18px; flex-shrink:0; margin-top:2px; }
+  .contract-term .label { font-size:11px; color:var(--mu); }
+  .contract-term .value { font-size:13px; font-weight:600; color:var(--dk); }
+  .sign-area { background:var(--gr); border:2px dashed var(--bo); border-radius:12px; padding:24px; text-align:center; margin:12px 0; cursor:pointer; transition:border-color 0.15s; }
+  .sign-area:hover { border-color:var(--pri); }
+  .sign-area .pen { font-size:28px; margin-bottom:6px; }
+  .sign-area p { font-size:12px; color:var(--mu); }
+  .contract-status { background:var(--wa-lt); border-radius:10px; padding:10px 14px; font-size:12px; color:#92400E; text-align:center; margin-bottom:12px; }
+  .checkbox-row { display:flex; align-items:center; gap:10px; padding:12px 0; cursor:pointer; }
+  .checkbox { width:20px; height:20px; border-radius:6px; border:2px solid var(--bo); display:flex; align-items:center; justify-content:center; font-size:12px; transition:all 0.15s; flex-shrink:0; }
+  .checkbox.checked { background:var(--pri); border-color:var(--pri); color:#fff; }
+  .checkbox-row span { font-size:13px; color:var(--dk); }
+
+  /* ========== C10: CHECKOUT ========== */
+  .checkout-section { padding:16px; }
+  .payment-method {
+    background:var(--wh); border-radius:12px; padding:14px 16px;
+    margin-bottom:8px; display:flex; align-items:center; gap:12px;
+    cursor:pointer; border:2px solid transparent; transition:all 0.15s;
+  }
+  .payment-method.selected { border-color:var(--pri); background:var(--pri-lt); }
+  .payment-method .pm-icon { font-size:24px; }
+  .payment-method .pm-info { flex:1; }
+  .payment-method .pm-info strong { font-size:13px; color:var(--dk); display:block; }
+  .payment-method .pm-info span { font-size:11px; color:var(--mu); }
+  .payment-method .pm-radio { width:20px; height:20px; border-radius:50%; border:2px solid var(--bo); display:flex; align-items:center; justify-content:center; }
+  .payment-method.selected .pm-radio { border-color:var(--pri); }
+  .payment-method.selected .pm-radio::after { content:''; width:10px; height:10px; border-radius:50%; background:var(--pri); }
+  .installment-card { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .installment-option { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--bo); font-size:13px; cursor:pointer; }
+  .installment-option:last-child { border-bottom:none; }
+  .installment-option.selected { color:var(--pri); font-weight:600; }
+  .escrow-notice { background:var(--su-lt); border-radius:12px; padding:14px 16px; margin:12px 0; display:flex; gap:10px; align-items:flex-start; }
+  .escrow-notice .icon { font-size:20px; }
+  .escrow-notice p { font-size:12px; color:#065F46; line-height:1.5; }
+
+  /* ========== C11: CONFIRMACAO + AVALIACAO ========== */
+  .confirm-screen { padding:32px 16px 16px; text-align:center; }
+  .confirm-check { width:72px; height:72px; background:var(--su); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff; margin:0 auto 16px; }
+  .confirm-screen h2 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:6px; }
+  .confirm-screen > p { font-size:13px; color:var(--mu); margin-bottom:20px; }
+  .confirm-summary { background:var(--gr); border-radius:12px; padding:14px; text-align:left; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .confirm-summary .item label { font-size:9px; font-weight:600; color:var(--mu); text-transform:uppercase; display:block; }
+  .confirm-summary .item strong { font-size:13px; color:var(--dk); }
+  .rating-section { padding:16px; }
+  .rating-banner { background:var(--pri-lt); border-radius:12px; padding:16px; text-align:center; margin-bottom:16px; }
+  .rating-banner h3 { font-size:15px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .rating-banner p { font-size:12px; color:var(--mu); }
+  .stars-row { display:flex; justify-content:center; gap:8px; margin:16px 0; }
+  .star { font-size:32px; cursor:pointer; transition:transform 0.15s; color:var(--bo); }
+  .star.filled { color:var(--wa); }
+  .star:hover { transform:scale(1.2); }
+  .rating-comment { width:100%; border:1px solid var(--bo); border-radius:10px; padding:12px; font-size:13px; font-family:inherit; color:var(--dk); outline:none; resize:none; min-height:80px; background:var(--wh); }
+  .rating-comment:focus { border-color:var(--pri); }
+  .dispute-section { background:var(--da-lt); border-radius:12px; padding:16px; margin-top:12px; }
+  .dispute-section h4 { font-size:13px; font-weight:700; color:var(--da); margin-bottom:6px; }
+  .dispute-section p { font-size:12px; color:#991B1B; }
+
+  /* ========== NOTIFICACOES ========== */
+  .notif-list { padding:16px; }
+  .notif-card { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:8px; display:flex; gap:12px; position:relative; }
+  .notif-card.unread { background:var(--pri-lt); border-left:3px solid var(--pri); }
+  .notif-icon { font-size:20px; flex-shrink:0; }
+  .notif-info { flex:1; }
+  .notif-info h4 { font-size:13px; font-weight:700; color:var(--dk); margin-bottom:2px; }
+  .notif-info p { font-size:12px; color:var(--mu); }
+  .notif-time { font-size:10px; color:var(--mu); white-space:nowrap; }
+  .notif-dot { width:7px; height:7px; background:var(--pri); border-radius:50%; position:absolute; top:14px; right:14px; }
+
+  /* ========== PERFIL ========== */
+  .profile-section { padding:16px; }
+  .profile-top { background:var(--wh); border-radius:14px; padding:20px; display:flex; gap:16px; align-items:center; margin-bottom:12px; }
+  .profile-avatar { width:64px; height:64px; border-radius:50%; background:var(--pri); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:#fff; flex-shrink:0; }
+  .profile-top .info h2 { font-size:16px; font-weight:700; color:var(--dk); }
+  .profile-top .info p { font-size:12px; color:var(--mu); margin-top:2px; }
+  .form-card { background:var(--wh); border-radius:12px; padding:16px; margin-bottom:12px; }
+  .form-card h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--bo); }
+  .form-field { margin-bottom:12px; }
+  .form-field label { display:block; font-size:10px; font-weight:600; color:var(--mu); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px; }
+  .form-field input { width:100%; background:var(--gr); border:1px solid var(--bo); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--dk); font-family:inherit; outline:none; }
+  .form-field input:focus { border-color:var(--pri); }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">← Voltar ao Menu</a>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="icons">📶 🔋</span>
+  </div>
+
+  <div class="screen-content">
+
+    <!-- ===== C1: ONBOARDING ===== -->
+    <div id="page-onboarding" class="page active">
+      <div class="onb-slides" id="onb-slides">
+        <div class="onb-slide active" data-slide="0">
+          <div class="onb-illust" style="background:var(--pri-lt)">📝</div>
+          <h2>Descreva seu problema</h2>
+          <p>Converse com a IA e ela vai estruturar um escopo tecnico completo do seu servico.</p>
+        </div>
+        <div class="onb-slide" data-slide="1">
+          <div class="onb-illust" style="background:var(--su-lt)">📊</div>
+          <h2>Compare propostas</h2>
+          <p>Receba propostas padronizadas com preco, prazo e garantia. Compare lado a lado.</p>
+        </div>
+        <div class="onb-slide" data-slide="2">
+          <div class="onb-illust" style="background:var(--vi-lt)">🔒</div>
+          <h2>Contrate com seguranca</h2>
+          <p>Smart contract + pagamento em escrow. Seu dinheiro so e liberado quando voce confirma.</p>
+        </div>
+      </div>
+      <div class="onb-bottom">
+        <div class="onb-dots">
+          <div class="onb-dot active" data-dot="0"></div>
+          <div class="onb-dot" data-dot="1"></div>
+          <div class="onb-dot" data-dot="2"></div>
+        </div>
+        <button class="btn btn-pri btn-full" onclick="nextSlide()">Criar conta</button>
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">Ja tenho conta</button>
+        <div class="onb-skip" onclick="goTo('home','home')">Pular</div>
+      </div>
+    </div>
+
+    <!-- ===== C2: HOME ===== -->
+    <div id="page-home" class="page">
+      <div class="home-hero">
+        <h2>Ola, Ygor! 👋</h2>
+        <p>O que voce precisa resolver hoje?</p>
+        <button class="btn" style="background:#fff;color:var(--pri);font-weight:700" onclick="goTo('chat','chat')">Criar novo pedido com IA →</button>
+      </div>
+      <div class="home-stats">
+        <div class="home-stat"><div class="num">3</div><div class="lbl">Pedidos ativos</div></div>
+        <div class="home-stat"><div class="num">1</div><div class="lbl">Propostas</div></div>
+        <div class="home-stat"><div class="num">2</div><div class="lbl">Aguardando</div></div>
+      </div>
+      <div class="px section-title">Seus pedidos ativos</div>
+      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('propostas','pedidos')">
+        <div class="info"><strong>Infiltracao no teto da sala</strong><span class="badge badge-wa">Aguardando propostas</span></div>
+        <span class="time">2 dias</span>
+      </div>
+      <div class="order-card" style="border-left-color:var(--su)" onclick="goTo('propostas','pedidos')">
+        <div class="info"><strong>Torneira com vazamento</strong><span class="badge badge-su">1 proposta recebida</span></div>
+        <span class="time">5 dias</span>
+      </div>
+      <div class="order-card" style="border-left-color:var(--vi)" onclick="goTo('chat-provider','chat')">
+        <div class="info"><strong>Pintura area externa</strong><span class="badge badge-vi">Em andamento</span></div>
+        <span class="time">1 sem</span>
+      </div>
+      <div class="tip-box">💡 <strong>Dica:</strong> Descreva com detalhes — a IA gera um escopo mais preciso e atrai prestadores qualificados.</div>
+    </div>
+
+    <!-- ===== C3: CHAT IA ===== -->
+    <div id="page-chat" class="page">
+      <div class="chat-wrap">
+        <div class="top-bar">
+          <button class="back" onclick="goTo('home','home')">←</button>
+          <div><h2>Chat com IA</h2><div class="subtitle">Criacao do escopo</div></div>
+        </div>
+        <div class="chat-progress"><div class="chat-progress-bar"><div class="chat-progress-fill" style="width:90%"></div></div><div class="chat-progress-label">90% do escopo</div></div>
+        <div class="chat-msgs" id="chat-msgs">
+          <div class="msg ai">Ola! Vou te ajudar a criar um pedido. Qual tipo de servico voce precisa? 🤖</div>
+          <div class="msg user">Tenho uma infiltracao no teto da sala de estar. Apareceu uma mancha de umidade grande e esta pingando quando chove.</div>
+          <div class="msg ai">Entendi. Vou fazer algumas perguntas para melhor diagnostico:
+
+• O imovel e casa ou apartamento?
+• A mancha esta em qual andar?
+• Tem laje ou telha acima da area?</div>
+          <div class="msg user">E um apartamento, 3o andar. Tem laje acima com area de servico do vizinho do 4o.</div>
+          <div class="msg ai-final">✅ Diagnostico concluido!
+
+Problema: Infiltracao por laje
+Causa provavel: Impermeabilizacao comprometida
+Servico: Inspecao + Impermeabilizacao
+Urgencia: 🔴 Alta</div>
+        </div>
+        <div class="chat-chips">
+          <span class="chip">Hidraulica</span>
+          <span class="chip">Eletrica</span>
+          <span class="chip">Pintura</span>
+          <span class="chip">Alvenaria</span>
+        </div>
+        <div class="chat-input-bar">
+          <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📷</button>
+          <input class="chat-input" type="text" id="chat-input" placeholder="Digite sua resposta..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendMsg()">↑</button>
+          <button class="btn btn-su btn-sm" onclick="goTo('escopo')">Ver Escopo →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== C4: ESCOPO ===== -->
+    <div id="page-escopo" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('chat','chat')">←</button>
+        <div><h2>Escopo Gerado pela IA</h2><div class="subtitle">Revise antes de publicar</div></div>
+      </div>
+      <div class="urgency-banner">
+        <span class="icon">⚠️</span>
+        <div><strong>Urgencia: Alta</strong><p>Risco de curto-circuito e danos estruturais.</p></div>
+      </div>
+      <div class="scope-section">
+        <div class="scope-card">
+          <div class="scope-field"><label>Titulo</label><span class="edit-link">Editar</span><p>Infiltracao por Laje — Ap. 3o Andar</p></div>
+          <div class="scope-field"><label>Tipo de servico</label><span class="edit-link">Editar</span><p>Impermeabilizacao de laje + Reparo de trinca</p></div>
+          <div class="scope-field"><label>Localizacao</label><span class="edit-link">Editar</span><p>Laje entre 3o e 4o andar — area de servico do apartamento superior</p></div>
+          <div class="scope-field"><label>Problema identificado</label><span class="edit-link">Editar</span><p>Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro.</p></div>
+          <div class="scope-field"><label>Servicos inclusos</label><span class="edit-link">Editar</span><p>• Inspecao visual e teste de estanqueidade<br>• Remocao do revestimento danificado<br>• Aplicacao de manta asfaltica<br>• Repintura final</p></div>
+          <div class="scope-field"><label>Prazo estimado</label><p>3 a 5 dias uteis</p></div>
+          <div class="scope-field">
+            <label>Fotos enviadas</label>
+            <div class="photo-grid">
+              <div class="photo-thumb" style="background:var(--pri)">Foto 1</div>
+              <div class="photo-thumb" style="background:var(--pri-dk)">Foto 2</div>
+              <div class="photo-thumb" style="background:#4F7CAC">Foto 3</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--mu);text-align:center;margin-bottom:12px">E assim que os prestadores vao ver seu pedido</div>
+        <button class="btn btn-pri btn-full" onclick="goTo('propostas','pedidos')">🚀 Publicar pedido</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="goTo('chat','chat')">← Voltar ao chat</button>
+      </div>
+    </div>
+
+    <!-- ===== C5: PROPOSTAS ===== -->
+    <div id="page-propostas" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('home','home')">←</button>
+        <div><h2>Propostas Recebidas</h2><div class="subtitle">3 propostas recebidas • 8 visualizaram</div></div>
+      </div>
+      <div class="filter-scroll">
+        <span class="filter-pill active" onclick="setFilter(this)">Melhor avaliacao</span>
+        <span class="filter-pill" onclick="setFilter(this)">Menor preco</span>
+        <span class="filter-pill" onclick="setFilter(this)">Menor prazo</span>
+      </div>
+      <div class="prop-card" onclick="goTo('detalhe')">
+        <div class="prop-top">
+          <div class="prop-avatar" style="background:var(--pri)">C</div>
+          <div class="prop-info">
+            <h3>Carlos Impermeabilizacoes <span class="badge badge-wa">🏅 TOP</span></h3>
+            <div class="meta">4.9 ★ · 127 servicos · ✅ Verificado</div>
+          </div>
+        </div>
+        <div class="prop-details">
+          <div class="prop-detail-item"><div class="val">R$1.850</div><div class="lbl">Preco</div></div>
+          <div class="prop-detail-item"><div class="val">4 dias</div><div class="lbl">Prazo</div></div>
+          <div class="prop-detail-item"><div class="val" style="color:var(--su)">5 anos</div><div class="lbl">Garantia</div></div>
+        </div>
+        <div class="prop-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+        </div>
+      </div>
+      <div class="prop-card" onclick="goTo('detalhe')">
+        <div class="prop-top">
+          <div class="prop-avatar" style="background:var(--vi)">F</div>
+          <div class="prop-info">
+            <h3>Fix Construcoes</h3>
+            <div class="meta">4.7 ★ · 89 servicos</div>
+          </div>
+        </div>
+        <div class="prop-details">
+          <div class="prop-detail-item"><div class="val">R$1.620</div><div class="lbl">Preco</div></div>
+          <div class="prop-detail-item"><div class="val">5 dias</div><div class="lbl">Prazo</div></div>
+          <div class="prop-detail-item"><div class="val" style="color:var(--su)">2 anos</div><div class="lbl">Garantia</div></div>
+        </div>
+        <div class="prop-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+        </div>
+      </div>
+      <div class="prop-card" onclick="goTo('detalhe')">
+        <div class="prop-top">
+          <div class="prop-avatar" style="background:var(--su)">R</div>
+          <div class="prop-info">
+            <h3>Reforma Express <span class="badge badge-pri">⚡ RAPIDO</span></h3>
+            <div class="meta">4.5 ★ · 54 servicos</div>
+          </div>
+        </div>
+        <div class="prop-details">
+          <div class="prop-detail-item"><div class="val">R$1.400</div><div class="lbl">Preco</div></div>
+          <div class="prop-detail-item"><div class="val">3 dias</div><div class="lbl">Prazo</div></div>
+          <div class="prop-detail-item"><div class="val" style="color:var(--su)">90 dias</div><div class="lbl">Garantia</div></div>
+        </div>
+        <div class="prop-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+        </div>
+      </div>
+      <div style="padding:0 16px 12px">
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('compare')">📊 Comparar propostas lado a lado</button>
+      </div>
+    </div>
+
+    <!-- ===== C6: DETALHE PROPOSTA ===== -->
+    <div id="page-detalhe" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('propostas','pedidos')">←</button>
+        <h2>Carlos Impermeabilizacoes</h2>
+      </div>
+      <div class="prov-profile">
+        <div class="prov-header">
+          <div class="prov-avatar-lg" style="background:var(--pri)">C</div>
+          <div class="prov-detail">
+            <h2>Carlos Impermeabilizacoes</h2>
+            <div class="rating">4.9 ★ · 127 servicos · Fortaleza, CE</div>
+            <p style="font-size:12px;color:var(--mu)">Especialista em impermeabilizacao ha 12 anos.</p>
+            <div class="prov-badges">
+              <span class="badge badge-su">✅ Verificado</span>
+              <span class="badge badge-wa">🏅 Top Rated</span>
+            </div>
+          </div>
+        </div>
+        <div class="prov-proposal-card">
+          <div style="font-size:13px;font-weight:700;color:var(--dk)">Proposta para seu pedido</div>
+          <div class="big-price">R$ 1.850</div>
+          <div style="font-size:12px;color:var(--mu)">Prazo: 4 dias uteis</div>
+          <div style="font-size:12px;color:var(--su);margin-top:2px">✓ Garantia: 5 anos</div>
+          <div style="font-size:12px;font-weight:700;color:var(--dk);margin-top:12px">Incluso na proposta:</div>
+          <ul class="include-list">
+            <li>Inspecao visual e teste de estanqueidade</li>
+            <li>Remocao do revestimento danificado</li>
+            <li>Aplicacao de manta asfaltica</li>
+            <li>Emboco + tinta impermeavel</li>
+            <li>Laudo tecnico final</li>
+          </ul>
+        </div>
+        <div class="section-title">📸 Portfolio</div>
+        <div class="portfolio-row">
+          <div class="portfolio-img" style="background:var(--pri)">Obra 1</div>
+          <div class="portfolio-img" style="background:var(--pri-dk)">Obra 2</div>
+          <div class="portfolio-img" style="background:#4F7CAC">Obra 3</div>
+        </div>
+        <div class="section-title">Avaliacoes Recentes</div>
+        <div class="review-item"><div class="reviewer">Ana Lima</div><div class="stars">★★★★★</div><div class="text">Excelente servico! Problema resolvido em 3 dias.</div></div>
+        <div class="review-item"><div class="reviewer">Pedro Souza</div><div class="stars">★★★★★</div><div class="text">Cumpriu o prazo e o resultado ficou perfeito.</div></div>
+        <div class="review-item"><div class="reviewer">Maria Santos</div><div class="stars">★★★★☆</div><div class="text">Otimo custo-beneficio. Recomendo!</div></div>
+        <div style="padding-top:12px; display:flex; flex-direction:column; gap:8px;">
+          <button class="btn btn-pri btn-full" onclick="goTo('contract')">✅ Escolher esta proposta</button>
+          <button class="btn btn-ghost btn-full" onclick="goTo('chat-provider')">💬 Enviar mensagem</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== C7: COMPARAR ===== -->
+    <div id="page-compare" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('propostas','pedidos')">←</button>
+        <h2>Comparar Propostas</h2>
+      </div>
+      <div class="compare-scroll">
+        <div class="compare-table">
+          <div class="compare-col">
+            <div class="col-header">
+              <div class="col-avatar" style="background:var(--pri)">C</div>
+              <div class="col-name">Carlos Imp.</div>
+              <div class="col-rating">4.9 ★</div>
+            </div>
+            <div class="compare-row"><div class="row-label">Preco</div><div class="row-val">R$1.850</div></div>
+            <div class="compare-row best"><div class="row-label">Prazo</div><div class="row-val">4 dias</div></div>
+            <div class="compare-row best"><div class="row-label">Garantia</div><div class="row-val">5 anos ✓</div></div>
+            <div class="compare-row best"><div class="row-label">Avaliacao</div><div class="row-val">4.9 ★</div></div>
+            <div class="compare-row"><div class="row-label">Servicos</div><div class="row-val">127</div></div>
+            <div class="compare-row best"><div class="row-label">Verificado</div><div class="row-val">✅ Sim</div></div>
+            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('contract')">Escolher</button></div>
+          </div>
+          <div class="compare-col">
+            <div class="col-header">
+              <div class="col-avatar" style="background:var(--vi)">F</div>
+              <div class="col-name">Fix Const.</div>
+              <div class="col-rating">4.7 ★</div>
+            </div>
+            <div class="compare-row"><div class="row-label">Preco</div><div class="row-val">R$1.620</div></div>
+            <div class="compare-row"><div class="row-label">Prazo</div><div class="row-val">5 dias</div></div>
+            <div class="compare-row"><div class="row-label">Garantia</div><div class="row-val">2 anos</div></div>
+            <div class="compare-row"><div class="row-label">Avaliacao</div><div class="row-val">4.7 ★</div></div>
+            <div class="compare-row"><div class="row-label">Servicos</div><div class="row-val">89</div></div>
+            <div class="compare-row"><div class="row-label">Verificado</div><div class="row-val">✅ Sim</div></div>
+            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('contract')">Escolher</button></div>
+          </div>
+          <div class="compare-col">
+            <div class="col-header">
+              <div class="col-avatar" style="background:var(--su)">R</div>
+              <div class="col-name">Reforma Exp.</div>
+              <div class="col-rating">4.5 ★</div>
+            </div>
+            <div class="compare-row best"><div class="row-label">Preco</div><div class="row-val">R$1.400 ✓</div></div>
+            <div class="compare-row best"><div class="row-label">Prazo</div><div class="row-val">3 dias ✓</div></div>
+            <div class="compare-row"><div class="row-label">Garantia</div><div class="row-val">90 dias</div></div>
+            <div class="compare-row"><div class="row-label">Avaliacao</div><div class="row-val">4.5 ★</div></div>
+            <div class="compare-row"><div class="row-label">Servicos</div><div class="row-val">54</div></div>
+            <div class="compare-row"><div class="row-label">Verificado</div><div class="row-val">❌ Nao</div></div>
+            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('contract')">Escolher</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== C8: CHAT COM PRESTADOR ===== -->
+    <div id="page-chat-provider" class="page">
+      <div class="chat-wrap">
+        <div class="chat-prov-header">
+          <button class="back" onclick="goTo('propostas','pedidos')">←</button>
+          <div class="avatar" style="background:var(--pri)">C</div>
+          <div class="info"><strong>Carlos Impermeabilizacoes</strong><span>● Online</span></div>
+        </div>
+        <div class="system-msg">Voce escolheu a proposta de Carlos. Alinhem os detalhes antes de assinar o contrato.</div>
+        <div class="px section-title" style="margin-top:12px">Checklist de alinhamento</div>
+        <div class="checklist">
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Data de inicio confirmada?</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais inclusos?</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco confirmado?</span></div>
+        </div>
+        <div class="chat-msgs" id="chat-prov-msgs" style="flex:1">
+          <div class="msg ai" style="background:var(--wh)">Ola Ygor! Vi que escolheu minha proposta. Quando seria uma boa data para iniciar?</div>
+          <div class="msg user">Pode ser na proxima segunda-feira? De manha.</div>
+          <div class="msg ai" style="background:var(--wh)">Perfeito! Segunda as 8h estarei ai. Vou levar todo o material necessario.</div>
+        </div>
+        <div class="chat-contract-btn">
+          <button class="btn btn-pri btn-full" onclick="goTo('contract')">Prosseguir para contrato →</button>
+        </div>
+        <div class="chat-input-bar">
+          <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📎</button>
+          <input class="chat-input" type="text" placeholder="Digite sua mensagem...">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff">↑</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== C9: SMART CONTRACT ===== -->
+    <div id="page-contract" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('chat-provider')">←</button>
+        <h2>Smart Contract</h2>
+      </div>
+      <div class="contract-section">
+        <div class="contract-card">
+          <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:14px">Partes envolvidas</div>
+          <div class="contract-parties">
+            <div class="contract-party">
+              <div class="avatar" style="background:var(--pri)">Y</div>
+              <div class="name">Ygor Chagas</div>
+              <div class="role">Contratante</div>
+            </div>
+            <div class="contract-arrow">⟷</div>
+            <div class="contract-party">
+              <div class="avatar" style="background:var(--su)">C</div>
+              <div class="name">Carlos Silva</div>
+              <div class="role">Prestador</div>
+            </div>
+          </div>
+        </div>
+        <div class="contract-card">
+          <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:10px">Resumo em linguagem simples</div>
+          <div class="contract-terms">
+            <div class="contract-term"><span class="icon">🔧</span><div><div class="label">Servico</div><div class="value">Impermeabilizacao de Laje</div></div></div>
+            <div class="contract-term"><span class="icon">💰</span><div><div class="label">Valor total</div><div class="value">R$ 1.850,00</div></div></div>
+            <div class="contract-term"><span class="icon">📅</span><div><div class="label">Prazo de execucao</div><div class="value">4 dias uteis</div></div></div>
+            <div class="contract-term"><span class="icon">🛡️</span><div><div class="label">Garantia</div><div class="value">5 anos — cobertura contra infiltracao</div></div></div>
+            <div class="contract-term"><span class="icon">🔒</span><div><div class="label">Pagamento</div><div class="value">Retido em escrow ate confirmacao</div></div></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-bottom:12px"><a style="font-size:12px;color:var(--pri);cursor:pointer">Ver contrato completo (versao juridica)</a></div>
+        <div class="contract-status">⏳ Aguardando assinatura do prestador</div>
+        <div class="sign-area" id="sign-area" onclick="signContract()">
+          <div class="pen">✍️</div>
+          <p>Toque para assinar digitalmente</p>
+        </div>
+        <div class="checkbox-row" onclick="toggleCheckbox(this)">
+          <div class="checkbox" id="terms-check"></div>
+          <span>Li e concordo com os termos</span>
+        </div>
+        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Assinar contrato →</button>
+      </div>
+    </div>
+
+    <!-- ===== C10: CHECKOUT ===== -->
+    <div id="page-checkout" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('contract')">←</button>
+        <h2>Pagamento</h2>
+      </div>
+      <div class="checkout-section">
+        <div class="card" style="margin-bottom:12px">
+          <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:8px">Resumo do servico</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--dk);margin-bottom:4px"><span>Impermeabilizacao de Laje</span><strong style="color:var(--pri)">R$ 1.850</strong></div>
+          <div style="font-size:11px;color:var(--mu)">Carlos Impermeabilizacoes · 4 dias uteis</div>
+        </div>
+        <div class="section-title">Forma de pagamento</div>
+        <div class="payment-method selected" onclick="selectPayment(this)">
+          <span class="pm-icon">💳</span>
+          <div class="pm-info"><strong>PIX</strong><span>Aprovacao instantanea</span></div>
+          <div class="pm-radio"></div>
+        </div>
+        <div class="payment-method" onclick="selectPayment(this)">
+          <span class="pm-icon">💳</span>
+          <div class="pm-info"><strong>Cartao de Credito</strong><span>Parcele em ate 12x</span></div>
+          <div class="pm-radio"></div>
+        </div>
+        <div class="payment-method" onclick="selectPayment(this)">
+          <span class="pm-icon">📄</span>
+          <div class="pm-info"><strong>Boleto</strong><span>Vencimento em 3 dias uteis</span></div>
+          <div class="pm-radio"></div>
+        </div>
+        <div class="installment-card">
+          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:8px">Parcelamento</div>
+          <div class="installment-option selected">1x de R$ 1.850,00 <span style="color:var(--su);font-size:11px">sem juros</span></div>
+          <div class="installment-option" onclick="selectInstallment(this)">2x de R$ 950,00 <span style="font-size:11px;color:var(--mu)">sem juros</span></div>
+          <div class="installment-option" onclick="selectInstallment(this)">3x de R$ 645,00 <span style="font-size:11px;color:var(--mu)">sem juros</span></div>
+          <div class="installment-option" onclick="selectInstallment(this)">6x de R$ 332,00 <span style="font-size:11px;color:var(--mu)">+ juros</span></div>
+          <div class="installment-option" onclick="selectInstallment(this)">12x de R$ 178,00 <span style="font-size:11px;color:var(--mu)">+ juros</span></div>
+        </div>
+        <div class="escrow-notice">
+          <span class="icon">🔒</span>
+          <p><strong>Pagamento seguro via ResolvAI.</strong> Seu dinheiro fica retido ate voce confirmar a conclusao do servico.</p>
+        </div>
+        <button class="btn btn-pri btn-full" onclick="goTo('confirmacao')">Confirmar pagamento →</button>
+      </div>
+    </div>
+
+    <!-- ===== C11: CONFIRMACAO + AVALIACAO ===== -->
+    <div id="page-confirmacao" class="page">
+      <div class="confirm-screen">
+        <div class="confirm-check">✓</div>
+        <h2>Pagamento Confirmado!</h2>
+        <p>Seu pedido esta em andamento.</p>
+        <div class="confirm-summary">
+          <div class="item"><label>Servico</label><strong>Impermeabilizacao</strong></div>
+          <div class="item"><label>Valor</label><strong>R$ 1.850</strong></div>
+          <div class="item"><label>Prazo</label><strong>4 dias uteis</strong></div>
+          <div class="item"><label>Garantia</label><strong>5 anos</strong></div>
+        </div>
+        <div style="text-align:left;margin-bottom:16px">
+          <div style="font-size:12px;font-weight:600;color:var(--dk);margin-bottom:6px">Proximos passos:</div>
+          <div style="font-size:12px;color:var(--mu);line-height:1.8">1. O prestador entrara em contato em ate 2 horas<br>2. Combine a data e hora da visita tecnica<br>3. Acompanhe o andamento pelo app</div>
+        </div>
+        <button class="btn btn-pri btn-full" onclick="goTo('home','home')">🏠 Voltar ao Home</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="goTo('rating')">📍 Acompanhar pedido</button>
+      </div>
+    </div>
+
+    <!-- ===== C11b: AVALIACAO ===== -->
+    <div id="page-rating" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('home','home')">←</button>
+        <h2>Confirmar e Avaliar</h2>
+      </div>
+      <div class="rating-section">
+        <div class="rating-banner">
+          <h3>O prestador marcou o servico como concluido</h3>
+          <p>Voce confirma que o servico foi realizado?</p>
+        </div>
+        <button class="btn btn-su btn-full" onclick="document.getElementById('rating-form').style.display='block';this.style.display='none'">✅ Sim, confirmar conclusao</button>
+        <div style="font-size:11px;color:var(--mu);text-align:center;margin:8px 0">Voce tem 7 dias para confirmar. Apos esse prazo, o sistema abrira verificacao automatica.</div>
+
+        <div id="rating-form" style="display:none;margin-top:16px">
+          <div class="section-title">Como foi a experiencia?</div>
+          <div class="stars-row">
+            <span class="star" onclick="setRating(1)">★</span>
+            <span class="star" onclick="setRating(2)">★</span>
+            <span class="star" onclick="setRating(3)">★</span>
+            <span class="star" onclick="setRating(4)">★</span>
+            <span class="star" onclick="setRating(5)">★</span>
+          </div>
+          <textarea class="rating-comment" placeholder="Deixe um comentario sobre o servico..."></textarea>
+          <div style="margin-top:12px">
+            <button class="btn btn-ghost btn-sm">📷 Adicionar fotos do resultado</button>
+          </div>
+          <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('home','home')">Enviar avaliacao</button>
+        </div>
+
+        <div class="dispute-section">
+          <h4>Algo deu errado?</h4>
+          <p>Se o servico nao foi concluido conforme o combinado, voce pode abrir uma disputa.</p>
+          <button class="btn btn-da btn-sm" style="margin-top:8px">Abrir disputa</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NOTIFICACOES ===== -->
+    <div id="page-notificacoes" class="page">
+      <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Notificacoes</div><div style="font-size:12px;color:var(--mu)">3 nao lidas</div></div>
+      <div class="notif-list">
+        <div class="notif-card unread">
+          <span class="notif-icon">💬</span>
+          <div class="notif-info"><h4>Nova proposta recebida</h4><p>Carlos Impermeabilizacoes enviou uma proposta.</p></div>
+          <span class="notif-time">10 min</span>
+          <div class="notif-dot"></div>
+        </div>
+        <div class="notif-card unread">
+          <span class="notif-icon">✅</span>
+          <div class="notif-info"><h4>Pedido confirmado</h4><p>Sua contratacao foi registrada com sucesso.</p></div>
+          <span class="notif-time">1h</span>
+          <div class="notif-dot"></div>
+        </div>
+        <div class="notif-card unread">
+          <span class="notif-icon">⭐</span>
+          <div class="notif-info"><h4>Avalie o servico</h4><p>Torneira com vazamento foi concluida.</p></div>
+          <span class="notif-time">2h</span>
+          <div class="notif-dot"></div>
+        </div>
+        <div class="notif-card">
+          <span class="notif-icon">📋</span>
+          <div class="notif-info"><h4>Escopo atualizado</h4><p>A IA atualizou o escopo do pedido de pintura.</p></div>
+          <span class="notif-time">Ontem</span>
+        </div>
+        <div class="notif-card">
+          <span class="notif-icon">🔔</span>
+          <div class="notif-info"><h4>Lembrete de visita</h4><p>Visita tecnica agendada para amanha as 14h.</p></div>
+          <span class="notif-time">Ontem</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PERFIL ===== -->
+    <div id="page-perfil" class="page">
+      <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Meu Perfil</div></div>
+      <div class="profile-section">
+        <div class="profile-top">
+          <div class="profile-avatar">Y</div>
+          <div class="info">
+            <h2>Ygor Chagas</h2>
+            <p>ygor@email.com</p>
+            <p>📍 Fortaleza, CE</p>
+          </div>
+        </div>
+        <div class="form-card">
+          <h3>Informacoes Pessoais</h3>
+          <div class="form-field"><label>Nome completo</label><input value="Ygor Chagas"></div>
+          <div class="form-field"><label>Telefone</label><input value="(85) 99999-0000"></div>
+          <div class="form-field"><label>Email</label><input value="ygor@email.com"></div>
+          <div class="form-field"><label>CPF</label><input value="***.999.***-00"></div>
+        </div>
+        <div class="form-card">
+          <h3>Preferencias de Servico</h3>
+          <div class="form-field"><label>Tipos de servico</label><input value="Reparos, Hidraulica, Pintura, Impermeabilizacao"></div>
+          <div class="form-field"><label>Localizacao</label><input value="Fortaleza, CE — raio de 15km"></div>
+          <div class="form-field"><label>Notificacoes</label><input value="Email + Push ativo"></div>
+        </div>
+        <div class="form-card">
+          <h3>Seguranca</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-pri-lt btn-sm">🔒 Alterar Senha</button>
+            <button class="btn btn-ghost btn-sm" style="background:var(--vi-lt);color:var(--vi);border-color:var(--vi-lt)">🔐 Autenticacao 2 Fatores</button>
+            <button class="btn btn-da btn-sm">Sair da conta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /screen-content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav" id="bottom-nav">
+    <button class="nav-tab active" data-section="home" onclick="goTo('home','home')">
+      <span class="tab-icon">🏠</span>Home
+    </button>
+    <button class="nav-tab" data-section="chat" onclick="goTo('chat','chat')">
+      <span class="tab-icon">💬</span>Chat IA
+    </button>
+    <button class="nav-tab" data-section="pedidos" onclick="goTo('propostas','pedidos')">
+      <span class="tab-icon">📋</span>Pedidos
+    </button>
+    <button class="nav-tab" data-section="notif" onclick="goTo('notificacoes','notif')">
+      <span class="tab-icon">🔔</span>Alertas
+    </button>
+    <button class="nav-tab" data-section="perfil" onclick="goTo('perfil','perfil')">
+      <span class="tab-icon">👤</span>Perfil
+    </button>
+  </div>
+</div><!-- /phone-frame -->
+
+<script>
+let currentSection = 'home';
+let currentSlide = 0;
+
+function goTo(pageId, section) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+
+  if (section) currentSection = section;
+
+  const nav = document.getElementById('bottom-nav');
+  const isOnboarding = pageId === 'onboarding';
+  nav.style.display = isOnboarding ? 'none' : 'flex';
+
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
+  if (activeTab) activeTab.classList.add('active');
+
+  document.querySelector('.screen-content').scrollTop = 0;
+}
+
+function nextSlide() {
+  currentSlide++;
+  if (currentSlide > 2) { goTo('home','home'); return; }
+  document.querySelectorAll('.onb-slide').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.onb-dot').forEach(d => d.classList.remove('active'));
+  document.querySelector(`.onb-slide[data-slide="${currentSlide}"]`).classList.add('active');
+  document.querySelector(`.onb-dot[data-dot="${currentSlide}"]`).classList.add('active');
+}
+
+function sendMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = document.getElementById('chat-msgs');
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.textContent = text;
+  msgs.appendChild(div);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function setFilter(el) {
+  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  const check = el.querySelector('.checklist-check');
+  check.textContent = el.classList.contains('done') ? '✓' : '';
+}
+
+function toggleCheckbox(el) {
+  const cb = el.querySelector('.checkbox');
+  cb.classList.toggle('checked');
+  cb.textContent = cb.classList.contains('checked') ? '✓' : '';
+}
+
+function signContract() {
+  const area = document.getElementById('sign-area');
+  area.innerHTML = '<div style="font-size:24px;color:var(--su);margin-bottom:4px">✅</div><p style="font-size:12px;color:var(--su);font-weight:600">Assinatura registrada</p>';
+  area.style.borderColor = 'var(--su)';
+  area.style.background = 'var(--su-lt)';
+}
+
+function selectPayment(el) {
+  document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectInstallment(el) {
+  document.querySelectorAll('.installment-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function setRating(n) {
+  document.querySelectorAll('.star').forEach((s,i) => {
+    s.classList.toggle('filled', i < n);
+  });
+}
+</script>
+</body>
+</html>
