@@ -1,23 +1,58 @@
-19/05/2026 ------
+Análise do Protótipo ResolvAI — Problemas Encontrados
+Cliente Mobile (cliente.html)
+Fluxo de Pagamento — Tela C10
 
-*Cliente (Mobile)
-- Smart Contract: Não é possível visualizar
+Problema 1 — PIX sem QR Code Ao selecionar PIX no checkout, a função selectPayment() apenas troca a classe CSS .selected entre os métodos. Nenhum QR code, chave ou código copia-e-cola é exibido. O fluxo esperado exige mostrar o QR code e a chave PIX para o pagamento ser realizado.
 
-- Aba Pagamento:
-Mostrar o QR Code quando for o pix e remover pacelamento.
-> Remover Boleto
+Problema 2 — Boleto não removido A opção "Boleto Bancário" ainda está presente como terceira forma de pagamento. Deve ser removida.
 
-- Depois da finalização, ao acompanhar pedido, vai p/ tela de finalizado. (Deveria ir para a tela de acompanhar pedido)
-- Na tela inicial em pedidos, deveria ser o histórico de pedidos
-- Na conversa com o prestador ele deve só verificar o contrato
-- No escopo gerado pela AI, a localização está errada.
+Problema 3 — Parcelamento sempre visível O bloco de parcelamento (1x a 12x) fica visível independente do método selecionado. Deve aparecer somente ao selecionar Cartão de Crédito, e ficar oculto quando PIX estiver selecionado.
 
-Web Cliente
+Fluxo pós-pagamento — Tela C11
 
--> Mudar Botão "Assinar e Pagar"
+Problema 4 — "Acompanhar pedido" navega para a tela errada Na tela de Confirmação (#page-confirmacao), o botão "📍 Acompanhar pedido" chama goTo('rating'), que é a tela de avaliação pós-conclusão (#page-rating). O fluxo esperado é navegar para uma tela de acompanhamento do serviço em andamento (cronograma/marcos de execução), não para a tela de avaliar o serviço antes de ele ter sido realizado.
 
-Pagamento:
--> Mostrar QR Code no pix.
--> Na opção de cartão mostrar campos para preencher as info do cartão.
+Home — Tela C2
 
-19/05/2026 ------
+Problema 5 — Aba "Pedidos" deveria exibir histórico A aba "Pedidos" na navegação inferior aciona goTo('propostas','pedidos'), levando à tela de propostas recebidas do pedido atual. O comportamento esperado é exibir o histórico completo de pedidos do usuário (ativos, concluídos, cancelados).
+
+Escopo Gerado — Tela C4
+
+Problema 6 — Localização no escopo da IA está incorreta O campo "Localização" no escopo gerado (#page-escopo) exibe:
+
+"Laje entre 3o e 4o andar — area de servico do apartamento superior"
+
+Esse é o local físico do problema, não o endereço do imóvel. O esperado é o endereço residencial completo do cliente (rua, número, bairro, cidade/estado).
+
+Smart Contract — Tela C9
+
+Problema 7 — Contrato difícil ou impossível de visualizar A tela #page-contract apresenta problemas de layout dentro do phone frame (375×812px). Com status bar (44px), bottom nav (64px) e muito conteúdo (partes, termos, área de assinatura, checkbox e botão), a área de assinatura e o botão "Assinar contrato" ficam escondidos abaixo do fold sem indicação clara de scroll. Adicionalmente, após acionar signContract(), o status da contraparte ("⏳ Aguardando assinatura do prestador") não é atualizado.
+
+Chat com Prestador — Tela C8
+
+Problema 8 — Chat completo onde deveria haver apenas verificação de contrato A tela #page-chat-provider oferece um chat livre com o prestador. Nessa etapa do fluxo, o contratante deveria apenas visualizar e verificar o contrato, sem a possibilidade de enviar mensagens novas.
+
+Fluxo de Navegação — Telas C5/C6/C7
+
+Problema 9 — Botão "Escolher" pula etapas obrigatórias Na tela de Propostas (C5), o botão "Escolher" no card da "Reforma Express" navega diretamente para goTo('contract'), pulando a tela de detalhe (C6) e o chat com o prestador (C8). O mesmo ocorre na tela de Comparação (C7), onde "Escolher" em qualquer coluna vai direto ao contrato. O fluxo correto documentado é:
+
+C5 → C6 (Detalhe) → C8 (Chat) → C9 (Contrato)
+Cliente Web (cliente-web.html)
+Problema 10 — Botão "Assinar contrato e pagar" precisa ser revisado O botão na tela de contrato combina duas ações distintas em um único label. A ação de assinar o contrato e a de ir para o pagamento devem ser separadas ou renomeadas conforme o fluxo esperado.
+
+Problema 11 — PIX sem QR Code (web) Mesmo problema da versão mobile: ao selecionar PIX, nenhum QR code é renderizado.
+
+Problema 12 — Cartão de crédito sem campos de preenchimento Ao selecionar "Cartão de crédito" no checkout web, nenhum campo é exibido para inserir número do cartão, nome do titular, data de validade e CVV.
+
+Problema 13 — Confirmação de pagamento pula a tela de confirmação O botão "Confirmar pagamento de R$ 2.800" chama goTo('home',null), redirecionando diretamente para a Home. A tela de confirmação (#page-confirmacao) existe mas é ignorada. O fluxo correto: Checkout → Confirmação → Home.
+
+Inconsistências de Dados entre Views
+Problema 14 — Preço do serviço divergente O mesmo serviço de Impermeabilização de Laje aparece por R$ 1.850 no mobile e R$ 2.800 na versão web.
+
+Problema 15 — Endereço do serviço divergente Em fornecedor-web.html, o endereço do local de serviço é "Rua das Flores, 123 — Moema, SP". Em todos os outros arquivos o cliente está em Fortaleza, CE (Aldeota).
+
+Problema 16 — Garantia divergente A garantia do serviço é de 5 anos no contrato mobile (C9) e na proposta (C6 mobile), mas de apenas 90 dias no contrato web e no checkout web.
+
+Problema 17 — Nome do prestador divergente O prestador é chamado de "Carlos Impermeabilizacoes" na maioria das telas, mas de "Carlos Silva" dentro do contrato mobile (C9).
+
+Problema 18 — Prazo de execução divergente 4 dias úteis no mobile vs. 5 dias úteis na versão web para o mesmo serviço.
