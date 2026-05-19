@@ -1,0 +1,23 @@
+19/05/2026 ------
+
+*Cliente (Mobile)
+- Smart Contract: Não é possível visualizar
+
+- Aba Pagamento:
+Mostrar o QR Code quando for o pix e remover pacelamento.
+> Remover Boleto
+
+- Depois da finalização, ao acompanhar pedido, vai p/ tela de finalizado. (Deveria ir para a tela de acompanhar pedido)
+- Na tela inicial em pedidos, deveria ser o histórico de pedidos
+- Na conversa com o prestador ele deve só verificar o contrato
+- No escopo gerado pela AI, a localização está errada.
+
+Web Cliente
+
+-> Mudar Botão "Assinar e Pagar"
+
+Pagamento:
+-> Mostrar QR Code no pix.
+-> Na opção de cartão mostrar campos para preencher as info do cartão.
+
+19/05/2026 ------
