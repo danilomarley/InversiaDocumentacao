@@ -1,6 +1,27 @@
 Correções fluxo mobile 21/05/2026 Não resolvido
 
-Mobile -- Cliente
+#Mobile -- Prestador
+
+Na tela inicial deveria ter a opção de "Criar Conta" ou "Fazer Login" igual do usuário, está indo direto para a tela de criação de conta.
+
+Na tela de "Pedidos para você" não está filtrando os pedidos "Hidraulica", etc.
+Na tela de Pedidos para você, ao "ver detalhes" está mostrando apenas "Impermeabilizacao de laje + Reparo de trinca"
+
+No menu de navegação "Home" e "Pedidos" levam para a mesma tela
+
+Nos meus pedidos deveria ter um pedido com status de "Em andamento" e quando clicado fosse para a tela de "Servico em Andamento".
+
+Na tela "Minhas Propostas" o filtro não está funcionando "Enviadas", "Escolhidas", "etc".
+
+Na aba "Chat" deveria aparecer a lista de pedidos em andamento e, ao clicar no pedido, exibir o chat com o cliente
+
+A aba "Home" vai exibir os pedidos em que ele pode enviar uma proposta
+
+A aba "Pedido" vai exibir os pedidos que já estão em andamento/foram aceitos
+
+A aba "Proposta" vai exibir o status das propostas que ele enviou 
+
+#Mobile -- Cliente
 
 Na primeira tela está aparecendo a opção de criar conta mas não tem o fluxo de criação de conta
 Na primeira tela está aparecendo o menu de navegação mesmo sem ter criado a conta.
