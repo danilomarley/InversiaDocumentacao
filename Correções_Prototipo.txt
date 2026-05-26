@@ -56,3 +56,6 @@ Problema 16 — Garantia divergente A garantia do serviço é de 5 anos no contr
 Problema 17 — Nome do prestador divergente O prestador é chamado de "Carlos Impermeabilizacoes" na maioria das telas, mas de "Carlos Silva" dentro do contrato mobile (C9).
 
 Problema 18 — Prazo de execução divergente 4 dias úteis no mobile vs. 5 dias úteis na versão web para o mesmo serviço.
+
+
+

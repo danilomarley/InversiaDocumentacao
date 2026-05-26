@@ -1,0 +1,2 @@
+
+1. adicionar campos para colocar informações do cartão no checkout - tanto mobile como web

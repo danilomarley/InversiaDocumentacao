@@ -1,0 +1,185 @@
+---
+title:
+  pt: "Olist: Análise de Retenção e Segmentação de Clientes com RFM"
+  en: "Olist: Customer Retention & Segmentation Analysis with RFM"
+thumbnail: "/images/projects/olist-rfm-analysis.png"
+description:
+  pt: "Pipeline de dados completo para segmentar ~95 mil clientes da Olist usando a metodologia RFM, revelando que 97% da base nunca retornou após a primeira compra."
+  en: "End-to-end data pipeline segmenting ~95k Olist customers using the RFM methodology, revealing that 97% of the customer base never returned after their first purchase."
+tags: ["analytics", "python", "sql", "power-bi", "rfm", "e-commerce"]
+tools: ["Python", "Pandas", "MySQL", "SQLAlchemy", "Power BI", "Jupyter Notebook"]
+date: 2025-01-15
+featured: true
+github: "https://github.com/ygorpradoch/olist-rfm-analysis"
+---
+
+## O problema que me fez começar esse projeto
+
+Imagine que você é contratado como Analista de Dados por uma das maiores lojas de departamento dentro dos marketplaces brasileiros. A empresa investe pesado em marketing, campanhas de aquisição, mídia paga — tudo para trazer novos clientes para dentro da plataforma. Os números de vendas parecem bons. Mas alguém na diretoria faz a pergunta que ninguém queria ouvir:
+
+> "Esses clientes estão voltando para comprar de novo, ou estamos jogando dinheiro fora?"
+
+Essa foi a provocação que guiou todo o projeto. Eu precisava investigar a saúde real da base de clientes da Olist e, mais do que diagnosticar, entregar um resultado que pudesse ser **acionável** — algo que o time de marketing, CRM e produto pudesse usar no dia seguinte.
+
+A resposta veio de uma metodologia clássica do mundo de analytics: a **Segmentação RFM**.
+
+---
+
+## O que é RFM e por que escolhi essa abordagem
+
+RFM é uma técnica de segmentação comportamental que classifica clientes com base em três dimensões:
+
+- **Recência (R):** Há quantos dias o cliente fez a última compra? Quanto mais recente, melhor.
+- **Frequência (F):** Quantas vezes ele comprou? Clientes que voltam são mais valiosos.
+- **Monetização (M):** Quanto ele gastou no total? Ticket alto sinaliza engajamento.
+
+A beleza do RFM está na simplicidade: com apenas três métricas, você consegue separar campeões de clientes perdidos, identificar quem está prestes a abandonar a marca e encontrar oportunidades de reativação — tudo sem precisar de modelos de machine learning complexos.
+
+Escolhi essa abordagem porque ela traduz dados brutos em linguagem de negócio. Um gerente de marketing não precisa entender gradiente descendente, mas entende perfeitamente o que significa "36 mil clientes compraram uma vez e nunca mais voltaram".
+
+---
+
+## O dataset: E-Commerce Brasileiro da Olist
+
+Trabalhei com o **Brazilian E-Commerce Public Dataset by Olist**, disponível no Kaggle. São aproximadamente 100 mil pedidos realizados entre 2016 e 2018 em diversos marketplaces brasileiros.
+
+O dataset é composto por múltiplas tabelas relacionais — clientes, pedidos, itens de pedido e pagamentos — o que já torna o projeto interessante do ponto de vista de engenharia de dados, pois exige modelagem relacional antes de qualquer análise.
+
+---
+
+## A arquitetura do pipeline: do CSV ao dashboard
+
+Estruturei o projeto em três grandes etapas, cada uma com sua ferramenta e propósito:
+
+### Etapa 1 — Engenharia de Dados com MySQL
+
+Antes de qualquer análise, os dados precisavam de uma casa. Carreguei os quatro CSVs principais para um banco de dados MySQL local usando Python com SQLAlchemy. A escolha do MySQL não foi aleatória: eu queria simular um cenário real de trabalho onde o analista consome dados de um banco relacional, não de arquivos soltos.
+
+Com as tabelas carregadas, escrevi uma query SQL que consolidou tudo em uma **Tabela Base analítica**:
+
+```sql
+SELECT
+    o.order_id,
+    c.customer_unique_id,
+    o.order_purchase_timestamp,
+    SUM(p.payment_value) AS total_payment
+FROM orders AS o
+INNER JOIN customers AS c ON o.customer_id = c.customer_id
+INNER JOIN order_payments AS p ON p.order_id = o.order_id
+WHERE o.order_status IN ('delivered', 'shipped', 'invoiced', 'processing', 'approved')
+GROUP BY o.order_id, c.customer_unique_id, o.order_purchase_timestamp
+```
+
+Essa query já faz duas coisas importantes: **unifica** as informações que estavam espalhadas em tabelas diferentes e **filtra** apenas pedidos com status válido — descartando cancelamentos e indisponíveis que distorceriam a análise.
+
+### Etapa 2 — Análise e Modelagem com Python
+
+Com a Tabela Base no pandas, comecei o trabalho analítico de verdade.
+
+**Cálculo das métricas RFM:**
+
+Agrupei os dados por `customer_unique_id` e calculei as três dimensões:
+
+- **Recência:** diferença em dias entre a data de referência (último dia do dataset + 1) e a última compra do cliente.
+- **Frequência:** contagem de pedidos por cliente.
+- **Monetização:** soma dos valores pagos por cliente.
+
+O resultado foi um DataFrame com **94.985 clientes únicos**, cada um com suas três métricas calculadas.
+
+**A Análise Exploratória que mudou tudo:**
+
+Aqui aconteceu o momento mais importante do projeto. Ao rodar as estatísticas descritivas e plotar a distribuição de frequência, o gráfico me mostrou algo brutal:
+
+**97,1% dos clientes fizeram apenas uma compra.**
+
+Esse número inviabilizou completamente o uso de `pd.qcut()` para criar quintis de frequência — função padrão em implementações RFM. Quando 97% dos dados estão em um único valor, não existe divisão estatística possível. Um modelo de prateleira simplesmente não funciona aqui.
+
+### A adaptação que fez o projeto ter valor real
+
+Em vez de forçar um modelo que não se encaixava, decidi criar **regras de negócio customizadas** baseadas no cruzamento Recência x Frequência. Mantive o `pd.qcut()` para Recência e Monetização (onde a distribuição é mais espalhada) e criei uma função manual para pontuar a Frequência:
+
+```python
+def pontuar_frequencia(freq):
+    if freq == 1: return 1
+    elif freq == 2: return 2
+    elif freq == 3: return 3
+    elif freq == 4: return 4
+    else: return 5
+```
+
+Com os três scores calculados, defini cinco segmentos estratégicos:
+
+| Segmento | Regra | O que significa |
+|---|---|---|
+| Campeões | R >= 4 e F >= 3 | Compram frequentemente e compraram recentemente |
+| Novos Clientes | R >= 4 e F = 1 | Compraram recentemente, mas só uma vez |
+| Risco de Churn | F >= 3 e R <= 2 | Já foram fiéis, mas sumiram |
+| Perdidos | F = 1 e R <= 2 | Compraram uma vez há muito tempo e nunca voltaram |
+| Regulares | Todos os demais | Comportamento intermediário |
+
+### Etapa 3 — Dashboard Executivo com Power BI
+
+A última etapa foi transformar os dados segmentados em uma visualização que qualquer stakeholder pudesse interpretar. Conectei o Power BI diretamente ao MySQL (consumindo a tabela `customer_segmentation_rfm` exportada pelo notebook) e construí um dashboard interativo com:
+
+- Distribuição de clientes por segmento
+- Receita total por segmento
+- Scatter plot Recência vs. Monetização colorido por segmento
+- KPIs de ticket médio e volume por grupo
+
+---
+
+## Os resultados: o diagnóstico do "balde furado"
+
+A segmentação final revelou a dimensão real do problema:
+
+| Segmento | Clientes | % da Base | Receita Total |
+|---|---|---|---|
+| Perdidos | 36.888 | 43,5% | R$ 5.850.547 |
+| Novos Clientes | 36.817 | 43,4% | R$ 5.968.850 |
+| Regulares | 21.081 | 24,9% | R$ 3.599.193 |
+| Campeões | 129 | 0,2% | R$ 30.563 |
+| Risco de Churn | 70 | 0,1% | R$ 9.915 |
+
+O diagnóstico ficou claro: **a Olist possui uma máquina excelente de primeira venda, mas é um "balde furado"** — a água (clientes) entra em volume, mas escorre imediatamente.
+
+Os "Novos Clientes" representam quase metade da base e geram quase R$ 6 milhões em receita. Mas do outro lado, os "Perdidos" são praticamente o mesmo volume — quase 37 mil pessoas que compraram uma vez e nunca mais voltaram. Enquanto isso, os "Campeões" — aqueles clientes que todo negócio sonha em ter — somam apenas 129 pessoas em uma base de quase 95 mil.
+
+---
+
+## As recomendações estratégicas
+
+Com os segmentos definidos, cada grupo recebeu uma recomendação de ação concreta:
+
+**Campeões (129 clientes)** — Prioridade alta. Programa VIP com cupons exclusivos, acesso antecipado a promoções e incentivo para indicar amigos. São poucos, mas são o modelo do cliente ideal.
+
+**Novos Clientes (36.817)** — Prioridade máxima. É aqui que a retenção precisa agir. Welcome email automatizado no dia 7 após a compra, oferta de segunda compra com desconto progressivo, e acompanhamento de satisfação pós-entrega.
+
+**Risco de Churn (70 clientes)** — Prioridade urgente. São clientes que demonstraram lealdade (compraram 3+ vezes) mas pararam. Campanha de reativação imediata com pesquisa de satisfação e oferta personalizada.
+
+**Perdidos (36.888)** — Prioridade baixa. O volume é enorme, mas a taxa de conversão de reativação tende a ser mínima. Focar apenas nos de ticket médio mais alto com campanha de win-back pontual.
+
+**Regulares (21.081)** — Prioridade média. Nutrir com conteúdo e ofertas para migrar para o comportamento de Campeão ao longo do tempo.
+
+---
+
+## O que aprendi construindo esse projeto
+
+Três lições ficaram marcadas:
+
+**1. Modelos de prateleira nem sempre funcionam.** O RFM é uma das técnicas mais consolidadas de analytics, mas aplicar cegamente um tutorial da internet teria gerado resultados sem sentido. A adaptação das regras de pontuação de frequência foi o que deu valor real à análise. Saber quando quebrar o padrão é tão importante quanto conhecer o padrão.
+
+**2. O insight mais valioso veio da exploração, não da modelagem.** O número "97% compraram apenas uma vez" surgiu na EDA, antes de qualquer score ser calculado. Muitas vezes, a análise exploratória bem feita já entrega o diagnóstico — o modelo depois serve para operacionalizar.
+
+**3. Pipeline completo > análise bonita.** Ter o dado saindo do CSV, passando pelo MySQL, sendo processado em Python e chegando no Power BI como dashboard interativo demonstra mais competência técnica do que um notebook isolado com gráficos bonitos. O mercado quer ver que você consegue pensar no fluxo inteiro.
+
+---
+
+## Stack técnica resumida
+
+- **MySQL** — Armazenamento relacional e construção da Tabela Base via SQL com JOINs e filtros
+- **Python 3.11** — Linguagem principal para ETL, EDA e modelagem
+- **Pandas** — Manipulação e agregação dos dados
+- **SQLAlchemy** — Conexão Python-MySQL e leitura/escrita de tabelas
+- **Matplotlib** — Visualizações exploratórias no notebook
+- **Power BI** — Dashboard executivo conectado ao banco de dados
+- **Jupyter Notebook** — Ambiente de desenvolvimento e documentação do processo
