@@ -41,7 +41,12 @@
   /* MAIN */
   .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
   .page { display: none; }
-  .page.active { display: block; }
+  .page.active { display: block; animation: pageIn 0.2s ease-out; }
+  @keyframes pageIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-10px); background:#0F1C2E; color:#fff; padding:12px 20px; border-radius:20px; font-size:13px; font-weight:500; opacity:0; pointer-events:none; z-index:9999; transition:all 0.25s ease; white-space:nowrap; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; }
+  @keyframes spin { to { transform:rotate(360deg); } }
   .page-header { margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; }
   .page-header div h1 { font-size: 22px; font-weight: 700; color: var(--dk); }
   .page-header div p { color: var(--mu); font-size: 13px; margin-top: 4px; }
@@ -241,6 +246,7 @@
 </style>
 </head>
 <body>
+<div class="toast" id="toast"></div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -386,7 +392,7 @@
                 <td><button class="btn btn-ghost btn-sm">Ver</button></td>
               </tr>
               <tr>
-                <td><strong>Reforma banheiro completo</strong><br><span style="font-size:11px;color:var(--mu)">Aldeota, Fortaleza - CE · há 9h</span></td>
+                <td><strong>Reforma banheiro completo</strong><br><span style="font-size:11px;color:var(--mu)">Aldeota, CE · há 9h</span></td>
                 <td><span class="badge badge-pri">Alvenaria</span></td>
                 <td style="font-weight:700;color:var(--pri)">R$ 8.000–12.000</td>
                 <td>
@@ -567,7 +573,7 @@
           <tr>
             <td><strong>Reforma banheiro completo</strong><br><span style="font-size:11px;color:var(--mu)">há 9 horas · Prazo do cliente: 45 dias</span></td>
             <td><span class="badge badge-pri">Alvenaria</span></td>
-            <td>Aldeota, Fortaleza - CE</td>
+            <td>Aldeota, CE</td>
             <td style="font-weight:700;color:var(--pri)">R$ 8.000–12.000</td>
             <td><span class="badge badge-gray">5 enviadas</span></td>
             <td>
@@ -784,7 +790,7 @@
           </div>
         </div>
 
-        <button class="btn btn-pri btn-full btn-lg" onclick="goTo('propostas', document.querySelector('[onclick*=\'propostas\']'))">📤 Enviar Proposta</button>
+        <button class="btn btn-pri btn-full btn-lg" onclick="(function(btn){var orig=btn.textContent;btn.disabled=true;btn.innerHTML='<span class=\'spinner\'></span>&nbsp;Enviando...';setTimeout(function(){btn.disabled=false;btn.textContent=orig;showToast('🚀 Proposta enviada com sucesso!');goTo('propostas',document.querySelector('[onclick*=\'propostas\']'));},1500);})(this)">📤 Enviar Proposta</button>
       </div>
 
       <div style="position:sticky;top:0">
@@ -872,7 +878,7 @@
         </thead>
         <tbody>
           <tr style="background:#ECFDF5">
-            <td><strong>Impermeabilização garagem</strong><br><span style="font-size:11px;color:var(--mu)">Aldeota, Fortaleza - CE</span></td>
+            <td><strong>Impermeabilização garagem</strong><br><span style="font-size:11px;color:var(--mu)">Aldeota, CE</span></td>
             <td style="font-weight:700;color:var(--pri)">R$ 4.200</td>
             <td>7 dias</td>
             <td>6 meses</td>
@@ -1027,7 +1033,7 @@
         <div class="contract-section">
           <h3>Objeto do Contrato</h3>
           <div class="contract-row"><span class="k">Serviço</span><span class="v">Impermeabilização de garagem</span></div>
-          <div class="contract-row"><span class="k">Endereço</span><span class="v">Rua das Flores, 123, Apt 304, Aldeota, Fortaleza - CE</span></div>
+          <div class="contract-row"><span class="k">Endereço</span><span class="v">Rua das Flores, 123 — Aldeota, CE</span></div>
           <div class="contract-row"><span class="k">Área</span><span class="v">42 m²</span></div>
           <div class="contract-row"><span class="k">Início</span><span class="v">18 de Maio de 2026</span></div>
           <div class="contract-row"><span class="k">Prazo</span><span class="v">7 dias úteis</span></div>
@@ -1202,7 +1208,7 @@
         <div class="card">
           <div class="section-title">Resumo do Serviço</div>
           <div class="summary-item"><span class="key">Cliente</span><span class="val">Ana Rodrigues</span></div>
-          <div class="summary-item"><span class="key">Endereço</span><span class="val">Aldeota, Fortaleza - CE</span></div>
+          <div class="summary-item"><span class="key">Endereço</span><span class="val">Aldeota, CE</span></div>
           <div class="summary-item"><span class="key">Início</span><span class="val">18 de Maio</span></div>
           <div class="summary-item"><span class="key">Prazo</span><span class="val">24 de Maio</span></div>
           <div class="summary-item"><span class="key">Valor</span><span class="val" style="color:var(--pri)">R$ 4.200</span></div>
@@ -1343,6 +1349,14 @@
 </main>
 
 <script>
+  function showToast(msg, duration) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), duration || 2800);
+  }
   function goTo(pageId, navEl) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const t = document.getElementById('page-' + pageId);

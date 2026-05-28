@@ -55,7 +55,28 @@
   }
   .screen-content::-webkit-scrollbar { width:0; }
   .page { display:none; }
-  .page.active { display:block; }
+  .page.active { display:block; animation: pageIn 0.2s ease-out; }
+  @keyframes pageIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  /* TOAST */
+  .toast {
+    position:fixed; top:60px; left:50%; transform:translateX(-50%) translateY(-10px);
+    background:var(--dk); color:#fff; padding:10px 18px; border-radius:20px;
+    font-size:13px; font-weight:500; opacity:0; pointer-events:none; z-index:999;
+    transition:all 0.25s ease; white-space:nowrap; max-width:90%;
+  }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* LOADING SPINNER */
+  .spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* TYPING INDICATOR */
+  .typing-dots { display:flex; gap:4px; align-items:center; padding:4px 0; }
+  .typing-dots span { width:7px; height:7px; background:var(--mu); border-radius:50%; animation:dot 1.2s infinite; }
+  .typing-dots span:nth-child(2) { animation-delay:0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay:0.4s; }
+  @keyframes dot { 0%,80%,100%{transform:scale(0.7);opacity:0.5} 40%{transform:scale(1);opacity:1} }
 
   /* TOP BAR (sub-screens) */
   .top-bar {
@@ -302,6 +323,9 @@
 
   /* ========== C10: CHECKOUT ========== */
   .checkout-section { padding:16px; }
+  .checkout-input { width:100%; border:1px solid var(--bo); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--dk); font-family:inherit; outline:none; background:var(--gr); margin-bottom:8px; display:block; }
+  .checkout-input:focus { border-color:var(--pri); background:var(--wh); }
+  .installment-option.selected { background:var(--pri-lt) !important; color:var(--pri) !important; border-color:var(--pri) !important; }
   .payment-method {
     background:var(--wh); border-radius:12px; padding:14px 16px;
     margin-bottom:8px; display:flex; align-items:center; gap:12px;
@@ -315,13 +339,40 @@
   .payment-method .pm-radio { width:20px; height:20px; border-radius:50%; border:2px solid var(--bo); display:flex; align-items:center; justify-content:center; }
   .payment-method.selected .pm-radio { border-color:var(--pri); }
   .payment-method.selected .pm-radio::after { content:''; width:10px; height:10px; border-radius:50%; background:var(--pri); }
-  .installment-card { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
-  .installment-option { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--bo); font-size:13px; cursor:pointer; }
-  .installment-option:last-child { border-bottom:none; }
-  .installment-option.selected { color:var(--pri); font-weight:600; }
+  .pix-qr-block { background:var(--wh); border-radius:12px; padding:16px; margin-bottom:12px; text-align:center; display:none; }
+  .pix-qr-block.visible { display:block; }
+  .pix-qr-img { width:160px; height:160px; background:var(--gr); border:1px solid var(--bo); border-radius:10px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--mu); position:relative; overflow:hidden; }
+  .pix-qr-img::before { content:''; position:absolute; inset:8px; background: repeating-linear-gradient(0deg, var(--bo) 0px, var(--bo) 2px, transparent 2px, transparent 8px), repeating-linear-gradient(90deg, var(--bo) 0px, var(--bo) 2px, transparent 2px, transparent 8px); opacity:0.6; }
+  .pix-qr-img .qr-corners { position:absolute; inset:0; }
+  .pix-qr-label { font-size:11px; font-weight:600; color:var(--mu); margin-bottom:6px; }
+  .pix-key-box { background:var(--gr); border:1px solid var(--bo); border-radius:8px; padding:10px 12px; font-size:11px; color:var(--dk); word-break:break-all; margin-bottom:8px; }
+  .pix-copy-btn { font-size:12px; font-weight:600; color:var(--pri); background:var(--pri-lt); border:none; border-radius:8px; padding:8px 16px; cursor:pointer; }
+  .pix-expiry { font-size:11px; color:var(--mu); margin-top:6px; }
   .escrow-notice { background:var(--su-lt); border-radius:12px; padding:14px 16px; margin:12px 0; display:flex; gap:10px; align-items:flex-start; }
   .escrow-notice .icon { font-size:20px; }
   .escrow-notice p { font-size:12px; color:#065F46; line-height:1.5; }
+
+  /* ========== ACOMPANHAR PEDIDO ========== */
+  .acomp-section { padding:16px; }
+  .acomp-status-card { background:var(--pri); color:#fff; border-radius:14px; padding:16px; margin-bottom:14px; }
+  .acomp-status-card h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .acomp-status-card p { font-size:12px; opacity:0.85; }
+  .acomp-prestador { background:var(--wh); border-radius:12px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .acomp-prestador .av { width:40px; height:40px; border-radius:50%; background:var(--pri); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
+  .acomp-prestador .info strong { font-size:13px; color:var(--dk); display:block; }
+  .acomp-prestador .info span { font-size:11px; color:var(--mu); }
+  .acomp-timeline { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:14px; }
+  .acomp-timeline h3 { font-size:13px; font-weight:700; color:var(--dk); margin-bottom:12px; }
+  .timeline-item { display:flex; gap:12px; margin-bottom:12px; }
+  .timeline-item:last-child { margin-bottom:0; }
+  .tl-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+  .tl-dot.done { background:var(--su); color:#fff; }
+  .tl-dot.active { background:var(--pri); color:#fff; }
+  .tl-dot.pending { background:var(--bo); color:var(--mu); }
+  .tl-info strong { font-size:13px; color:var(--dk); display:block; }
+  .tl-info span { font-size:11px; color:var(--mu); }
+  .acomp-escrow { background:var(--wa-lt); border-radius:12px; padding:14px 16px; display:flex; gap:10px; align-items:flex-start; margin-bottom:14px; }
+  .acomp-escrow p { font-size:12px; color:#92400E; line-height:1.5; }
 
   /* ========== C11: CONFIRMACAO + AVALIACAO ========== */
   .confirm-screen { padding:32px 16px 16px; text-align:center; }
@@ -373,6 +424,7 @@
 <body>
 
 <a href="index.html" class="back-link">← Voltar ao Menu</a>
+<div class="toast" id="toast"></div>
 
 <div class="phone-frame">
   <div class="status-bar">
@@ -408,8 +460,26 @@
           <div class="onb-dot" data-dot="2"></div>
         </div>
         <button class="btn btn-pri btn-full" onclick="nextSlide()">Criar conta</button>
-        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">Ja tenho conta</button>
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">Ja tenho conta — Fazer Login</button>
         <div class="onb-skip" onclick="goTo('home','home')">Pular</div>
+      </div>
+    </div>
+
+    <!-- ===== SIGNUP ===== -->
+    <div id="page-signup" class="page">
+      <div style="background:var(--wh);min-height:100%;padding:24px 20px">
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="width:56px;height:56px;background:var(--pri);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;margin:0 auto 12px">🏠</div>
+          <h2 style="font-size:18px;font-weight:700;color:var(--dk)">Criar sua conta</h2>
+          <p style="font-size:12px;color:var(--mu);margin-top:4px">Preencha seus dados para comecar</p>
+        </div>
+        <div class="form-field"><label>Nome completo</label><input placeholder="Seu nome"></div>
+        <div class="form-field"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="form-field"><label>Telefone</label><input placeholder="(85) 99999-0000"></div>
+        <div class="form-field"><label>Senha</label><input type="password" placeholder="Minimo 8 caracteres"></div>
+        <div class="form-field"><label>Confirmar senha</label><input type="password" placeholder="Repita a senha"></div>
+        <button class="btn btn-pri btn-full" style="margin-top:8px" onclick="goTo('home','home')">Criar conta</button>
+        <p style="font-size:11px;color:var(--mu);text-align:center;margin-top:12px">Ao criar sua conta, voce concorda com os <a href="#" style="color:var(--pri)">Termos de Uso</a></p>
       </div>
     </div>
 
@@ -426,7 +496,7 @@
         <div class="home-stat"><div class="num">2</div><div class="lbl">Aguardando</div></div>
       </div>
       <div class="px section-title">Seus pedidos ativos</div>
-      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('propostas','pedidos')">
+      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('sem-propostas','pedidos')">
         <div class="info"><strong>Infiltracao no teto da sala</strong><span class="badge badge-wa">Aguardando propostas</span></div>
         <span class="time">2 dias</span>
       </div>
@@ -475,7 +545,9 @@ Urgencia: 🔴 Alta</div>
           <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📷</button>
           <input class="chat-input" type="text" id="chat-input" placeholder="Digite sua resposta..." onkeydown="if(event.key==='Enter')sendMsg()">
           <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendMsg()">↑</button>
-          <button class="btn btn-su btn-sm" onclick="goTo('escopo')">Ver Escopo →</button>
+        </div>
+        <div style="padding:6px 16px 12px;background:var(--wh)">
+          <button class="btn btn-su btn-full" style="font-size:13px" onclick="goTo('escopo')">✅ Ver Escopo Gerado →</button>
         </div>
       </div>
     </div>
@@ -494,7 +566,7 @@ Urgencia: 🔴 Alta</div>
         <div class="scope-card">
           <div class="scope-field"><label>Titulo</label><span class="edit-link">Editar</span><p>Infiltracao por Laje — Ap. 3o Andar</p></div>
           <div class="scope-field"><label>Tipo de servico</label><span class="edit-link">Editar</span><p>Impermeabilizacao de laje + Reparo de trinca</p></div>
-          <div class="scope-field"><label>Localizacao</label><span class="edit-link">Editar</span><p>Rua das Flores, 123, Apt 304, Aldeota, Fortaleza - CE</p></div>
+          <div class="scope-field"><label>Localizacao</label><span class="edit-link">Editar</span><p>Rua das Orquideas, 450, Ap. 302 — Aldeota, Fortaleza - CE</p></div>
           <div class="scope-field"><label>Problema identificado</label><span class="edit-link">Editar</span><p>Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro.</p></div>
           <div class="scope-field"><label>Servicos inclusos</label><span class="edit-link">Editar</span><p>• Inspecao visual e teste de estanqueidade<br>• Remocao do revestimento danificado<br>• Aplicacao de manta asfaltica<br>• Repintura final</p></div>
           <div class="scope-field"><label>Prazo estimado</label><p>3 a 5 dias uteis</p></div>
@@ -524,7 +596,7 @@ Urgencia: 🔴 Alta</div>
         <span class="filter-pill" onclick="setFilter(this)">Menor preco</span>
         <span class="filter-pill" onclick="setFilter(this)">Menor prazo</span>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
+      <div class="prop-card" data-rating="4.9" data-price="1850" data-prazo="4" onclick="showDetalhe('carlos')">
         <div class="prop-top">
           <div class="prop-avatar" style="background:var(--pri)">C</div>
           <div class="prop-info">
@@ -538,11 +610,11 @@ Urgencia: 🔴 Alta</div>
           <div class="prop-detail-item"><div class="val" style="color:var(--su)">5 anos</div><div class="lbl">Garantia</div></div>
         </div>
         <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();showDetalhe('carlos')">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();showDetalhe('carlos')">Ver perfil</button>
         </div>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
+      <div class="prop-card" data-rating="4.7" data-price="1620" data-prazo="5" onclick="showDetalhe('fix')">
         <div class="prop-top">
           <div class="prop-avatar" style="background:var(--vi)">F</div>
           <div class="prop-info">
@@ -556,11 +628,11 @@ Urgencia: 🔴 Alta</div>
           <div class="prop-detail-item"><div class="val" style="color:var(--su)">2 anos</div><div class="lbl">Garantia</div></div>
         </div>
         <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();showDetalhe('fix')">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();showDetalhe('fix')">Ver perfil</button>
         </div>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
+      <div class="prop-card" data-rating="4.5" data-price="1400" data-prazo="3" onclick="showDetalhe('reforma')">
         <div class="prop-top">
           <div class="prop-avatar" style="background:var(--su)">R</div>
           <div class="prop-info">
@@ -574,8 +646,8 @@ Urgencia: 🔴 Alta</div>
           <div class="prop-detail-item"><div class="val" style="color:var(--su)">90 dias</div><div class="lbl">Garantia</div></div>
         </div>
         <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();showDetalhe('reforma')">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();showDetalhe('reforma')">Ver perfil</button>
         </div>
       </div>
       <div style="padding:0 16px 12px">
@@ -627,8 +699,8 @@ Urgencia: 🔴 Alta</div>
         <div class="review-item"><div class="reviewer">Pedro Souza</div><div class="stars">★★★★★</div><div class="text">Cumpriu o prazo e o resultado ficou perfeito.</div></div>
         <div class="review-item"><div class="reviewer">Maria Santos</div><div class="stars">★★★★☆</div><div class="text">Otimo custo-beneficio. Recomendo!</div></div>
         <div style="padding-top:12px; display:flex; flex-direction:column; gap:8px;">
-          <button class="btn btn-pri btn-full" onclick="goTo('contract')">✅ Escolher esta proposta</button>
-          <button class="btn btn-ghost btn-full" onclick="goTo('chat-provider')">💬 Enviar mensagem</button>
+          <button class="btn btn-pri btn-full" onclick="goTo('chat-provider')">✅ Escolher esta proposta</button>
+          <button class="btn btn-ghost btn-full" onclick="goTo('chat-prestador-msg')">💬 Enviar mensagem</button>
         </div>
       </div>
     </div>
@@ -653,7 +725,7 @@ Urgencia: 🔴 Alta</div>
             <div class="compare-row best"><div class="row-label">Avaliacao</div><div class="row-val">4.9 ★</div></div>
             <div class="compare-row"><div class="row-label">Servicos</div><div class="row-val">127</div></div>
             <div class="compare-row best"><div class="row-label">Verificado</div><div class="row-val">✅ Sim</div></div>
-            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('detalhe')">Escolher</button></div>
+            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('chat-provider')">Escolher</button></div>
           </div>
           <div class="compare-col">
             <div class="col-header">
@@ -687,29 +759,31 @@ Urgencia: 🔴 Alta</div>
       </div>
     </div>
 
-    <!-- ===== C8: CHAT COM PRESTADOR ===== -->
+    <!-- ===== C8: VERIFICAR CONTRATO ===== -->
     <div id="page-chat-provider" class="page">
-      <div class="chat-wrap">
-        <div class="chat-prov-header">
-          <button class="back" onclick="goTo('propostas','pedidos')">←</button>
-          <div class="avatar" style="background:var(--pri)">C</div>
-          <div class="info"><strong>Carlos Impermeabilizacoes</strong><span>● Online</span></div>
+      <div class="top-bar">
+        <button class="back" onclick="goTo('detalhe')">←</button>
+        <h2>Revisar Contrato</h2>
+      </div>
+      <div class="contract-section">
+        <div class="system-msg" style="margin:0 0 12px">Revise os detalhes combinados com Carlos antes de prosseguir para a assinatura.</div>
+        <div class="contract-card">
+          <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:10px">Resumo do combinado</div>
+          <div class="contract-term"><span class="icon">🔧</span><div><div class="label">Servico</div><div class="value">Impermeabilizacao de Laje</div></div></div>
+          <div class="contract-term"><span class="icon">💰</span><div><div class="label">Valor</div><div class="value">R$ 1.850,00</div></div></div>
+          <div class="contract-term"><span class="icon">📅</span><div><div class="label">Inicio previsto</div><div class="value">Segunda-feira, 20/Mai/2026 — 8h</div></div></div>
+          <div class="contract-term"><span class="icon">📍</span><div><div class="label">Local</div><div class="value">Rua das Orquideas, 450, Ap. 302 — Aldeota</div></div></div>
+          <div class="contract-term"><span class="icon">🛡️</span><div><div class="label">Garantia</div><div class="value">5 anos contra infiltracao</div></div></div>
+          <div class="contract-term" style="border-bottom:none"><span class="icon">📦</span><div><div class="label">Materiais</div><div class="value">Inclusos na proposta</div></div></div>
         </div>
-        <div class="system-msg">Verifique os detalhes abaixo antes de prosseguir para o contrato.</div>
-        <div class="px section-title" style="margin-top:12px">Checklist de verificacao</div>
+        <div class="px section-title" style="margin-top:4px">Checklist de verificacao</div>
         <div class="checklist">
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Data de inicio confirmada?</span></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais inclusos?</span></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco confirmado?</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Data e horario de inicio conferidos</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco e acesso confirmados</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais e garantia conferidos</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Valor e condicoes de pagamento ok</span></div>
         </div>
-        <div class="chat-msgs" id="chat-prov-msgs" style="flex:1">
-          <div class="msg ai" style="background:var(--wh)">Ola Ygor! Vi que escolheu minha proposta. Quando seria uma boa data para iniciar?</div>
-          <div class="msg user">Pode ser na proxima segunda-feira? De manha.</div>
-          <div class="msg ai" style="background:var(--wh)">Perfeito! Segunda as 8h estarei ai. Vou levar todo o material necessario.</div>
-        </div>
-        <div class="chat-contract-btn">
-          <button class="btn btn-pri btn-full" onclick="goTo('contract')">Prosseguir para contrato →</button>
-        </div>
+        <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('contract')">Prosseguir para assinatura do contrato →</button>
       </div>
     </div>
 
@@ -746,18 +820,14 @@ Urgencia: 🔴 Alta</div>
             <div class="contract-term"><span class="icon">🔒</span><div><div class="label">Pagamento</div><div class="value">Retido em escrow ate confirmacao</div></div></div>
           </div>
         </div>
-        <div style="text-align:center;margin-bottom:12px"><a style="font-size:12px;color:var(--pri);cursor:pointer">Ver contrato completo (versao juridica)</a></div>
+        <div style="text-align:center;margin-bottom:12px"><a style="font-size:12px;color:var(--pri);cursor:pointer;text-decoration:underline" onclick="goTo('smart-contract-view')">🔗 Ver contrato completo (versao juridica blockchain)</a></div>
         <div class="contract-status" id="contract-status">⏳ Aguardando assinatura do prestador</div>
-        <div class="scroll-hint">↓ Role para assinar ↓</div>
+        <div class="scroll-hint">↓ Toque na area abaixo para assinar ↓</div>
         <div class="sign-area" id="sign-area" onclick="signContract()">
           <div class="pen">✍️</div>
           <p>Toque para assinar digitalmente</p>
         </div>
-        <div class="checkbox-row" onclick="toggleCheckbox(this)">
-          <div class="checkbox" id="terms-check"></div>
-          <span>Li e concordo com os termos</span>
-        </div>
-        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Assinar contrato →</button>
+        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Ir para pagamento →</button>
       </div>
     </div>
 
@@ -774,35 +844,51 @@ Urgencia: 🔴 Alta</div>
           <div style="font-size:11px;color:var(--mu)">Carlos Impermeabilizacoes · 4 dias uteis</div>
         </div>
         <div class="section-title">Forma de pagamento</div>
-        <div class="payment-method selected" onclick="selectPayment(this)" data-method="pix">
-          <span class="pm-icon">💳</span>
-          <div class="pm-info"><strong>PIX</strong><span>Aprovacao instantanea</span></div>
+        <div class="payment-method selected" data-method="pix" onclick="selectPayment(this)">
+          <span class="pm-icon">⚡</span>
+          <div class="pm-info"><strong>PIX</strong><span>Aprovacao instantanea · sem juros</span></div>
           <div class="pm-radio"></div>
         </div>
-        <div class="payment-method" onclick="selectPayment(this)" data-method="cartao">
+        <div class="payment-method" data-method="cartao" onclick="selectPayment(this)">
           <span class="pm-icon">💳</span>
-          <div class="pm-info"><strong>Cartao de Credito</strong><span>Parcele em ate 12x</span></div>
+          <div class="pm-info"><strong>Cartao de Credito</strong><span>A vista · sem juros adicionais</span></div>
           <div class="pm-radio"></div>
         </div>
-        <div id="pix-info" style="background:var(--pri-lt);border-radius:12px;padding:16px;text-align:center;margin-bottom:12px">
-          <div style="width:120px;height:120px;background:#fff;border:2px solid var(--pri);border-radius:8px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:48px">📱</div>
-          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:6px">Escaneie o QR Code ou copie a chave</div>
-          <div style="background:#fff;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--dk);font-family:monospace;word-break:break-all;margin-bottom:8px">00020126580014br.gov.bcb.pix0136resolvai-escrow@pix.com.br</div>
-          <button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="this.textContent='✓ Copiado!'">📋 Copiar chave PIX</button>
+
+        <!-- Campos cartao de credito -->
+        <div id="card-form-block" style="display:none;margin-top:8px;background:var(--wh);border-radius:12px;padding:14px;border:1px solid var(--bo)">
+          <div style="font-size:13px;font-weight:600;color:var(--dk);margin-bottom:10px">Dados do cartao</div>
+          <input class="checkout-input" type="text" placeholder="Numero do cartao" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()">
+          <input class="checkout-input" type="text" placeholder="Nome impresso no cartao" style="text-transform:uppercase">
+          <div style="display:flex;gap:8px">
+            <input class="checkout-input" type="text" placeholder="MM/AA" style="flex:1" maxlength="5">
+            <input class="checkout-input" type="text" placeholder="CVV" style="flex:1" maxlength="3">
+          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--dk);margin:10px 0 6px">Parcelamento</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="installment-option selected" onclick="selectInstallment(this)" style="background:var(--pri-lt);color:var(--pri);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;border:1px solid var(--pri)">1x de R$ 1.850,00 <span style="font-size:11px;opacity:0.7">sem juros</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)" style="background:var(--gr);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;border:1px solid var(--bo)">3x de R$ 616,67 <span style="font-size:11px;color:var(--mu)">sem juros</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)" style="background:var(--gr);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;border:1px solid var(--bo)">6x de R$ 308,33 <span style="font-size:11px;color:var(--mu)">sem juros</span></div>
+          </div>
         </div>
-        <div id="installment-card" class="installment-card" style="display:none">
-          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:8px">Parcelamento</div>
-          <div class="installment-option selected">1x de R$ 1.850,00 <span style="color:var(--su);font-size:11px">sem juros</span></div>
-          <div class="installment-option" onclick="selectInstallment(this)">2x de R$ 950,00 <span style="font-size:11px;color:var(--mu)">sem juros</span></div>
-          <div class="installment-option" onclick="selectInstallment(this)">3x de R$ 645,00 <span style="font-size:11px;color:var(--mu)">sem juros</span></div>
-          <div class="installment-option" onclick="selectInstallment(this)">6x de R$ 332,00 <span style="font-size:11px;color:var(--mu)">+ juros</span></div>
-          <div class="installment-option" onclick="selectInstallment(this)">12x de R$ 178,00 <span style="font-size:11px;color:var(--mu)">+ juros</span></div>
+
+        <!-- QR Code PIX (visivel quando PIX estiver selecionado) -->
+        <div class="pix-qr-block visible" id="pix-qr-block">
+          <div class="pix-qr-label">Escaneie o QR Code com o app do seu banco</div>
+          <div class="pix-qr-img">
+            <span style="z-index:1;font-size:10px;color:var(--mu)">QR Code</span>
+          </div>
+          <div class="pix-qr-label" style="margin-top:2px">Ou copie a chave PIX:</div>
+          <div class="pix-key-box">00020126580014BR.GOV.BCB.PIX0136resolv-ai-pagamento@resolvai.com.br5204000053039865802BR5915ResolvAI Escrow6008Fortaleza62070503***6304A1B2</div>
+          <button class="pix-copy-btn" onclick="this.textContent='✅ Copiado!'">📋 Copiar chave PIX</button>
+          <div class="pix-expiry">⏱ Expira em <strong>15 minutos</strong></div>
         </div>
+
         <div class="escrow-notice">
           <span class="icon">🔒</span>
           <p><strong>Pagamento seguro via ResolvAI.</strong> Seu dinheiro fica retido ate voce confirmar a conclusao do servico.</p>
         </div>
-        <button class="btn btn-pri btn-full" onclick="goTo('confirmacao')">Confirmar pagamento →</button>
+        <button class="btn btn-pri btn-full" id="pay-btn" onclick="processarPagamento(this)">Confirmar pagamento →</button>
       </div>
     </div>
 
@@ -823,54 +909,61 @@ Urgencia: 🔴 Alta</div>
           <div style="font-size:12px;color:var(--mu);line-height:1.8">1. O prestador entrara em contato em ate 2 horas<br>2. Combine a data e hora da visita tecnica<br>3. Acompanhe o andamento pelo app</div>
         </div>
         <button class="btn btn-pri btn-full" onclick="goTo('home','home')">🏠 Voltar ao Home</button>
-        <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="goTo('acompanhamento')">📍 Acompanhar pedido</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="goTo('acompanhar')">📍 Acompanhar pedido</button>
       </div>
     </div>
 
-    <!-- ===== C11a: ACOMPANHAMENTO DO PEDIDO ===== -->
-    <div id="page-acompanhamento" class="page">
+    <!-- ===== ACOMPANHAR PEDIDO ===== -->
+    <div id="page-acompanhar" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('home','home')">←</button>
         <h2>Acompanhar Pedido</h2>
       </div>
-      <div style="padding:16px">
-        <div class="card" style="margin-bottom:12px">
-          <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px">Impermeabilizacao de Laje</div>
-          <div style="font-size:12px;color:var(--mu)">Carlos Impermeabilizacoes · Pedido #1042</div>
+      <div class="acomp-section">
+        <div class="acomp-status-card">
+          <h3>Em andamento</h3>
+          <p>Impermeabilizacao de Laje · Inicio: 20/Mai/2026</p>
         </div>
-        <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:12px">Cronograma de execucao</div>
-        <div style="position:relative;padding-left:24px">
-          <div style="position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--bo)"></div>
-          <div style="margin-bottom:16px;position:relative">
-            <div style="position:absolute;left:-20px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--su);border:2px solid #fff"></div>
-            <div style="font-size:13px;font-weight:600;color:var(--su)">✓ Contrato assinado</div>
-            <div style="font-size:11px;color:var(--mu)">Hoje</div>
+        <div class="acomp-prestador">
+          <div class="av">C</div>
+          <div class="info">
+            <strong>Carlos Impermeabilizacoes</strong>
+            <span>● Online agora · 4.9 ★</span>
           </div>
-          <div style="margin-bottom:16px;position:relative">
-            <div style="position:absolute;left:-20px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--su);border:2px solid #fff"></div>
-            <div style="font-size:13px;font-weight:600;color:var(--su)">✓ Pagamento confirmado</div>
-            <div style="font-size:11px;color:var(--mu)">Hoje</div>
+          <button class="btn btn-ghost btn-sm" onclick="goTo('chat-prestador-msg')">💬 Chat</button>
+        </div>
+        <div class="acomp-timeline">
+          <h3>Progresso do servico</h3>
+          <div class="timeline-item">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-info"><strong>Contrato assinado</strong><span>11/Mai/2026 — Ambas as partes</span></div>
           </div>
-          <div style="margin-bottom:16px;position:relative">
-            <div style="position:absolute;left:-20px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--pri);border:2px solid #fff"></div>
-            <div style="font-size:13px;font-weight:600;color:var(--pri)">⏳ Aguardando inicio</div>
-            <div style="font-size:11px;color:var(--mu)">Prestador confirmara a data de inicio</div>
+          <div class="timeline-item">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-info"><strong>Pagamento em escrow</strong><span>11/Mai/2026 — R$ 1.850 retidos</span></div>
           </div>
-          <div style="margin-bottom:16px;position:relative">
-            <div style="position:absolute;left:-20px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--bo);border:2px solid #fff"></div>
-            <div style="font-size:13px;font-weight:600;color:var(--mu)">Servico em andamento</div>
-            <div style="font-size:11px;color:var(--mu)">Prazo estimado: 4 dias uteis</div>
+          <div class="timeline-item">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-info"><strong>Visita tecnica realizada</strong><span>20/Mai/2026 — Diagnostico confirmado</span></div>
           </div>
-          <div style="margin-bottom:16px;position:relative">
-            <div style="position:absolute;left:-20px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--bo);border:2px solid #fff"></div>
-            <div style="font-size:13px;font-weight:600;color:var(--mu)">Confirmacao e avaliacao</div>
-            <div style="font-size:11px;color:var(--mu)">Voce confirmara a conclusao do servico</div>
+          <div class="timeline-item">
+            <div class="tl-dot active">→</div>
+            <div class="tl-info"><strong>Execucao em andamento</strong><span>Em progresso — Aplicacao da manta asfaltica</span></div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-dot pending">○</div>
+            <div class="tl-info"><strong>Conclusao e revisao</strong><span>Previsto: 24/Mai/2026</span></div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-dot pending">○</div>
+            <div class="tl-info"><strong>Confirmacao e liberacao do pagamento</strong><span>Aguardando conclusao</span></div>
           </div>
         </div>
-        <div class="card" style="margin-top:12px;background:var(--pri-lt)">
-          <div style="font-size:12px;color:var(--pri)">🔒 Seu pagamento de R$ 1.850 esta protegido em escrow ate a confirmacao da conclusao.</div>
+        <div class="acomp-escrow">
+          <span style="font-size:18px">🔒</span>
+          <p><strong>R$ 1.850 em escrow.</strong> O valor sera liberado para o prestador somente apos voce confirmar a conclusao do servico.</p>
         </div>
-        <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('home','home')">🏠 Voltar ao Home</button>
+        <button class="btn btn-su btn-full" onclick="goTo('rating')">✅ Confirmar conclusao do servico</button>
       </div>
     </div>
 
@@ -1030,6 +1123,137 @@ Urgencia: 🔴 Alta</div>
       </div>
     </div>
 
+    <!-- ===== SEM PROPOSTAS ===== -->
+    <div id="page-sem-propostas" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('home','home')">←</button>
+        <h2>Propostas</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 32px;text-align:center">
+        <div style="width:80px;height:80px;background:var(--wa-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px">⏳</div>
+        <h3 style="font-size:16px;font-weight:700;color:var(--dk);margin-bottom:8px">Ainda nao houve propostas</h3>
+        <p style="font-size:13px;color:var(--mu);line-height:1.5;margin-bottom:24px">Seu pedido foi publicado e esta visivel para prestadores da regiao. Voce sera notificado assim que receber a primeira proposta.</p>
+        <div class="card" style="width:100%;text-align:left;margin-bottom:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:6px">Infiltracao no teto da sala</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:4px">Impermeabilizacao · Aldeota</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <span class="badge badge-wa">Aguardando</span>
+            <span style="font-size:10px;color:var(--mu)">Publicado ha 2 dias</span>
+          </div>
+        </div>
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">← Voltar ao Home</button>
+      </div>
+    </div>
+
+    <!-- ===== SMART CONTRACT BLOCKCHAIN VIEW ===== -->
+    <div id="page-smart-contract-view" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('contract')">←</button>
+        <h2>Smart Contract</h2>
+      </div>
+      <div style="padding:16px">
+        <div class="card" style="margin-bottom:12px;background:linear-gradient(135deg,#0F1C2E,#1E3A5F);color:#fff;padding:18px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">⛓️</div>
+            <div>
+              <div style="font-size:14px;font-weight:700">Smart Contract #RSV-2026-1042</div>
+              <div style="font-size:10px;opacity:0.7">Registrado em blockchain</div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:10px;font-family:monospace;font-size:10px;word-break:break-all;margin-bottom:8px">
+            Hash: 0x7f3a9b2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a...b2c1
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;opacity:0.7">
+            <span>Criado: 11/Mai/2026 14:32 UTC</span>
+            <span>Rede: ResolvAI Chain</span>
+          </div>
+        </div>
+
+        <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:12px">Clausulas do Contrato</div>
+
+        <div class="card" style="margin-bottom:8px;border-left:4px solid var(--pri);padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:16px">🔒</span>
+            <div style="font-size:13px;font-weight:700;color:var(--dk)">Clausula 1 — Escopo do Servico</div>
+          </div>
+          <p style="font-size:12px;color:var(--mu);line-height:1.5">O Prestador se compromete a executar impermeabilizacao de laje de 30m2, incluindo inspecao, remocao do revestimento danificado, aplicacao de manta asfaltica e repintura final.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:8px;border-left:4px solid var(--su);padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:16px">💰</span>
+            <div style="font-size:13px;font-weight:700;color:var(--dk)">Clausula 2 — Pagamento e Escrow</div>
+          </div>
+          <p style="font-size:12px;color:var(--mu);line-height:1.5">Valor total de R$ 1.850,00 retido em escrow inteligente. Liberacao automatica apos confirmacao do Contratante ou apos 7 dias sem contestacao.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:8px;border-left:4px solid var(--wa);padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:16px">⏱️</span>
+            <div style="font-size:13px;font-weight:700;color:var(--dk)">Clausula 3 — Prazo de Execucao</div>
+          </div>
+          <p style="font-size:12px;color:var(--mu);line-height:1.5">Prazo de 4 dias uteis a partir de 20/Mai/2026. Atraso injustificado gera penalidade de 2% por dia sobre o valor total, limitado a 20%.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:8px;border-left:4px solid var(--vi);padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:16px">🛡️</span>
+            <div style="font-size:13px;font-weight:700;color:var(--dk)">Clausula 4 — Garantia</div>
+          </div>
+          <p style="font-size:12px;color:var(--mu);line-height:1.5">Garantia de 5 anos contra infiltracao na area tratada. Prestador obrigado a refazer o servico sem custo adicional se o problema reaparecer.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:12px;border-left:4px solid var(--da);padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:16px">⚖️</span>
+            <div style="font-size:13px;font-weight:700;color:var(--dk)">Clausula 5 — Resolucao de Disputas</div>
+          </div>
+          <p style="font-size:12px;color:var(--mu);line-height:1.5">Em caso de disputa, mediacao automatica via ResolvAI. Se nao resolvido em 15 dias, arbitragem por profissional certificado com custos rateados.</p>
+        </div>
+
+        <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:10px">Status das Assinaturas</div>
+        <div class="card" style="margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--bo)">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--pri);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700">Y</div>
+            <div style="flex:1"><strong style="font-size:12px;color:var(--dk)">Ygor Chagas</strong><div style="font-size:10px;color:var(--su)">✅ Assinado · 11/Mai/2026 14:35</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding-top:10px">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--su);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700">C</div>
+            <div style="flex:1"><strong style="font-size:12px;color:var(--dk)">Carlos Impermeabilizacoes</strong><div style="font-size:10px;color:var(--wa)">⏳ Aguardando assinatura</div></div>
+          </div>
+        </div>
+
+        <div style="background:var(--su-lt);border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:18px">⛓️</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--su)">Registrado em Blockchain</div>
+            <div style="font-size:10px;color:var(--mu);font-family:monospace;margin-top:2px">TX: 0xabc123...def456</div>
+          </div>
+        </div>
+
+        <button class="btn btn-ghost btn-full" onclick="goTo('contract')">← Voltar ao contrato</button>
+      </div>
+    </div>
+
+    <!-- ===== CHAT COM PRESTADOR (mensagens) ===== -->
+    <div id="page-chat-prestador-msg" class="page">
+      <div class="chat-wrap">
+        <div class="chat-prov-header">
+          <button class="back" onclick="goTo('detalhe')">←</button>
+          <div class="avatar" style="background:var(--pri)">C</div>
+          <div class="info"><strong>Carlos Impermeabilizacoes</strong><span>● Online</span></div>
+        </div>
+        <div class="chat-msgs" id="chat-prest-msgs">
+          <div class="msg ai" style="background:var(--wh);border:1px solid var(--bo);border-bottom-left-radius:4px;align-self:flex-start">Ola! Vi que tem interesse na minha proposta. Posso ajudar com alguma duvida?</div>
+        </div>
+        <div class="chat-input-bar">
+          <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📎</button>
+          <input class="chat-input" type="text" id="chat-prest-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendChatPrest()">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendChatPrest()">↑</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /screen-content -->
 
   <!-- BOTTOM NAV -->
@@ -1064,8 +1288,8 @@ function goTo(pageId, section) {
   if (section) currentSection = section;
 
   const nav = document.getElementById('bottom-nav');
-  const isOnboarding = pageId === 'onboarding';
-  nav.style.display = isOnboarding ? 'none' : 'flex';
+  const hideNav = (pageId === 'onboarding' || pageId === 'signup');
+  nav.style.display = hideNav ? 'none' : 'flex';
 
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
@@ -1076,11 +1300,25 @@ function goTo(pageId, section) {
 
 function nextSlide() {
   currentSlide++;
-  if (currentSlide > 2) { goTo('home','home'); return; }
+  if (currentSlide > 2) { goTo('signup'); return; }
   document.querySelectorAll('.onb-slide').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.onb-dot').forEach(d => d.classList.remove('active'));
   document.querySelector(`.onb-slide[data-slide="${currentSlide}"]`).classList.add('active');
   document.querySelector(`.onb-dot[data-dot="${currentSlide}"]`).classList.add('active');
+}
+
+function showToast(msg, duration) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), duration || 2800);
+}
+
+function nowTime() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
 }
 
 function sendMsg() {
@@ -1088,17 +1326,37 @@ function sendMsg() {
   const text = input.value.trim();
   if (!text) return;
   const msgs = document.getElementById('chat-msgs');
-  const div = document.createElement('div');
-  div.className = 'msg user';
-  div.textContent = text;
-  msgs.appendChild(div);
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg user';
+  userDiv.textContent = text;
+  msgs.appendChild(userDiv);
   input.value = '';
   msgs.scrollTop = msgs.scrollHeight;
+  // typing indicator
+  const typing = document.createElement('div');
+  typing.className = 'msg ai';
+  typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(() => {
+    typing.innerHTML = 'Entendido! Vou atualizar o escopo com essa informacao. ✅';
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1200);
 }
 
 function setFilter(el) {
   el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
+  const text = el.textContent.trim();
+  const page = el.closest('.page');
+  if (!page) return;
+  const cards = [...page.querySelectorAll('.prop-card')];
+  if (!cards.length) return;
+  const parent = cards[0].parentElement;
+  if (text.includes('avaliacao')) cards.sort((a,b) => parseFloat(b.dataset.rating||0) - parseFloat(a.dataset.rating||0));
+  else if (text.includes('preco')) cards.sort((a,b) => parseFloat(a.dataset.price||0) - parseFloat(b.dataset.price||0));
+  else if (text.includes('prazo')) cards.sort((a,b) => parseFloat(a.dataset.prazo||0) - parseFloat(b.dataset.prazo||0));
+  cards.forEach(c => parent.appendChild(c));
 }
 
 function toggleCheck(el) {
@@ -1115,19 +1373,23 @@ function toggleCheckbox(el) {
 
 function signContract() {
   const area = document.getElementById('sign-area');
-  area.innerHTML = '<div style="font-size:24px;color:var(--su);margin-bottom:4px">✅</div><p style="font-size:12px;color:var(--su);font-weight:600">Assinatura registrada</p>';
+  area.innerHTML = '<div style="font-size:24px;color:var(--su);margin-bottom:4px">✅</div><p style="font-size:12px;color:var(--su);font-weight:600">Assinatura registrada · ' + nowTime() + '</p>';
   area.style.borderColor = 'var(--su)';
   area.style.background = 'var(--su-lt)';
+  area.onclick = null;
   var status = document.getElementById('contract-status');
-  if (status) { status.textContent = '✅ Assinado por ambas as partes'; status.style.background = 'var(--su-lt)'; status.style.color = 'var(--su)'; }
+  if (status) { status.textContent = '✅ Contrato assinado · Registrado na blockchain'; status.style.background = 'var(--su-lt)'; status.style.color = 'var(--su)'; }
+  showToast('✅ Assinatura registrada com sucesso!');
 }
 
 function selectPayment(el) {
   document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
   el.classList.add('selected');
-  var method = el.getAttribute('data-method');
-  document.getElementById('pix-info').style.display = method === 'pix' ? 'block' : 'none';
-  document.getElementById('installment-card').style.display = method === 'cartao' ? 'block' : 'none';
+  const method = el.dataset.method;
+  const qrBlock = document.getElementById('pix-qr-block');
+  const cardBlock = document.getElementById('card-form-block');
+  if (qrBlock) qrBlock.classList.toggle('visible', method === 'pix');
+  if (cardBlock) cardBlock.style.display = method === 'cartao' ? 'block' : 'none';
 }
 
 function selectInstallment(el) {
@@ -1139,6 +1401,78 @@ function setRating(n) {
   document.querySelectorAll('.star').forEach((s,i) => {
     s.classList.toggle('filled', i < n);
   });
+}
+
+function processarPagamento(btn) {
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>&nbsp;Processando...';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = orig;
+    showToast('✅ Pagamento confirmado!');
+    goTo('confirmacao');
+  }, 1800);
+}
+
+const _providers = {
+  carlos: { name:'Carlos Impermeabilizacoes', initial:'C', color:'var(--pri)', rating:'4.9', servicos:'127', price:'R$ 1.850', prazo:'4 dias uteis', garantia:'5 anos', desc:'Especialista em impermeabilizacao ha 12 anos.', items:['Inspecao visual e teste de estanqueidade','Remocao do revestimento danificado','Aplicacao de manta asfaltica','Emboco + tinta impermeavel','Laudo tecnico final'] },
+  fix:    { name:'Fix Hidraulica', initial:'F', color:'var(--or)', rating:'4.7', servicos:'89', price:'R$ 1.620', prazo:'5 dias uteis', garantia:'2 anos', desc:'Especialista em hidraulica e impermeabilizacao. 8 anos de mercado.', items:['Inspecao hidraulica completa','Reparo de vazamentos','Impermeabilizacao de laje','Teste de estanqueidade'] },
+  reforma:{ name:'Reforma Express', initial:'R', color:'var(--su)', rating:'4.5', servicos:'56', price:'R$ 1.400', prazo:'3 dias uteis', garantia:'1 ano', desc:'Servicos ageis de reforma e impermeabilizacao com equipe propria.', items:['Impermeabilizacao basica de laje','Reparo de trincas e frestas','Pintura de acabamento impermeavel'] }
+};
+
+function showDetalhe(key) {
+  const p = _providers[key];
+  if (!p) return;
+  const page = document.getElementById('page-detalhe');
+  page.querySelector('.top-bar h2').textContent = p.name;
+  const av = page.querySelector('.prov-avatar-lg');
+  av.textContent = p.initial; av.style.background = p.color;
+  page.querySelector('.prov-detail h2').textContent = p.name;
+  page.querySelector('.prov-detail .rating').textContent = p.rating + ' ★ · ' + p.servicos + ' servicos · Fortaleza, CE';
+  const descEl = page.querySelector('.prov-detail p');
+  if (descEl) descEl.textContent = p.desc;
+  page.querySelector('.big-price').textContent = p.price;
+  const prazoEl = page.querySelector('.prov-proposal-card div[style*="color:var(--mu)"]');
+  if (prazoEl) prazoEl.textContent = 'Prazo: ' + p.prazo;
+  const garantiaEl = page.querySelector('.prov-proposal-card div[style*="color:var(--su)"]');
+  if (garantiaEl) garantiaEl.textContent = '✓ Garantia: ' + p.garantia;
+  const ul = page.querySelector('.include-list');
+  if (ul) ul.innerHTML = p.items.map(i => '<li>' + i + '</li>').join('');
+  window._selectedProvider = p;
+  goTo('detalhe', 'pedidos');
+}
+
+const _prestReplies = [
+  'Claro! Posso te explicar melhor sobre o servico.',
+  'Sem problema, podemos combinar o horario da visita tecnica.',
+  'O prazo e estimado, mas farei o possivel para ser mais rapido.',
+  'Sim, a garantia cobre qualquer reincidencia do problema.',
+  'Entendido! Vou verificar e te respondo em breve.'
+];
+function sendChatPrest() {
+  const input = document.getElementById('chat-prest-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = document.getElementById('chat-prest-msgs');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg user';
+  userDiv.textContent = text;
+  msgs.appendChild(userDiv);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+  // typing indicator
+  const typing = document.createElement('div');
+  typing.className = 'msg ai';
+  typing.style.cssText = 'background:var(--wh);border:1px solid var(--bo);border-bottom-left-radius:4px;align-self:flex-start';
+  typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(() => {
+    const reply = _prestReplies[Math.floor(Math.random() * _prestReplies.length)];
+    typing.innerHTML = reply;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1000 + Math.random() * 800);
 }
 </script>
 </body>

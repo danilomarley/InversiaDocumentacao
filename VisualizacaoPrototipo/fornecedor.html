@@ -54,7 +54,17 @@
   }
   .screen-content::-webkit-scrollbar { width:0; }
   .page { display:none; }
-  .page.active { display:block; }
+  .page.active { display:block; animation: pageIn 0.2s ease-out; }
+  @keyframes pageIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .toast { position:fixed; top:60px; left:50%; transform:translateX(-50%) translateY(-10px); background:var(--dk); color:#fff; padding:10px 18px; border-radius:20px; font-size:13px; font-weight:500; opacity:0; pointer-events:none; z-index:999; transition:all 0.25s ease; white-space:nowrap; max-width:90%; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .typing-dots { display:flex; gap:4px; align-items:center; padding:4px 0; }
+  .typing-dots span { width:7px; height:7px; background:var(--mu); border-radius:50%; animation:dot 1.2s infinite; }
+  .typing-dots span:nth-child(2) { animation-delay:0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay:0.4s; }
+  @keyframes dot { 0%,80%,100%{transform:scale(0.7);opacity:0.5} 40%{transform:scale(1);opacity:1} }
 
   .top-bar {
     background:var(--wh); padding:14px 16px;
@@ -336,6 +346,7 @@
 <body>
 
 <a href="index.html" class="back-link">← Voltar ao Menu</a>
+<div class="toast" id="toast"></div>
 
 <div class="phone-frame">
   <div class="status-bar">
@@ -345,8 +356,20 @@
 
   <div class="screen-content">
 
+    <!-- ===== P0: WELCOME ===== -->
+    <div id="page-welcome" class="page active">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;padding:40px 24px;text-align:center;background:linear-gradient(180deg,var(--wh) 0%,var(--pri-lt) 100%)">
+        <div style="width:80px;height:80px;background:var(--pri);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;margin-bottom:20px;box-shadow:0 8px 24px rgba(255,92,26,0.3)">🔧</div>
+        <h1 style="font-size:22px;font-weight:800;color:var(--dk);margin-bottom:6px">ResolvAI Prestador</h1>
+        <p style="font-size:13px;color:var(--mu);margin-bottom:32px;line-height:1.5">Conecte-se com clientes, envie propostas e gerencie seus servicos em um so lugar.</p>
+        <button class="btn btn-pri btn-full" style="margin-bottom:12px" onclick="goTo('onboarding')">Criar Conta</button>
+        <button class="btn btn-ghost btn-full" onclick="goTo('feed','home')">Ja tenho conta — Fazer Login</button>
+        <p style="font-size:11px;color:var(--mu);margin-top:24px">Ao continuar, voce concorda com os <a href="#" style="color:var(--pri)">Termos de Uso</a></p>
+      </div>
+    </div>
+
     <!-- ===== P1: ONBOARDING ===== -->
-    <div id="page-onboarding" class="page active">
+    <div id="page-onboarding" class="page">
       <div class="onb-header">
         <h1>Cadastro de Prestador</h1>
         <p>Complete seu perfil em 3 passos rapidos</p>
@@ -413,7 +436,7 @@
         <span class="filter-pill" onclick="setFilter(this)">Alvenaria</span>
         <span class="filter-pill" onclick="setFilter(this)">Pintura</span>
       </div>
-      <div class="pedido-card" onclick="goTo('detalhe-pedido')">
+      <div class="pedido-card" data-category="Impermeabilizacao" onclick="goTo('detalhe-pedido')">
         <h3>Infiltracao no teto da sala</h3>
         <div class="desc">Ap. 3o andar, area de servico do vizinho. Mancha de 80x60cm, gotejamento.</div>
         <div class="pedido-tags">
@@ -431,7 +454,7 @@
           <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
         </div>
       </div>
-      <div class="pedido-card" onclick="goTo('detalhe-pedido')">
+      <div class="pedido-card" data-category="Hidraulica" onclick="goTo('detalhe-pedido')">
         <h3>Troca de encanamento — Cozinha</h3>
         <div class="desc">Cano estourado, agua desligada. Precisa de reparo imediato.</div>
         <div class="pedido-tags">
@@ -448,7 +471,7 @@
           <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
         </div>
       </div>
-      <div class="pedido-card" style="border-left-color:var(--wa)" onclick="goTo('detalhe-pedido')">
+      <div class="pedido-card" data-category="Pintura" style="border-left-color:var(--wa)" onclick="goTo('detalhe-pedido')">
         <h3>Pintura fachada residencial</h3>
         <div class="desc">Casa 2 pavimentos, calafetacao antes da pintura. 180m².</div>
         <div class="pedido-tags">
@@ -522,7 +545,7 @@
         <div class="form-field"><label>Condicoes de cobertura</label><textarea placeholder="Ex: Cobertura contra infiltracao na area tratada..."></textarea></div>
         <div class="form-field"><label>Descricao da abordagem</label><textarea placeholder="Descreva como pretende executar o servico, materiais..."></textarea></div>
         <div style="font-size:12px;color:var(--mu);margin-bottom:12px">📋 Preview: e assim que o cliente vai ver sua proposta</div>
-        <button class="btn btn-pri btn-full" onclick="goTo('propostas','propostas')">🚀 Enviar proposta</button>
+        <button class="btn btn-pri btn-full" onclick="enviarProposta(this)">🚀 Enviar proposta</button>
         <button class="btn btn-ghost btn-full" style="margin-top:8px">Salvar rascunho</button>
       </div>
     </div>
@@ -540,22 +563,22 @@
         <span class="filter-pill" onclick="setFilter(this)">Escolhidas</span>
         <span class="filter-pill" onclick="setFilter(this)">Nao selecionadas</span>
       </div>
-      <div class="proposta-card" onclick="goTo('chat-cliente','chat')">
+      <div class="proposta-card" data-status="Escolhidas" onclick="goTo('chat-cliente','chat')">
         <div class="proposta-status" style="background:var(--su-lt)">✅</div>
         <div class="proposta-info"><h4>Impermeabilizacao laje — Ygor</h4><div class="meta">Aldeota · Enviada ha 2 dias</div></div>
         <div class="proposta-val"><div class="price">R$1.850</div><div class="status-text badge badge-su">Escolhida</div></div>
       </div>
-      <div class="proposta-card">
+      <div class="proposta-card" data-status="Enviadas">
         <div class="proposta-status" style="background:var(--bl-lt)">👁️</div>
         <div class="proposta-info"><h4>Reparo calha — Ana Lima</h4><div class="meta">Meireles · Enviada ha 3 dias</div></div>
         <div class="proposta-val"><div class="price">R$980</div><div class="status-text badge badge-bl">Visualizada</div></div>
       </div>
-      <div class="proposta-card">
+      <div class="proposta-card" data-status="Enviadas">
         <div class="proposta-status" style="background:var(--pri-lt)">📤</div>
         <div class="proposta-info"><h4>Troca encanamento — Pedro</h4><div class="meta">Fatima · Enviada ha 5 dias</div></div>
         <div class="proposta-val"><div class="price">R$750</div><div class="status-text badge badge-pri">Enviada</div></div>
       </div>
-      <div class="proposta-card">
+      <div class="proposta-card" data-status="Nao selecionadas">
         <div class="proposta-status" style="background:var(--da-lt)">❌</div>
         <div class="proposta-info"><h4>Pintura fachada — Roberto</h4><div class="meta">Coco · Enviada ha 1 sem</div></div>
         <div class="proposta-val"><div class="price">R$3.200</div><div class="status-text badge badge-da">Nao selecionada</div></div>
@@ -577,7 +600,7 @@
           <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais inclusos?</span></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco confirmado?</span></div>
         </div>
-        <div class="chat-msgs" style="flex:1">
+        <div class="chat-msgs" id="chat-cliente-msgs" style="flex:1">
           <div class="msg other">Ola Carlos! Pode comecar segunda de manha?</div>
           <div class="msg me">Perfeito! Segunda as 8h estarei ai com todo o material.</div>
           <div class="msg other">Otimo! O porteiro ja vai estar avisado.</div>
@@ -587,8 +610,8 @@
         </div>
         <div class="chat-input-bar">
           <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📎</button>
-          <input class="chat-input" type="text" placeholder="Digite sua mensagem...">
-          <button class="chat-btn-icon" style="background:var(--pri);color:#fff">↑</button>
+          <input class="chat-input" type="text" id="chat-cliente-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendChatCliente()">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendChatCliente()">↑</button>
         </div>
       </div>
     </div>
@@ -611,7 +634,7 @@
             <div class="contract-arrow">⟷</div>
             <div class="contract-party">
               <div class="avatar" style="background:var(--pri)">C</div>
-              <div class="name">Carlos Silva</div>
+              <div class="name">Carlos Impermeabilizacoes</div>
               <div class="role">Prestador</div>
             </div>
           </div>
@@ -709,6 +732,87 @@
       </div>
     </div>
 
+    <!-- ===== MEUS PEDIDOS (em andamento/aceitos) ===== -->
+    <div id="page-meus-pedidos" class="page">
+      <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Meus Pedidos</div></div>
+      <div class="filter-scroll" style="padding-top:0">
+        <span class="filter-pill active" onclick="setFilterPedidos(this)">Todos</span>
+        <span class="filter-pill" onclick="setFilterPedidos(this)">Em andamento</span>
+        <span class="filter-pill" onclick="setFilterPedidos(this)">Concluidos</span>
+      </div>
+      <div class="pedido-card" data-status-pedido="andamento" style="border-left-color:var(--su)" onclick="goTo('servico')">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <h3>Impermeabilizacao de Laje</h3>
+          <span class="badge badge-su">Em andamento</span>
+        </div>
+        <div class="desc">Cliente: Ygor Chagas · Aldeota, Fortaleza</div>
+        <div class="pedido-tags">
+          <span class="pedido-tag">Impermeabilizacao</span>
+          <span class="pedido-tag">📅 Inicio: 20/Mai</span>
+        </div>
+        <div class="pedido-footer">
+          <span class="budget">R$ 1.850</span>
+          <span style="font-size:10px;color:var(--su);font-weight:600">Dia 2 de 4</span>
+        </div>
+      </div>
+      <div class="pedido-card" data-status-pedido="andamento" style="border-left-color:var(--bl)" onclick="goTo('servico')">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <h3>Reparo Calha — Ana Lima</h3>
+          <span class="badge badge-bl">Aguardando inicio</span>
+        </div>
+        <div class="desc">Cliente: Ana Lima · Meireles, Fortaleza</div>
+        <div class="pedido-tags">
+          <span class="pedido-tag">Hidraulica</span>
+          <span class="pedido-tag">📅 Inicio: 26/Mai</span>
+        </div>
+        <div class="pedido-footer">
+          <span class="budget">R$ 980</span>
+          <span style="font-size:10px;color:var(--bl);font-weight:600">Contrato assinado</span>
+        </div>
+      </div>
+      <div class="pedido-card" data-status-pedido="concluido" style="border-left-color:var(--mu);opacity:0.7">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <h3>Pintura sala — Roberto</h3>
+          <span class="badge" style="background:var(--gr);color:var(--mu)">Concluido</span>
+        </div>
+        <div class="desc">Cliente: Roberto Mendes · Coco, Fortaleza</div>
+        <div class="pedido-footer">
+          <span class="budget" style="color:var(--mu)">R$ 2.400</span>
+          <span style="font-size:10px;color:var(--mu)">Concluido em 10/Mai</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CHAT LIST ===== -->
+    <div id="page-chat-list" class="page">
+      <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Conversas</div></div>
+      <div style="padding:0 16px">
+        <div class="card" style="margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px" onclick="goTo('chat-cliente','chat')">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0">Y</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong style="font-size:13px;color:var(--dk)">Ygor Chagas</strong>
+              <span style="font-size:10px;color:var(--mu)">Hoje</span>
+            </div>
+            <div style="font-size:11px;color:var(--mu);margin-top:2px">Impermeabilizacao de Laje · Em andamento</div>
+            <div style="font-size:12px;color:var(--dk);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Otimo! O porteiro ja vai estar avisado.</div>
+          </div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--pri);flex-shrink:0"></div>
+        </div>
+        <div class="card" style="margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--su);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0">A</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong style="font-size:13px;color:var(--dk)">Ana Lima</strong>
+              <span style="font-size:10px;color:var(--mu)">Ontem</span>
+            </div>
+            <div style="font-size:11px;color:var(--mu);margin-top:2px">Reparo Calha · Aguardando inicio</div>
+            <div style="font-size:12px;color:var(--dk);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Combinado, segunda de manha esta otimo!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ===== PERFIL ===== -->
     <div id="page-perfil" class="page">
       <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Meu Perfil Profissional</div></div>
@@ -716,7 +820,7 @@
         <div class="profile-top">
           <div class="profile-avatar">C</div>
           <div class="info">
-            <h2>Carlos Silva</h2>
+            <h2>Carlos Impermeabilizacoes</h2>
             <p>Impermeabilizacao · Alvenaria</p>
             <div class="badges">
               <span class="badge badge-su">✅ Verificado</span>
@@ -727,7 +831,7 @@
         </div>
         <div class="form-card">
           <h3>Informacoes Profissionais</h3>
-          <div class="form-field"><label>Nome / Empresa</label><input value="Carlos Silva Impermeabilizacoes"></div>
+          <div class="form-field"><label>Nome / Empresa</label><input value="Carlos Impermeabilizacoes Impermeabilizacoes"></div>
           <div class="form-field"><label>Especialidades</label><input value="Impermeabilizacao, Alvenaria, Reboco"></div>
           <div class="form-field"><label>Telefone</label><input value="(85) 98888-1111"></div>
           <div class="form-field"><label>Email</label><input value="carlos@impermeabiliza.com"></div>
@@ -766,13 +870,13 @@
     <button class="nav-tab active" data-section="home" onclick="goTo('feed','home')">
       <span class="tab-icon">🏠</span>Home
     </button>
-    <button class="nav-tab" data-section="oport" onclick="goTo('feed','oport')">
-      <span class="tab-icon">🔍</span>Pedidos
+    <button class="nav-tab" data-section="oport" onclick="goTo('meus-pedidos','oport')">
+      <span class="tab-icon">📋</span>Pedidos
     </button>
     <button class="nav-tab" data-section="propostas" onclick="goTo('propostas','propostas')">
       <span class="tab-icon">📝</span>Propostas
     </button>
-    <button class="nav-tab" data-section="chat" onclick="goTo('chat-cliente','chat')">
+    <button class="nav-tab" data-section="chat" onclick="goTo('chat-list','chat')">
       <span class="tab-icon">💬</span>Chat
     </button>
     <button class="nav-tab" data-section="perfil" onclick="goTo('perfil','perfil')">
@@ -792,7 +896,7 @@ function goTo(pageId, section) {
   if (section) currentSection = section;
 
   const nav = document.getElementById('bottom-nav');
-  nav.style.display = pageId === 'onboarding' ? 'none' : 'flex';
+  nav.style.display = (pageId === 'onboarding' || pageId === 'welcome') ? 'none' : 'flex';
 
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
@@ -822,8 +926,31 @@ function updateSteps() {
 }
 
 function setFilter(el) {
+  const container = el.parentElement;
+  container.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const filter = el.textContent.trim();
+  const section = container.closest('.page');
+  if (section.id === 'page-feed') {
+    section.querySelectorAll('.pedido-card').forEach(card => {
+      card.style.display = (filter === 'Todas' || card.dataset.category === filter) ? '' : 'none';
+    });
+  } else if (section.id === 'page-propostas') {
+    section.querySelectorAll('.proposta-card').forEach(card => {
+      card.style.display = (filter === 'Todas' || card.dataset.status === filter) ? '' : 'none';
+    });
+  }
+}
+
+function setFilterPedidos(el) {
   el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
+  const filter = el.textContent.trim();
+  const section = el.closest('.page');
+  section.querySelectorAll('.pedido-card').forEach(card => {
+    const status = card.dataset.statusPedido;
+    card.style.display = (filter === 'Todos' || (filter === 'Em andamento' && status === 'andamento') || (filter === 'Concluidos' && status === 'concluido')) ? '' : 'none';
+  });
 }
 
 function toggleCat(el) { el.classList.toggle('selected'); }
@@ -840,17 +967,74 @@ function toggleCheckbox(el) {
   cb.textContent = cb.classList.contains('checked') ? '✓' : '';
 }
 
+function showToast(msg, duration) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), duration || 2800);
+}
+
+function nowTime() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
 function signContractP() {
   const area = document.getElementById('sign-area-p');
-  area.innerHTML = '<div style="font-size:24px;color:var(--su);margin-bottom:4px">✅</div><p style="font-size:12px;color:var(--su);font-weight:600">Assinatura registrada</p>';
+  area.innerHTML = '<div style="font-size:24px;color:var(--su);margin-bottom:4px">✅</div><p style="font-size:12px;color:var(--su);font-weight:600">Assinatura registrada · ' + nowTime() + '</p>';
   area.style.borderColor = 'var(--su)';
   area.style.background = 'var(--su-lt)';
+  area.onclick = null;
+  showToast('✅ Contrato assinado com sucesso!');
+}
+
+function enviarProposta(btn) {
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>&nbsp;Enviando...';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = orig;
+    showToast('🚀 Proposta enviada com sucesso!');
+    goTo('propostas', 'propostas');
+  }, 1500);
 }
 
 function setRating(n) {
   document.querySelectorAll('.star').forEach((s,i) => {
     s.classList.toggle('filled', i < n);
   });
+}
+
+const _clienteReplies = [
+  'Perfeito, combinado!',
+  'Ok, estarei esperando.',
+  'Pode vir sim, estamos liberados.',
+  'Otimo, obrigado pela confirmacao!',
+  'Tudo certo! Ate la.'
+];
+function sendChatCliente() {
+  const input = document.getElementById('chat-cliente-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = document.getElementById('chat-cliente-msgs');
+  const div = document.createElement('div');
+  div.className = 'msg me';
+  div.textContent = text;
+  msgs.appendChild(div);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+  const typing = document.createElement('div');
+  typing.className = 'msg other';
+  typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(() => {
+    typing.innerHTML = _clienteReplies[Math.floor(Math.random() * _clienteReplies.length)];
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1000 + Math.random() * 600);
 }
 </script>
 </body>
