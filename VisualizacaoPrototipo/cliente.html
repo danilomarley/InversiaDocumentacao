@@ -381,6 +381,38 @@
   .notif-time { font-size:10px; color:var(--mu); white-space:nowrap; }
   .notif-dot { width:7px; height:7px; background:var(--pri); border-radius:50%; position:absolute; top:14px; right:14px; }
 
+  /* ========== REGISTER ========== */
+  #page-register { background:var(--wh); min-height:100%; }
+  .register-header { padding:24px 20px 16px; text-align:center; }
+  .register-header h2 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .register-header p { font-size:13px; color:var(--mu); }
+  .register-form { padding:0 20px 24px; }
+
+  /* ========== SEM PROPOSTAS ========== */
+  .sem-prop-screen { padding:40px 24px; text-align:center; }
+  .sem-prop-illust { font-size:64px; margin-bottom:16px; }
+  .sem-prop-screen h2 { font-size:18px; font-weight:700; color:var(--dk); margin-bottom:8px; }
+  .sem-prop-screen p { font-size:13px; color:var(--mu); line-height:1.6; margin-bottom:24px; }
+
+  /* ========== MEUS PEDIDOS ========== */
+  .meus-pedidos-section { padding:16px; }
+  .pedido-hist-card { background:var(--wh); border-radius:14px; padding:14px 16px; margin-bottom:10px; border-left:4px solid var(--bo); cursor:pointer; }
+  .pedido-hist-card h4 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .pedido-hist-card .meta { font-size:11px; color:var(--mu); margin-bottom:6px; }
+
+  /* ========== CHAT PRE-CONTRATO ========== */
+  .chat-pre-wrap { display:flex; flex-direction:column; min-height:100%; }
+
+  /* ========== CARD FORM (CHECKOUT) ========== */
+  .card-form-mobile { display:none; background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .card-form-mobile.visible { display:block; }
+  .card-form-mobile h4 { font-size:13px; font-weight:700; color:var(--dk); margin-bottom:12px; }
+  .card-row-mobile { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .card-field-mobile { margin-bottom:10px; }
+  .card-field-mobile label { display:block; font-size:10px; font-weight:600; color:var(--mu); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px; }
+  .card-field-mobile input { width:100%; background:var(--gr); border:1px solid var(--bo); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--dk); font-family:inherit; outline:none; }
+  .card-field-mobile input:focus { border-color:var(--pri); }
+
   /* ========== PERFIL ========== */
   .profile-section { padding:16px; }
   .profile-top { background:var(--wh); border-radius:14px; padding:20px; display:flex; gap:16px; align-items:center; margin-bottom:12px; }
@@ -432,9 +464,123 @@
           <div class="onb-dot" data-dot="1"></div>
           <div class="onb-dot" data-dot="2"></div>
         </div>
-        <button class="btn btn-pri btn-full" onclick="nextSlide()">Criar conta</button>
-        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">Ja tenho conta</button>
+        <button class="btn btn-pri btn-full" id="onb-cta" onclick="nextSlide()">Proximo →</button>
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">Ja tenho conta — Fazer login</button>
         <div class="onb-skip" onclick="goTo('home','home')">Pular</div>
+      </div>
+    </div>
+
+    <!-- ===== REGISTER ===== -->
+    <div id="page-register" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('onboarding')">←</button>
+        <h2>Criar conta</h2>
+      </div>
+      <div class="register-header">
+        <h2>Boas-vindas ao ResolvAI</h2>
+        <p>Crie sua conta gratuitamente e comece a contratar servicos com seguranca.</p>
+      </div>
+      <div class="register-form">
+        <div class="form-field"><label>Nome completo</label><input placeholder="Seu nome completo"></div>
+        <div class="form-field"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="form-field"><label>Telefone</label><input placeholder="(00) 99999-0000"></div>
+        <div class="form-field"><label>Senha</label><input type="password" placeholder="Minimo 8 caracteres"></div>
+        <div class="form-field"><label>Confirmar senha</label><input type="password" placeholder="Repita a senha"></div>
+        <div style="font-size:11px;color:var(--mu);margin-bottom:16px;line-height:1.6">Ao criar conta voce concorda com os <span style="color:var(--pri);cursor:pointer">Termos de Uso</span> e <span style="color:var(--pri);cursor:pointer">Politica de Privacidade</span>.</div>
+        <button class="btn btn-pri btn-full" onclick="goTo('home','home')">Criar minha conta →</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:10px" onclick="goTo('home','home')">Ja tenho conta — Fazer login</button>
+      </div>
+    </div>
+
+    <!-- ===== SEM PROPOSTAS ===== -->
+    <div id="page-sem-propostas" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('home','home')">←</button>
+        <h2>Infiltracao no teto da sala</h2>
+      </div>
+      <div class="sem-prop-screen">
+        <div class="sem-prop-illust">⏳</div>
+        <h2>Ainda sem propostas</h2>
+        <p>Seu pedido foi publicado e esta visivel para os prestadores da sua regiao. Em breve voce comecara a receber propostas!</p>
+        <div class="card" style="text-align:left;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:10px">Status do pedido</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--mu)">Publicado ha</span><strong>2 dias</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--mu)">Visualizacoes</span><strong>8 prestadores</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--mu)">Propostas recebidas</span><strong style="color:var(--wa)">0</strong></div>
+        </div>
+        <div class="escrow-notice" style="text-align:left;margin-bottom:20px">
+          <span class="icon">💡</span>
+          <p>Prestadores estao analisando seu escopo. Tempo medio de recebimento da 1a proposta: <strong>4 horas</strong>.</p>
+        </div>
+        <button class="btn btn-ghost btn-full" onclick="goTo('home','home')">← Voltar ao inicio</button>
+      </div>
+    </div>
+
+    <!-- ===== MEUS PEDIDOS ===== -->
+    <div id="page-meus-pedidos" class="page">
+      <div class="top-bar">
+        <h2>Meus Pedidos</h2>
+      </div>
+      <div class="meus-pedidos-section">
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Em andamento</div>
+        <div class="pedido-hist-card" style="border-left-color:var(--vi)" onclick="goTo('acompanhar')">
+          <h4>Pintura area externa</h4>
+          <div class="meta">Prestador: Fix Construcoes · R$ 1.620</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-vi">Em andamento</span>
+            <span style="font-size:11px;color:var(--mu)">Ha 1 semana</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Aguardando resposta</div>
+        <div class="pedido-hist-card" style="border-left-color:var(--wa)" onclick="goTo('sem-propostas','pedidos')">
+          <h4>Infiltracao no teto da sala</h4>
+          <div class="meta">Publicado ha 2 dias · 8 visualizacoes</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-wa">Aguardando propostas</span>
+            <span style="font-size:11px;color:var(--mu)">0 propostas</span>
+          </div>
+        </div>
+        <div class="pedido-hist-card" style="border-left-color:var(--su)" onclick="goTo('propostas','pedidos')">
+          <h4>Torneira com vazamento</h4>
+          <div class="meta">Publicado ha 5 dias · 12 visualizacoes</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-su">1 proposta recebida</span>
+            <span style="font-size:11px;color:var(--mu)">Ver proposta</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Concluidos</div>
+        <div class="pedido-hist-card" style="border-left-color:var(--mu);opacity:0.75">
+          <h4>Reparo hidraulico — Banheiro</h4>
+          <div class="meta">Carlos Impermeabilizacoes · R$ 350</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-su">Concluido</span>
+            <span style="font-size:11px;color:var(--mu)">05/Mai/2026</span>
+          </div>
+        </div>
+        <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('chat','chat')">+ Criar novo pedido com IA</button>
+      </div>
+    </div>
+
+    <!-- ===== CHAT PRE-CONTRATO ===== -->
+    <div id="page-chat-pre" class="page">
+      <div class="chat-pre-wrap">
+        <div class="top-bar">
+          <button class="back" onclick="goTo('detalhe')">←</button>
+          <div class="avatar" style="background:var(--pri);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0" id="chat-pre-av">C</div>
+          <div style="flex:1;margin-left:8px"><strong style="font-size:14px;color:var(--dk);display:block" id="chat-pre-nome">Carlos Impermeabilizacoes</strong><span style="font-size:11px;color:var(--su)">● Online</span></div>
+        </div>
+        <div class="system-msg" style="margin:12px 16px">Tire suas duvidas antes de escolher esta proposta.</div>
+        <div class="chat-msgs" style="flex:1" id="chat-pre-msgs">
+          <div class="msg ai" style="background:var(--wh)" id="chat-pre-msg1">Ola! Pode tirar todas suas duvidas sobre minha proposta. Estou a disposicao!</div>
+        </div>
+        <div style="padding:10px 16px;background:var(--wh);border-top:1px solid var(--bo)">
+          <button class="btn btn-pri-lt btn-full btn-sm" style="margin-bottom:8px" onclick="goTo('chat-provider')">✅ Escolher esta proposta e revisar contrato →</button>
+        </div>
+        <div class="chat-input-bar">
+          <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📎</button>
+          <input class="chat-input" type="text" id="chat-pre-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendChatPre()">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendChatPre()">↑</button>
+        </div>
       </div>
     </div>
 
@@ -451,7 +597,7 @@
         <div class="home-stat"><div class="num">2</div><div class="lbl">Aguardando</div></div>
       </div>
       <div class="px section-title">Seus pedidos ativos</div>
-      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('propostas','pedidos')">
+      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('sem-propostas','pedidos')">
         <div class="info"><strong>Infiltracao no teto da sala</strong><span class="badge badge-wa">Aguardando propostas</span></div>
         <span class="time">2 dias</span>
       </div>
@@ -496,11 +642,13 @@ Urgencia: 🔴 Alta</div>
           <span class="chip">Pintura</span>
           <span class="chip">Alvenaria</span>
         </div>
+        <div style="padding:8px 16px;background:var(--su-lt);border-top:1px solid #A7F3D0">
+          <button class="btn btn-su btn-full btn-sm" onclick="goTo('escopo')">✅ Escopo concluido — Ver escopo gerado →</button>
+        </div>
         <div class="chat-input-bar">
           <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📷</button>
           <input class="chat-input" type="text" id="chat-input" placeholder="Digite sua resposta..." onkeydown="if(event.key==='Enter')sendMsg()">
           <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendMsg()">↑</button>
-          <button class="btn btn-su btn-sm" onclick="goTo('escopo')">Ver Escopo →</button>
         </div>
       </div>
     </div>
@@ -544,12 +692,13 @@ Urgencia: 🔴 Alta</div>
         <button class="back" onclick="goTo('home','home')">←</button>
         <div><h2>Propostas Recebidas</h2><div class="subtitle">3 propostas recebidas • 8 visualizaram</div></div>
       </div>
-      <div class="filter-scroll">
-        <span class="filter-pill active" onclick="setFilter(this)">Melhor avaliacao</span>
-        <span class="filter-pill" onclick="setFilter(this)">Menor preco</span>
-        <span class="filter-pill" onclick="setFilter(this)">Menor prazo</span>
+      <div class="filter-scroll" id="prop-filters">
+        <span class="filter-pill active" onclick="sortPropostas(this,'rating')">Melhor avaliacao</span>
+        <span class="filter-pill" onclick="sortPropostas(this,'preco')">Menor preco</span>
+        <span class="filter-pill" onclick="sortPropostas(this,'prazo')">Menor prazo</span>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
+      <div id="prop-list">
+      <div class="prop-card" data-rating="4.9" data-preco="1850" data-prazo="4" onclick="abrirPrestador('carlos')">
         <div class="prop-top">
           <div class="prop-avatar" style="background:var(--pri)">C</div>
           <div class="prop-info">
@@ -563,11 +712,11 @@ Urgencia: 🔴 Alta</div>
           <div class="prop-detail-item"><div class="val" style="color:var(--su)">5 anos</div><div class="lbl">Garantia</div></div>
         </div>
         <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPrestador('carlos');setTimeout(()=>goTo('chat-provider'),0)">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPrestador('carlos')">Ver perfil</button>
         </div>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
+      <div class="prop-card" data-rating="4.7" data-preco="1620" data-prazo="5" onclick="abrirPrestador('fix')">
         <div class="prop-top">
           <div class="prop-avatar" style="background:var(--vi)">F</div>
           <div class="prop-info">
@@ -581,11 +730,11 @@ Urgencia: 🔴 Alta</div>
           <div class="prop-detail-item"><div class="val" style="color:var(--su)">2 anos</div><div class="lbl">Garantia</div></div>
         </div>
         <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPrestador('fix');setTimeout(()=>goTo('chat-provider'),0)">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPrestador('fix')">Ver perfil</button>
         </div>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
+      <div class="prop-card" data-rating="4.5" data-preco="1400" data-prazo="3" onclick="abrirPrestador('reforma')">
         <div class="prop-top">
           <div class="prop-avatar" style="background:var(--su)">R</div>
           <div class="prop-info">
@@ -599,9 +748,10 @@ Urgencia: 🔴 Alta</div>
           <div class="prop-detail-item"><div class="val" style="color:var(--su)">90 dias</div><div class="lbl">Garantia</div></div>
         </div>
         <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPrestador('reforma');setTimeout(()=>goTo('chat-provider'),0)">Escolher</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPrestador('reforma')">Ver perfil</button>
         </div>
+      </div>
       </div>
       <div style="padding:0 16px 12px">
         <button class="btn btn-pri-lt btn-full" onclick="goTo('compare')">📊 Comparar propostas lado a lado</button>
@@ -612,16 +762,16 @@ Urgencia: 🔴 Alta</div>
     <div id="page-detalhe" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('propostas','pedidos')">←</button>
-        <h2>Carlos Impermeabilizacoes</h2>
+        <h2 id="det-nome">Carlos Impermeabilizacoes</h2>
       </div>
       <div class="prov-profile">
         <div class="prov-header">
-          <div class="prov-avatar-lg" style="background:var(--pri)">C</div>
+          <div class="prov-avatar-lg" id="det-av" style="background:var(--pri)">C</div>
           <div class="prov-detail">
-            <h2>Carlos Impermeabilizacoes</h2>
-            <div class="rating">4.9 ★ · 127 servicos · Fortaleza, CE</div>
-            <p style="font-size:12px;color:var(--mu)">Especialista em impermeabilizacao ha 12 anos.</p>
-            <div class="prov-badges">
+            <h2 id="det-nome2">Carlos Impermeabilizacoes</h2>
+            <div class="rating" id="det-rating">4.9 ★ · 127 servicos · Fortaleza, CE</div>
+            <p id="det-bio" style="font-size:12px;color:var(--mu)">Especialista em impermeabilizacao ha 12 anos.</p>
+            <div class="prov-badges" id="det-badges">
               <span class="badge badge-su">✅ Verificado</span>
               <span class="badge badge-wa">🏅 Top Rated</span>
             </div>
@@ -629,9 +779,9 @@ Urgencia: 🔴 Alta</div>
         </div>
         <div class="prov-proposal-card">
           <div style="font-size:13px;font-weight:700;color:var(--dk)">Proposta para seu pedido</div>
-          <div class="big-price">R$ 1.850</div>
-          <div style="font-size:12px;color:var(--mu)">Prazo: 4 dias uteis</div>
-          <div style="font-size:12px;color:var(--su);margin-top:2px">✓ Garantia: 5 anos</div>
+          <div class="big-price" id="det-preco">R$ 1.850</div>
+          <div style="font-size:12px;color:var(--mu)" id="det-prazo">Prazo: 4 dias uteis</div>
+          <div style="font-size:12px;color:var(--su);margin-top:2px" id="det-garantia">✓ Garantia: 5 anos</div>
           <div style="font-size:12px;font-weight:700;color:var(--dk);margin-top:12px">Incluso na proposta:</div>
           <ul class="include-list">
             <li>Inspecao visual e teste de estanqueidade</li>
@@ -653,7 +803,7 @@ Urgencia: 🔴 Alta</div>
         <div class="review-item"><div class="reviewer">Maria Santos</div><div class="stars">★★★★☆</div><div class="text">Otimo custo-beneficio. Recomendo!</div></div>
         <div style="padding-top:12px; display:flex; flex-direction:column; gap:8px;">
           <button class="btn btn-pri btn-full" onclick="goTo('chat-provider')">✅ Escolher esta proposta</button>
-          <button class="btn btn-ghost btn-full" onclick="goTo('chat-provider')">💬 Enviar mensagem</button>
+          <button class="btn btn-ghost btn-full" onclick="goTo('chat-pre')">💬 Enviar mensagem</button>
         </div>
       </div>
     </div>
@@ -779,11 +929,7 @@ Urgencia: 🔴 Alta</div>
           <div class="pen">✍️</div>
           <p>Toque para assinar digitalmente</p>
         </div>
-        <div class="checkbox-row" onclick="toggleCheckbox(this)">
-          <div class="checkbox" id="terms-check"></div>
-          <span>Li e concordo com os termos</span>
-        </div>
-        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Assinar contrato →</button>
+        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Ir para pagamento →</button>
       </div>
     </div>
 
@@ -809,6 +955,29 @@ Urgencia: 🔴 Alta</div>
           <span class="pm-icon">💳</span>
           <div class="pm-info"><strong>Cartao de Credito</strong><span>A vista · sem juros adicionais</span></div>
           <div class="pm-radio"></div>
+        </div>
+
+        <!-- Campos do Cartao (visivel quando Cartao estiver selecionado) -->
+        <div class="card-form-mobile" id="card-form-mobile">
+          <h4>Dados do cartao</h4>
+          <div class="card-field-mobile">
+            <label>Numero do cartao</label>
+            <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+          </div>
+          <div class="card-field-mobile">
+            <label>Nome no cartao</label>
+            <input type="text" placeholder="Como aparece no cartao">
+          </div>
+          <div class="card-row-mobile">
+            <div class="card-field-mobile">
+              <label>Validade</label>
+              <input type="text" placeholder="MM/AA" maxlength="5">
+            </div>
+            <div class="card-field-mobile">
+              <label>CVV</label>
+              <input type="text" placeholder="000" maxlength="4">
+            </div>
+          </div>
         </div>
 
         <!-- QR Code PIX (visivel quando PIX estiver selecionado) -->
@@ -869,7 +1038,7 @@ Urgencia: 🔴 Alta</div>
             <strong>Carlos Impermeabilizacoes</strong>
             <span>● Online agora · 4.9 ★</span>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="goTo('chat-provider')">Chat</button>
+          <button class="btn btn-ghost btn-sm" onclick="goTo('chat-pre')">Chat</button>
         </div>
         <div class="acomp-timeline">
           <h3>Progresso do servico</h3>
@@ -1018,14 +1187,14 @@ Urgencia: 🔴 Alta</div>
   </div><!-- /screen-content -->
 
   <!-- BOTTOM NAV -->
-  <div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
     <button class="nav-tab active" data-section="home" onclick="goTo('home','home')">
       <span class="tab-icon">🏠</span>Home
     </button>
     <button class="nav-tab" data-section="chat" onclick="goTo('chat','chat')">
       <span class="tab-icon">💬</span>Chat IA
     </button>
-    <button class="nav-tab" data-section="pedidos" onclick="goTo('propostas','pedidos')">
+    <button class="nav-tab" data-section="pedidos" onclick="goTo('meus-pedidos','pedidos')">
       <span class="tab-icon">📋</span>Pedidos
     </button>
     <button class="nav-tab" data-section="notif" onclick="goTo('notificacoes','notif')">
@@ -1049,8 +1218,8 @@ function goTo(pageId, section) {
   if (section) currentSection = section;
 
   const nav = document.getElementById('bottom-nav');
-  const isOnboarding = pageId === 'onboarding';
-  nav.style.display = isOnboarding ? 'none' : 'flex';
+  const hideNav = ['onboarding', 'register'].includes(pageId);
+  nav.style.display = hideNav ? 'none' : 'flex';
 
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
@@ -1061,11 +1230,13 @@ function goTo(pageId, section) {
 
 function nextSlide() {
   currentSlide++;
-  if (currentSlide > 2) { goTo('home','home'); return; }
+  if (currentSlide > 2) { goTo('register'); return; }
   document.querySelectorAll('.onb-slide').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.onb-dot').forEach(d => d.classList.remove('active'));
   document.querySelector(`.onb-slide[data-slide="${currentSlide}"]`).classList.add('active');
   document.querySelector(`.onb-dot[data-dot="${currentSlide}"]`).classList.add('active');
+  const cta = document.getElementById('onb-cta');
+  if (cta) cta.textContent = currentSlide === 2 ? 'Criar conta' : 'Proximo →';
 }
 
 function sendMsg() {
@@ -1110,7 +1281,59 @@ function selectPayment(el) {
   el.classList.add('selected');
   const method = el.dataset.method;
   const qrBlock = document.getElementById('pix-qr-block');
+  const cardForm = document.getElementById('card-form-mobile');
   if (qrBlock) qrBlock.classList.toggle('visible', method === 'pix');
+  if (cardForm) cardForm.classList.toggle('visible', method === 'cartao');
+}
+
+const prestadorData = {
+  carlos: { nome:'Carlos Impermeabilizacoes', av:'C', cor:'var(--pri)', rating:'4.9 ★ · 127 servicos · Fortaleza, CE', bio:'Especialista em impermeabilizacao ha 12 anos. Materiais de alta qualidade.', badges:'<span class="badge badge-su">✅ Verificado</span><span class="badge badge-wa">🏅 Top Rated</span>', preco:'R$ 1.850', prazo:'Prazo: 4 dias uteis', garantia:'✓ Garantia: 5 anos', chatAv:'C', chatNome:'Carlos Impermeabilizacoes' },
+  fix:    { nome:'Fix Construcoes', av:'F', cor:'var(--vi)', rating:'4.7 ★ · 89 servicos · Fortaleza, CE', bio:'Empresa especializada em reformas residenciais e comerciais.', badges:'<span class="badge badge-su">✅ Verificado</span>', preco:'R$ 1.620', prazo:'Prazo: 5 dias uteis', garantia:'✓ Garantia: 2 anos', chatAv:'F', chatNome:'Fix Construcoes' },
+  reforma:{ nome:'Reforma Express', av:'R', cor:'var(--su)', rating:'4.5 ★ · 54 servicos · Fortaleza, CE', bio:'Servicos rapidos e de qualidade. Especialidade em pequenos reparos.', badges:'<span class="badge badge-pri">⚡ Rapido</span>', preco:'R$ 1.400', prazo:'Prazo: 3 dias uteis', garantia:'✓ Garantia: 90 dias', chatAv:'R', chatNome:'Reforma Express' },
+};
+
+function abrirPrestador(id) {
+  const d = prestadorData[id];
+  if (!d) return;
+  document.getElementById('det-nome').textContent = d.nome;
+  document.getElementById('det-nome2').textContent = d.nome;
+  document.getElementById('det-av').textContent = d.av;
+  document.getElementById('det-av').style.background = d.cor;
+  document.getElementById('det-rating').textContent = d.rating;
+  document.getElementById('det-bio').textContent = d.bio;
+  document.getElementById('det-badges').innerHTML = d.badges;
+  document.getElementById('det-preco').textContent = d.preco;
+  document.getElementById('det-prazo').textContent = d.prazo;
+  document.getElementById('det-garantia').textContent = d.garantia;
+  document.getElementById('chat-pre-av').textContent = d.chatAv;
+  document.getElementById('chat-pre-av').style.background = d.cor;
+  document.getElementById('chat-pre-nome').textContent = d.chatNome;
+  goTo('detalhe');
+}
+
+function sortPropostas(el, key) {
+  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const list = document.getElementById('prop-list');
+  const cards = Array.from(list.querySelectorAll('.prop-card'));
+  cards.sort((a, b) => {
+    const av = parseFloat(a.dataset[key]);
+    const bv = parseFloat(b.dataset[key]);
+    return key === 'rating' ? bv - av : av - bv;
+  });
+  cards.forEach(c => list.appendChild(c));
+}
+
+function sendChatPre() {
+  const input = document.getElementById('chat-pre-input');
+  if (!input || !input.value.trim()) return;
+  const msgs = document.getElementById('chat-pre-msgs');
+  const msg = document.createElement('div');
+  msg.className = 'msg user';
+  msg.textContent = input.value;
+  msgs.appendChild(msg);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
 function selectInstallment(el) {

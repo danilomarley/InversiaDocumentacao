@@ -117,6 +117,39 @@
   .form-field input:focus, .form-field textarea:focus { border-color:var(--pri); }
   .form-field textarea { min-height:70px; resize:vertical; }
 
+  /* ===== WELCOME / AUTH ===== */
+  #page-welcome { background:var(--wh); min-height:100%; display:flex; flex-direction:column; }
+  .welcome-hero { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 28px 20px; text-align:center; }
+  .welcome-logo { width:80px; height:80px; background:var(--pri); border-radius:22px; display:flex; align-items:center; justify-content:center; font-size:36px; font-weight:800; color:#fff; margin-bottom:20px; }
+  .welcome-hero h1 { font-size:24px; font-weight:800; color:var(--dk); margin-bottom:8px; }
+  .welcome-hero p { font-size:14px; color:var(--mu); line-height:1.6; margin-bottom:6px; }
+  .welcome-hero .tagline { font-size:12px; color:var(--pri); font-weight:600; margin-top:4px; }
+  .welcome-actions { padding:20px 28px 36px; display:flex; flex-direction:column; gap:12px; }
+  .welcome-actions .divider-text { text-align:center; font-size:12px; color:var(--mu); position:relative; }
+  .welcome-actions .divider-text::before,.welcome-actions .divider-text::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:var(--bo); }
+  .welcome-actions .divider-text::before { left:0; }
+  .welcome-actions .divider-text::after { right:0; }
+
+  /* ===== PEDIDOS EM ANDAMENTO ===== */
+  .pedidos-and-section { padding:16px; }
+  .pedidos-and-card { background:var(--wh); border-radius:14px; padding:14px 16px; margin-bottom:10px; border-left:4px solid var(--su); cursor:pointer; }
+  .pedidos-and-card h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .pedidos-and-card .meta { font-size:11px; color:var(--mu); margin-bottom:8px; }
+  .pedidos-and-card .progress-row { display:flex; align-items:center; gap:8px; }
+  .progress-bar { flex:1; height:6px; background:var(--bo); border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--su); border-radius:3px; }
+  .progress-label { font-size:10px; color:var(--su); font-weight:600; }
+
+  /* ===== CHAT LISTA ===== */
+  .chat-lista-section { padding:16px; }
+  .chat-item { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .chat-item .av { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
+  .chat-item .ci-info { flex:1; }
+  .chat-item .ci-info strong { font-size:13px; color:var(--dk); display:block; }
+  .chat-item .ci-info span { font-size:11px; color:var(--mu); }
+  .chat-item .ci-time { font-size:10px; color:var(--mu); }
+  .chat-item .ci-badge { background:var(--pri); color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; }
+
   /* ===== P1: ONBOARDING ===== */
   #page-onboarding { background:var(--wh); min-height:100%; }
   .onb-header { padding:24px 20px 16px; text-align:center; }
@@ -345,8 +378,24 @@
 
   <div class="screen-content">
 
+    <!-- ===== WELCOME / AUTH ===== -->
+    <div id="page-welcome" class="page active">
+      <div class="welcome-hero">
+        <div class="welcome-logo">R</div>
+        <h1>ResolvAI</h1>
+        <p>A plataforma que conecta voce a clientes que precisam do seu servico agora.</p>
+        <div class="tagline">+ de 1.200 prestadores verificados</div>
+      </div>
+      <div class="welcome-actions">
+        <button class="btn btn-pri btn-full" onclick="goTo('onboarding')">Criar conta de prestador</button>
+        <div class="divider-text">ou</div>
+        <button class="btn btn-ghost btn-full" onclick="goTo('feed','home')">Ja tenho conta — Fazer login</button>
+        <div style="font-size:11px;color:var(--mu);text-align:center;margin-top:4px">Ao criar conta voce concorda com os <span style="color:var(--pri);cursor:pointer">Termos de Uso</span></div>
+      </div>
+    </div>
+
     <!-- ===== P1: ONBOARDING ===== -->
-    <div id="page-onboarding" class="page active">
+    <div id="page-onboarding" class="page">
       <div class="onb-header">
         <h1>Cadastro de Prestador</h1>
         <p>Complete seu perfil em 3 passos rapidos</p>
@@ -413,7 +462,7 @@
         <span class="filter-pill" onclick="setFilter(this)">Alvenaria</span>
         <span class="filter-pill" onclick="setFilter(this)">Pintura</span>
       </div>
-      <div class="pedido-card" onclick="goTo('detalhe-pedido')">
+      <div class="pedido-card" data-categoria="impermeabilizacao" onclick="abrirPedido('impermeabilizacao')">
         <h3>Infiltracao no teto da sala</h3>
         <div class="desc">Ap. 3o andar, area de servico do vizinho. Mancha de 80x60cm, gotejamento.</div>
         <div class="pedido-tags">
@@ -427,11 +476,11 @@
           <span class="compat">🤖 95% compativel</span>
         </div>
         <div class="pedido-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPedido('impermeabilizacao');goTo('proposta')">Enviar proposta</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPedido('impermeabilizacao')">Ver detalhes</button>
         </div>
       </div>
-      <div class="pedido-card" onclick="goTo('detalhe-pedido')">
+      <div class="pedido-card" data-categoria="hidraulica" onclick="abrirPedido('hidraulica')">
         <h3>Troca de encanamento — Cozinha</h3>
         <div class="desc">Cano estourado, agua desligada. Precisa de reparo imediato.</div>
         <div class="pedido-tags">
@@ -444,11 +493,11 @@
           <span class="compat">🤖 88% compativel</span>
         </div>
         <div class="pedido-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPedido('hidraulica');goTo('proposta')">Enviar proposta</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPedido('hidraulica')">Ver detalhes</button>
         </div>
       </div>
-      <div class="pedido-card" style="border-left-color:var(--wa)" onclick="goTo('detalhe-pedido')">
+      <div class="pedido-card" style="border-left-color:var(--wa)" data-categoria="pintura" onclick="abrirPedido('pintura')">
         <h3>Pintura fachada residencial</h3>
         <div class="desc">Casa 2 pavimentos, calafetacao antes da pintura. 180m².</div>
         <div class="pedido-tags">
@@ -461,8 +510,25 @@
           <span class="compat">🤖 72% compativel</span>
         </div>
         <div class="pedido-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPedido('pintura');goTo('proposta')">Enviar proposta</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPedido('pintura')">Ver detalhes</button>
+        </div>
+      </div>
+      <div class="pedido-card" style="border-left-color:var(--vi)" data-categoria="alvenaria" onclick="abrirPedido('alvenaria')">
+        <h3>Reparo de trinca — Parede externa</h3>
+        <div class="desc">Trinca longa na fachada, possivel infiltracao. Casa terrea.</div>
+        <div class="pedido-tags">
+          <span class="pedido-tag">Alvenaria</span>
+          <span class="badge badge-wa">🟡 Normal</span>
+          <span class="pedido-tag">📍 Fatima</span>
+        </div>
+        <div class="pedido-footer">
+          <span class="budget">R$ 600 – 1.000</span>
+          <span class="compat">🤖 78% compativel</span>
+        </div>
+        <div class="pedido-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();abrirPedido('alvenaria');goTo('proposta')">Enviar proposta</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();abrirPedido('alvenaria')">Ver detalhes</button>
         </div>
       </div>
     </div>
@@ -475,15 +541,16 @@
       </div>
       <div class="detalhe-section">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <span class="badge badge-da">🔴 Urgencia Alta</span>
+          <span id="ped-urgencia" class="badge badge-da">🔴 Urgencia Alta</span>
           <span style="font-size:11px;color:var(--mu)">2 propostas enviadas</span>
         </div>
         <div class="detalhe-card">
-          <div class="detalhe-field"><label>Tipo de servico</label><p>Impermeabilizacao de laje + Reparo de trinca</p></div>
-          <div class="detalhe-field"><label>Localizacao</label><p>Aldeota, Fortaleza — Laje entre 3o e 4o andar</p></div>
-          <div class="detalhe-field"><label>Problema</label><p>Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro da sala.</p></div>
-          <div class="detalhe-field"><label>Servicos esperados</label><p>• Inspecao visual e teste de estanqueidade<br>• Remocao do revestimento danificado<br>• Aplicacao de manta asfaltica<br>• Repintura final</p></div>
-          <div class="detalhe-field"><label>Prazo esperado</label><p>3 a 5 dias uteis</p></div>
+          <div class="detalhe-field"><label>Tipo de servico</label><p id="ped-tipo">Impermeabilizacao de laje + Reparo de trinca</p></div>
+          <div class="detalhe-field"><label>Localizacao</label><p id="ped-local">Aldeota, Fortaleza — Laje entre 3o e 4o andar</p></div>
+          <div class="detalhe-field"><label>Problema</label><p id="ped-problema">Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro da sala.</p></div>
+          <div class="detalhe-field"><label>Servicos esperados</label><p id="ped-servicos">• Inspecao visual e teste de estanqueidade<br>• Remocao do revestimento danificado<br>• Aplicacao de manta asfaltica<br>• Repintura final</p></div>
+          <div class="detalhe-field"><label>Orcamento esperado</label><p id="ped-orcamento" style="font-weight:700;color:var(--pri)">R$ 1.500 – 2.500</p></div>
+          <div class="detalhe-field"><label>Prazo esperado</label><p id="ped-prazo">3 a 5 dias uteis</p></div>
           <div class="detalhe-field">
             <label>Fotos do cliente</label>
             <div class="photo-grid">
@@ -495,7 +562,7 @@
         </div>
         <div class="client-info">
           <div class="client-avatar" style="background:var(--bl)">Y</div>
-          <div class="info"><strong>Ygor Chagas</strong><span>4.8 ★ · 5 servicos contratados</span></div>
+          <div class="info"><strong id="ped-cliente-nome">Ygor Chagas</strong><span id="ped-cliente-rating">4.8 ★ · 5 servicos contratados</span></div>
         </div>
         <button class="btn btn-pri btn-full" onclick="goTo('proposta')">Enviar proposta →</button>
         <button class="btn btn-ghost btn-full" style="margin-top:8px">Pedir esclarecimento</button>
@@ -540,22 +607,22 @@
         <span class="filter-pill" onclick="setFilter(this)">Escolhidas</span>
         <span class="filter-pill" onclick="setFilter(this)">Nao selecionadas</span>
       </div>
-      <div class="proposta-card" onclick="goTo('chat-cliente','chat')">
+      <div class="proposta-card" data-status="escolhida" onclick="goTo('chat-cliente','chat')">
         <div class="proposta-status" style="background:var(--su-lt)">✅</div>
         <div class="proposta-info"><h4>Impermeabilizacao laje — Ygor</h4><div class="meta">Aldeota · Enviada ha 2 dias</div></div>
         <div class="proposta-val"><div class="price">R$1.850</div><div class="status-text badge badge-su">Escolhida</div></div>
       </div>
-      <div class="proposta-card">
+      <div class="proposta-card" data-status="visualizada">
         <div class="proposta-status" style="background:var(--bl-lt)">👁️</div>
         <div class="proposta-info"><h4>Reparo calha — Ana Lima</h4><div class="meta">Meireles · Enviada ha 3 dias</div></div>
         <div class="proposta-val"><div class="price">R$980</div><div class="status-text badge badge-bl">Visualizada</div></div>
       </div>
-      <div class="proposta-card">
+      <div class="proposta-card" data-status="enviada">
         <div class="proposta-status" style="background:var(--pri-lt)">📤</div>
         <div class="proposta-info"><h4>Troca encanamento — Pedro</h4><div class="meta">Fatima · Enviada ha 5 dias</div></div>
         <div class="proposta-val"><div class="price">R$750</div><div class="status-text badge badge-pri">Enviada</div></div>
       </div>
-      <div class="proposta-card">
+      <div class="proposta-card" data-status="nao-selecionada">
         <div class="proposta-status" style="background:var(--da-lt)">❌</div>
         <div class="proposta-info"><h4>Pintura fachada — Roberto</h4><div class="meta">Coco · Enviada ha 1 sem</div></div>
         <div class="proposta-val"><div class="price">R$3.200</div><div class="status-text badge badge-da">Nao selecionada</div></div>
@@ -709,6 +776,76 @@
       </div>
     </div>
 
+    <!-- ===== PEDIDOS EM ANDAMENTO ===== -->
+    <div id="page-pedidos-andamento" class="page">
+      <div class="top-bar">
+        <h2>Meus Pedidos</h2>
+        <span style="font-size:11px;color:var(--mu)">Andamento e concluidos</span>
+      </div>
+      <div class="pedidos-and-section">
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Em andamento</div>
+        <div class="pedidos-and-card" onclick="goTo('servico')">
+          <h3>Impermeabilizacao de Laje</h3>
+          <div class="meta">📍 Aldeota · Cliente: Ygor Chagas · R$ 1.850</div>
+          <div class="progress-row">
+            <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+            <div class="progress-label">60%</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span class="badge badge-su" style="font-size:10px">Em execucao</span>
+            <span style="font-size:11px;color:var(--mu)">Prazo: 24/Mai</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Concluidos recentemente</div>
+        <div class="pedidos-and-card" style="border-left-color:var(--mu);opacity:0.75">
+          <h3>Reparo hidraulico — Cozinha</h3>
+          <div class="meta">📍 Meireles · Cliente: Pedro Costa · R$ 750</div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span class="badge badge-su" style="font-size:10px">Concluido</span>
+            <span style="font-size:11px;color:var(--mu)">18/Mai/2026</span>
+          </div>
+        </div>
+        <div class="pedidos-and-card" style="border-left-color:var(--mu);opacity:0.75">
+          <h3>Pintura quarto — 15m²</h3>
+          <div class="meta">📍 Coco · Cliente: Maria Souza · R$ 480</div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span class="badge badge-su" style="font-size:10px">Concluido</span>
+            <span style="font-size:11px;color:var(--mu)">10/Mai/2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CHAT LISTA ===== -->
+    <div id="page-chat-lista" class="page">
+      <div class="top-bar">
+        <h2>Conversas</h2>
+      </div>
+      <div class="chat-lista-section">
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Servicos em andamento</div>
+        <div class="chat-item" onclick="goTo('chat-cliente','chat')">
+          <div class="av" style="background:var(--bl)">Y</div>
+          <div class="ci-info">
+            <strong>Ygor Chagas</strong>
+            <span>Segunda as 8h estarei ai com todo o material.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <div class="ci-time">14:23</div>
+            <div class="ci-badge">2</div>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Propostas enviadas</div>
+        <div class="chat-item">
+          <div class="av" style="background:var(--su)">A</div>
+          <div class="ci-info">
+            <strong>Ana Lima</strong>
+            <span>Pode ser quinta-feira de manha?</span>
+          </div>
+          <div class="ci-time">Ontem</div>
+        </div>
+      </div>
+    </div>
+
     <!-- ===== PERFIL ===== -->
     <div id="page-perfil" class="page">
       <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Meu Perfil Profissional</div></div>
@@ -762,17 +899,17 @@
   </div><!-- /screen-content -->
 
   <!-- BOTTOM NAV -->
-  <div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
     <button class="nav-tab active" data-section="home" onclick="goTo('feed','home')">
       <span class="tab-icon">🏠</span>Home
     </button>
-    <button class="nav-tab" data-section="oport" onclick="goTo('feed','oport')">
-      <span class="tab-icon">🔍</span>Pedidos
+    <button class="nav-tab" data-section="pedidos" onclick="goTo('pedidos-andamento','pedidos')">
+      <span class="tab-icon">🔧</span>Pedidos
     </button>
     <button class="nav-tab" data-section="propostas" onclick="goTo('propostas','propostas')">
       <span class="tab-icon">📝</span>Propostas
     </button>
-    <button class="nav-tab" data-section="chat" onclick="goTo('chat-cliente','chat')">
+    <button class="nav-tab" data-section="chat" onclick="goTo('chat-lista','chat')">
       <span class="tab-icon">💬</span>Chat
     </button>
     <button class="nav-tab" data-section="perfil" onclick="goTo('perfil','perfil')">
@@ -792,7 +929,8 @@ function goTo(pageId, section) {
   if (section) currentSection = section;
 
   const nav = document.getElementById('bottom-nav');
-  nav.style.display = pageId === 'onboarding' ? 'none' : 'flex';
+  const hideNav = ['welcome', 'onboarding'].includes(pageId);
+  nav.style.display = hideNav ? 'none' : 'flex';
 
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
@@ -821,9 +959,96 @@ function updateSteps() {
   document.getElementById('onb-next').textContent = currentStep === 2 ? 'Concluir cadastro' : 'Continuar →';
 }
 
+const pedidoData = {
+  impermeabilizacao: {
+    titulo: 'Infiltracao no teto da sala',
+    urgencia: '🔴 Urgencia Alta',
+    tipo: 'Impermeabilizacao de laje + Reparo de trinca',
+    local: 'Aldeota, Fortaleza — Laje entre 3o e 4o andar',
+    problema: 'Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro da sala.',
+    servicos: '• Inspecao visual e teste de estanqueidade\n• Remocao do revestimento danificado\n• Aplicacao de manta asfaltica\n• Repintura final',
+    prazo: '3 a 5 dias uteis',
+    orcamento: 'R$ 1.500 – 2.500',
+    cliente: 'Ygor Chagas',
+    rating: '4.8 ★ · 5 servicos',
+  },
+  hidraulica: {
+    titulo: 'Troca de encanamento — Cozinha',
+    urgencia: '🔴 Urgencia Alta',
+    tipo: 'Hidraulica — Reparo de encanamento',
+    local: 'Meireles, Fortaleza — Cozinha do apartamento',
+    problema: 'Cano estourado embaixo da pia. Agua desligada ha 6 horas. Precisa de reparo imediato.',
+    servicos: '• Diagnostico e localizacao do ponto danificado\n• Substituicao do trecho de encanamento\n• Teste de pressao pos-reparo',
+    prazo: '1 dia util',
+    orcamento: 'R$ 800 – 1.200',
+    cliente: 'Pedro Costa',
+    rating: '4.5 ★ · 8 servicos',
+  },
+  pintura: {
+    titulo: 'Pintura fachada residencial',
+    urgencia: '🟡 Urgencia Normal',
+    tipo: 'Pintura — Fachada externa',
+    local: 'Coco, Fortaleza — Casa 2 pavimentos',
+    problema: 'Pintura descascando em varios pontos da fachada. Necessaria calafetacao antes da pintura.',
+    servicos: '• Limpeza e preparacao da superficie\n• Calafetacao de fissuras\n• Aplicacao de massa corrida\n• 2 demaos de tinta acrilica',
+    prazo: '5 a 7 dias uteis',
+    orcamento: 'R$ 3.000 – 5.000',
+    cliente: 'Maria Souza',
+    rating: '4.9 ★ · 12 servicos',
+  },
+  alvenaria: {
+    titulo: 'Reparo de trinca — Parede externa',
+    urgencia: '🟡 Urgencia Normal',
+    tipo: 'Alvenaria — Reparo de fissura',
+    local: 'Fatima, Fortaleza — Fachada lateral da casa',
+    problema: 'Trinca de aprox. 3m de comprimento na parede lateral. Suspeita de infiltracao pela trinca.',
+    servicos: '• Avaliacao estrutural da fissura\n• Abertura e limpeza do sulco\n• Preenchimento com argamassa especial\n• Reboco e pintura da area afetada',
+    prazo: '2 a 3 dias uteis',
+    orcamento: 'R$ 600 – 1.000',
+    cliente: 'Luis Mendes',
+    rating: '4.7 ★ · 3 servicos',
+  },
+};
+
+function abrirPedido(tipo) {
+  const d = pedidoData[tipo];
+  if (!d) return;
+  document.querySelector('#page-detalhe-pedido h2').textContent = d.titulo;
+  document.querySelector('#ped-urgencia').textContent = d.urgencia;
+  document.querySelector('#ped-tipo').textContent = d.tipo;
+  document.querySelector('#ped-local').textContent = d.local;
+  document.querySelector('#ped-problema').textContent = d.problema;
+  document.querySelector('#ped-servicos').innerHTML = d.servicos.replace(/\n/g,'<br>');
+  document.querySelector('#ped-prazo').textContent = d.prazo;
+  document.querySelector('#ped-orcamento').textContent = d.orcamento;
+  document.querySelector('#ped-cliente-nome').textContent = d.cliente;
+  document.querySelector('#ped-cliente-rating').textContent = d.rating;
+  goTo('detalhe-pedido');
+}
+
 function setFilter(el) {
-  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  const parent = el.parentElement;
+  parent.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
+  const val = el.textContent.trim().toLowerCase();
+
+  // Feed filter
+  const pedidoCards = document.querySelectorAll('#page-feed .pedido-card');
+  if (pedidoCards.length) {
+    pedidoCards.forEach(card => {
+      card.style.display = (val === 'todas' || card.dataset.categoria === val) ? '' : 'none';
+    });
+  }
+
+  // Propostas filter
+  const propCards = document.querySelectorAll('#page-propostas .proposta-card');
+  if (propCards.length) {
+    const map = { 'todas': null, 'enviadas': 'enviada', 'escolhidas': 'escolhida', 'nao selecionadas': 'nao-selecionada', 'visualizadas': 'visualizada' };
+    const target = map[val] ?? null;
+    propCards.forEach(card => {
+      card.style.display = (!target || card.dataset.status === target) ? '' : 'none';
+    });
+  }
 }
 
 function toggleCat(el) { el.classList.toggle('selected'); }
