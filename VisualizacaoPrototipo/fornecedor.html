@@ -148,6 +148,36 @@
   .login-footer a { font-size:13px; color:var(--pri); font-weight:600; cursor:pointer; text-decoration:none; }
   .login-footer p { font-size:12px; color:var(--mu); margin-bottom:6px; }
 
+  /* ===== PEDIDOS EM ANDAMENTO ===== */
+  .pedidos-and-section { padding:16px; }
+  .pedidos-and-card { background:var(--wh); border-radius:14px; padding:14px 16px; margin-bottom:10px; border-left:4px solid var(--su); cursor:pointer; }
+  .pedidos-and-card h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .pedidos-and-card .meta { font-size:11px; color:var(--mu); margin-bottom:8px; }
+  .pedidos-and-card .progress-row { display:flex; align-items:center; gap:8px; }
+  .progress-bar { flex:1; height:6px; background:var(--bo); border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--su); border-radius:3px; }
+  .progress-label { font-size:10px; color:var(--su); font-weight:600; }
+
+  /* ===== CHAT LISTA ===== */
+  .chat-lista-section { padding:16px; }
+  .chat-item { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .chat-item .av { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
+  .chat-item .ci-info { flex:1; }
+  .chat-item .ci-info strong { font-size:13px; color:var(--dk); display:block; }
+  .chat-item .ci-info span { font-size:11px; color:var(--mu); }
+  .chat-item .ci-time { font-size:10px; color:var(--mu); }
+  .chat-item .ci-badge { background:var(--pri); color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; }
+
+  /* ===== CHAT LISTA ===== */
+  .chat-lista-section { padding:16px; }
+  .chat-item { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .chat-item .av { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
+  .chat-item .ci-info { flex:1; }
+  .chat-item .ci-info strong { font-size:13px; color:var(--dk); display:block; }
+  .chat-item .ci-info span { font-size:11px; color:var(--mu); }
+  .chat-item .ci-time { font-size:10px; color:var(--mu); }
+  .chat-item .ci-badge { background:var(--pri); color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; }
+
   /* ===== ONBOARDING ===== */
   #page-onboarding { background:var(--wh); min-height:100%; }
   .onb-header { padding:24px 20px 16px; text-align:center; }
@@ -999,6 +1029,76 @@
           </div>
           <textarea class="rating-comment" placeholder="Deixe um comentario sobre o cliente..."></textarea>
           <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('home','home')">Publicar e ver novos pedidos →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PEDIDOS EM ANDAMENTO ===== -->
+    <div id="page-pedidos-andamento" class="page">
+      <div class="top-bar">
+        <h2>Meus Pedidos</h2>
+        <span style="font-size:11px;color:var(--mu)">Andamento e concluidos</span>
+      </div>
+      <div class="pedidos-and-section">
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Em andamento</div>
+        <div class="pedidos-and-card" onclick="goTo('servico')">
+          <h3>Impermeabilizacao de Laje</h3>
+          <div class="meta">📍 Aldeota · Cliente: Ygor Chagas · R$ 1.850</div>
+          <div class="progress-row">
+            <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+            <div class="progress-label">60%</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span class="badge badge-su" style="font-size:10px">Em execucao</span>
+            <span style="font-size:11px;color:var(--mu)">Prazo: 24/Mai</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Concluidos recentemente</div>
+        <div class="pedidos-and-card" style="border-left-color:var(--mu);opacity:0.75">
+          <h3>Reparo hidraulico — Cozinha</h3>
+          <div class="meta">📍 Meireles · Cliente: Pedro Costa · R$ 750</div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span class="badge badge-su" style="font-size:10px">Concluido</span>
+            <span style="font-size:11px;color:var(--mu)">18/Mai/2026</span>
+          </div>
+        </div>
+        <div class="pedidos-and-card" style="border-left-color:var(--mu);opacity:0.75">
+          <h3>Pintura quarto — 15m²</h3>
+          <div class="meta">📍 Coco · Cliente: Maria Souza · R$ 480</div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span class="badge badge-su" style="font-size:10px">Concluido</span>
+            <span style="font-size:11px;color:var(--mu)">10/Mai/2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CHAT LISTA ===== -->
+    <div id="page-chat-lista" class="page">
+      <div class="top-bar">
+        <h2>Conversas</h2>
+      </div>
+      <div class="chat-lista-section">
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Servicos em andamento</div>
+        <div class="chat-item" onclick="goTo('chat-cliente','chat')">
+          <div class="av" style="background:var(--bl)">Y</div>
+          <div class="ci-info">
+            <strong>Ygor Chagas</strong>
+            <span>Segunda as 8h estarei ai com todo o material.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <div class="ci-time">14:23</div>
+            <div class="ci-badge">2</div>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Propostas enviadas</div>
+        <div class="chat-item">
+          <div class="av" style="background:var(--su)">A</div>
+          <div class="ci-info">
+            <strong>Ana Lima</strong>
+            <span>Pode ser quinta-feira de manha?</span>
+          </div>
+          <div class="ci-time">Ontem</div>
         </div>
       </div>
     </div>

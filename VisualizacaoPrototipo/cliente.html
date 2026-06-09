@@ -401,6 +401,21 @@
   .notif-time { font-size:10px; color:var(--mu); white-space:nowrap; }
   .notif-dot { width:7px; height:7px; background:var(--pri); border-radius:50%; position:absolute; top:14px; right:14px; }
 
+  /* ===== SEM PROPOSTAS ===== */
+  .sem-prop-screen { padding:40px 24px; text-align:center; }
+  .sem-prop-illust { font-size:64px; margin-bottom:16px; }
+  .sem-prop-screen h2 { font-size:18px; font-weight:700; color:var(--dk); margin-bottom:8px; }
+  .sem-prop-screen p { font-size:13px; color:var(--mu); line-height:1.6; margin-bottom:24px; }
+
+  /* ===== MEUS PEDIDOS ===== */
+  .meus-pedidos-section { padding:16px; }
+  .pedido-hist-card { background:var(--wh); border-radius:14px; padding:14px 16px; margin-bottom:10px; border-left:4px solid var(--bo); cursor:pointer; }
+  .pedido-hist-card h4 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .pedido-hist-card .meta { font-size:11px; color:var(--mu); margin-bottom:6px; }
+
+  /* ===== CHAT PRE-CONTRATO ===== */
+  .chat-pre-wrap { display:flex; flex-direction:column; min-height:100%; }
+
   /* ===== PERFIL ===== */
   .profile-section { padding:16px; }
   .profile-top { background:var(--wh); border-radius:14px; padding:20px; display:flex; gap:16px; align-items:center; margin-bottom:12px; }
@@ -424,7 +439,7 @@
   <div class="screen-content">
 
     <!-- ===== WELCOME ===== -->
-    <div id="page-welcome" class="page">
+    <div id="page-welcome" class="page active">
       <div style="background:linear-gradient(160deg,#0F1C2E 0%,#1a2d44 100%);min-height:768px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;">
         <div style="text-align:center;margin-bottom:40px;">
           <div style="width:72px;height:72px;background:var(--pri);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#fff;margin:0 auto 16px;box-shadow:0 8px 24px rgba(37,99,235,0.4);">R</div>
@@ -467,7 +482,7 @@
     </div>
 
     <!-- ===== ONBOARDING (Criar Conta — slides) ===== -->
-    <div id="page-onboarding" class="page active">
+    <div id="page-onboarding" class="page">
       <div class="onb-slides" id="onb-slides">
         <div class="onb-slide active" data-slide="0">
           <div class="onb-illust" style="background:var(--pri-lt)">📝</div>
@@ -491,8 +506,8 @@
           <div class="onb-dot" data-dot="1" onclick="goToSlide(1)"></div>
           <div class="onb-dot" data-dot="2" onclick="goToSlide(2)"></div>
         </div>
-        <button class="btn btn-pri btn-full" onclick="goTo('cadastro')">Criar Conta</button>
-        <button class="btn btn-pri-lt btn-full" onclick="goTo('login')">Login</button>
+        <button class="btn btn-pri btn-full" id="onb-cta" onclick="nextSlide()">Proximo →</button>
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('login')">Ja tenho conta — Fazer login</button>
       </div>
     </div>
 
@@ -520,6 +535,100 @@
         <a onclick="goTo('login')">Fazer Login</a>
       </div>
     </div>
+
+
+    <!-- ===== SEM PROPOSTAS ===== -->
+    <div id="page-sem-propostas" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('home','home')">←</button>
+        <h2>Infiltracao no teto da sala</h2>
+      </div>
+      <div class="sem-prop-screen">
+        <div class="sem-prop-illust">⏳</div>
+        <h2>Ainda sem propostas</h2>
+        <p>Seu pedido foi publicado e esta visivel para os prestadores da sua regiao. Em breve voce comecara a receber propostas!</p>
+        <div class="card" style="text-align:left;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:10px">Status do pedido</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--mu)">Publicado ha</span><strong>2 dias</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--mu)">Visualizacoes</span><strong>8 prestadores</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--mu)">Propostas recebidas</span><strong style="color:var(--wa)">0</strong></div>
+        </div>
+        <div class="escrow-notice" style="text-align:left;margin-bottom:20px">
+          <span class="icon">💡</span>
+          <p>Prestadores estao analisando seu escopo. Tempo medio de recebimento da 1a proposta: <strong>4 horas</strong>.</p>
+        </div>
+        <button class="btn btn-ghost btn-full" onclick="goTo('home','home')">← Voltar ao inicio</button>
+      </div>
+    </div>
+
+    <!-- ===== MEUS PEDIDOS ===== -->
+    <div id="page-meus-pedidos" class="page">
+      <div class="top-bar">
+        <h2>Meus Pedidos</h2>
+      </div>
+      <div class="meus-pedidos-section">
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Em andamento</div>
+        <div class="pedido-hist-card" style="border-left-color:var(--vi)" onclick="goTo('acompanhar')">
+          <h4>Pintura area externa</h4>
+          <div class="meta">Prestador: Fix Construcoes · R$ 1.620</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-vi">Em andamento</span>
+            <span style="font-size:11px;color:var(--mu)">Ha 1 semana</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Aguardando resposta</div>
+        <div class="pedido-hist-card" style="border-left-color:var(--wa)" onclick="goTo('sem-propostas','pedidos')">
+          <h4>Infiltracao no teto da sala</h4>
+          <div class="meta">Publicado ha 2 dias · 8 visualizacoes</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-wa">Aguardando propostas</span>
+            <span style="font-size:11px;color:var(--mu)">0 propostas</span>
+          </div>
+        </div>
+        <div class="pedido-hist-card" style="border-left-color:var(--su)" onclick="goTo('propostas','pedidos')">
+          <h4>Torneira com vazamento</h4>
+          <div class="meta">Publicado ha 5 dias · 12 visualizacoes</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-su">1 proposta recebida</span>
+            <span style="font-size:11px;color:var(--mu)">Ver proposta</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px">Concluidos</div>
+        <div class="pedido-hist-card" style="border-left-color:var(--mu);opacity:0.75">
+          <h4>Reparo hidraulico — Banheiro</h4>
+          <div class="meta">Carlos Impermeabilizacoes · R$ 350</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-su">Concluido</span>
+            <span style="font-size:11px;color:var(--mu)">05/Mai/2026</span>
+          </div>
+        </div>
+        <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('chat','chat')">+ Criar novo pedido com IA</button>
+      </div>
+    </div>
+
+    <!-- ===== CHAT PRE-CONTRATO ===== -->
+    <div id="page-chat-pre" class="page">
+      <div class="chat-pre-wrap">
+        <div class="top-bar">
+          <button class="back" onclick="goTo('detalhe')">←</button>
+          <div class="avatar" style="background:var(--pri);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0" id="chat-pre-av">C</div>
+          <div style="flex:1;margin-left:8px"><strong style="font-size:14px;color:var(--dk);display:block" id="chat-pre-nome">Carlos Impermeabilizacoes</strong><span style="font-size:11px;color:var(--su)">● Online</span></div>
+        </div>
+        <div class="system-msg" style="margin:12px 16px">Tire suas duvidas antes de escolher esta proposta.</div>
+        <div class="chat-msgs" style="flex:1" id="chat-pre-msgs">
+          <div class="msg ai" style="background:var(--wh)" id="chat-pre-msg1">Ola! Pode tirar todas suas duvidas sobre minha proposta. Estou a disposicao!</div>
+        </div>
+        <div style="padding:10px 16px;background:var(--wh);border-top:1px solid var(--bo)">
+          <button class="btn btn-pri-lt btn-full btn-sm" style="margin-bottom:8px" onclick="goTo('chat-provider')">✅ Escolher esta proposta e revisar contrato →</button>
+        </div>
+        <div class="chat-input-bar">
+          <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📎</button>
+          <input class="chat-input" type="text" id="chat-pre-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendChatPre()">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendChatPre()">↑</button>
+        </div>
+      </div>
+    </div>
+
 
     <!-- ===== HOME ===== -->
     <div id="page-home" class="page">
@@ -789,7 +898,7 @@ Urgencia: 🔴 Alta</div>
         <div id="det-reviews"></div>
         <div style="padding-top:12px;display:flex;flex-direction:column;gap:8px;">
           <button class="btn btn-pri btn-full" onclick="openChatProvider(currentProviderId)">✅ Escolher esta proposta</button>
-          <button class="btn btn-ghost btn-full" onclick="openChatProvider(currentProviderId)">💬 Enviar mensagem</button>
+          <button class="btn btn-ghost btn-full" onclick="goTo('chat-pre')">💬 Enviar mensagem</button>
         </div>
       </div>
     </div>
@@ -1207,6 +1316,14 @@ function goToSlide(n) {
   document.querySelector(`.onb-dot[data-dot="${n}"]`).classList.add('active');
 }
 
+function nextSlide() {
+  currentSlide++;
+  if (currentSlide > 2) { goTo('cadastro'); return; }
+  goToSlide(currentSlide);
+  const cta = document.getElementById('onb-cta');
+  if (cta) cta.textContent = currentSlide === 2 ? 'Criar conta' : 'Proximo →';
+}
+
 let currentProviderId = 'carlos';
 
 function openDetalhe(id) {
@@ -1235,6 +1352,10 @@ function openDetalhe(id) {
   document.getElementById('det-reviews').innerHTML = p.reviews.map(r =>
     `<div class="review-item"><div class="reviewer">${r.name}</div><div class="stars">${r.stars}</div><div class="text">${r.text}</div></div>`
   ).join('');
+  const chatPreAv = document.getElementById('chat-pre-av');
+  const chatPreNome = document.getElementById('chat-pre-nome');
+  if (chatPreAv) { chatPreAv.textContent = p.initial; chatPreAv.style.background = p.color; }
+  if (chatPreNome) chatPreNome.textContent = p.name;
   goTo('detalhe', 'pedidos');
 }
 
@@ -1251,6 +1372,7 @@ function sortPropostas(el) {
     return 0;
   });
   cards.forEach(c => container.appendChild(c));
+}
 }
 
 function sendMsg() {
@@ -1284,6 +1406,18 @@ function selectPayment(el) {
   const method = el.dataset.method;
   document.getElementById('pix-qr-block').classList.toggle('visible', method === 'pix');
   document.getElementById('card-fields-block').classList.toggle('visible', method === 'cartao');
+}
+
+function sendChatPre() {
+  const input = document.getElementById('chat-pre-input');
+  if (!input || !input.value.trim()) return;
+  const msgs = document.getElementById('chat-pre-msgs');
+  const msg = document.createElement('div');
+  msg.className = 'msg user';
+  msg.textContent = input.value;
+  msgs.appendChild(msg);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
 function selectInstallment(el) {
