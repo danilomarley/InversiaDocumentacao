@@ -30,7 +30,6 @@
   }
   .back-link:hover { color:#fff; }
 
-  /* PHONE FRAME */
   .phone-frame {
     width:375px; height:812px;
     background:var(--bg);
@@ -84,7 +83,6 @@
   .nav-tab .tab-icon { font-size:20px; }
   .nav-tab.active { color:var(--pri); font-weight:700; }
 
-  /* UTILITIES */
   .px { padding-left:16px; padding-right:16px; }
   .btn {
     display:inline-flex; align-items:center; justify-content:center;
@@ -99,6 +97,7 @@
   .btn-su { background:var(--su); color:#fff; }
   .btn-full { width:100%; }
   .btn-sm { padding:8px 14px; font-size:12px; border-radius:8px; }
+  .btn-outline-pri { background:transparent; border:1.5px solid var(--pri); color:var(--pri); }
   .badge { display:inline-block; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; }
   .badge-pri { background:var(--pri-lt); color:var(--pri); }
   .badge-su { background:var(--su-lt); color:var(--su); }
@@ -117,7 +116,39 @@
   .form-field input:focus, .form-field textarea:focus { border-color:var(--pri); }
   .form-field textarea { min-height:70px; resize:vertical; }
 
-  /* ===== P1: ONBOARDING ===== */
+  /* ===== WELCOME ===== */
+  #page-welcome { min-height:100%; }
+  .welcome-logo { text-align:center; margin-bottom:40px; }
+  .welcome-logo-icon {
+    width:72px; height:72px; background:var(--pri); border-radius:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px; font-weight:800; color:#fff;
+    margin:0 auto 16px;
+    box-shadow: 0 8px 24px rgba(255,92,26,0.4);
+  }
+  .welcome-logo h1 { font-size:28px; font-weight:800; color:#fff; letter-spacing:-0.5px; }
+  .welcome-logo h1 span { color:var(--pri); }
+  .welcome-logo p { font-size:13px; color:rgba(255,255,255,0.5); margin-top:6px; }
+  .welcome-role-badge {
+    background:rgba(255,92,26,0.15); border:1px solid rgba(255,92,26,0.3);
+    border-radius:20px; padding:6px 16px; margin-bottom:32px;
+    font-size:12px; font-weight:600; color:var(--pri);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .welcome-actions { width:100%; display:flex; flex-direction:column; gap:12px; }
+  .welcome-divider { text-align:center; font-size:12px; color:rgba(255,255,255,0.3); margin:4px 0; }
+
+  /* ===== LOGIN ===== */
+  #page-login { background:var(--wh); min-height:100%; }
+  .login-header { padding:24px 20px 20px; }
+  .login-header h1 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .login-header p { font-size:13px; color:var(--mu); }
+  .login-form { padding:0 20px 24px; }
+  .login-footer { text-align:center; padding:0 20px 20px; }
+  .login-footer a { font-size:13px; color:var(--pri); font-weight:600; cursor:pointer; text-decoration:none; }
+  .login-footer p { font-size:12px; color:var(--mu); margin-bottom:6px; }
+
+  /* ===== ONBOARDING ===== */
   #page-onboarding { background:var(--wh); min-height:100%; }
   .onb-header { padding:24px 20px 16px; text-align:center; }
   .onb-header h1 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:4px; }
@@ -141,7 +172,7 @@
   .cat-option .cat-icon { font-size:24px; display:block; margin-bottom:4px; }
   .onb-nav { display:flex; gap:10px; padding:16px 20px; }
 
-  /* ===== P2: FEED DE PEDIDOS ===== */
+  /* ===== FEED DE PEDIDOS (HOME) ===== */
   .feed-header { padding:16px; }
   .feed-header h1 { font-size:18px; font-weight:700; color:var(--dk); margin-bottom:4px; }
   .feed-header p { font-size:12px; color:var(--mu); }
@@ -152,12 +183,18 @@
   .feed-kpi .lbl { font-size:10px; color:var(--mu); margin-top:2px; }
   .filter-scroll { display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; }
   .filter-scroll::-webkit-scrollbar { display:none; }
-  .filter-pill { padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600; white-space:nowrap; cursor:pointer; background:var(--wh); color:var(--mu); border:1px solid var(--bo); transition:all 0.15s; flex-shrink:0; }
+  .filter-pill {
+    padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600;
+    white-space:nowrap; cursor:pointer; background:var(--wh); color:var(--mu);
+    border:1px solid var(--bo); transition:all 0.15s; flex-shrink:0;
+  }
   .filter-pill.active { background:var(--pri-lt); color:var(--pri); border-color:var(--pri); }
   .pedido-card {
     background:var(--wh); border-radius:14px; padding:14px 16px;
     margin:0 16px 10px; border-left:4px solid var(--pri);
+    cursor:pointer; transition:box-shadow 0.15s;
   }
+  .pedido-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
   .pedido-card h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:4px; }
   .pedido-card .desc { font-size:12px; color:var(--mu); margin-bottom:8px; line-height:1.5; }
   .pedido-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
@@ -167,7 +204,23 @@
   .pedido-footer .compat { font-size:10px; color:var(--su); font-weight:600; }
   .pedido-actions { display:flex; gap:6px; margin-top:10px; }
 
-  /* ===== P3: DETALHE PEDIDO ===== */
+  /* ===== PEDIDOS EM ANDAMENTO ===== */
+  .andamento-header { padding:16px 16px 8px; }
+  .andamento-header h1 { font-size:18px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .andamento-header p { font-size:12px; color:var(--mu); }
+  .andamento-card {
+    background:var(--wh); border-radius:14px; padding:14px 16px;
+    margin:0 16px 10px; border-left:4px solid var(--wa);
+    cursor:pointer; transition:box-shadow 0.15s;
+  }
+  .andamento-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+  .andamento-card.concluido { border-left-color:var(--su); }
+  .andamento-card h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .andamento-card .meta { font-size:12px; color:var(--mu); margin-bottom:6px; }
+  .andamento-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
+  .andamento-card-footer .value { font-size:14px; font-weight:700; color:var(--pri); }
+
+  /* ===== DETALHE PEDIDO ===== */
   .detalhe-section { padding:16px; }
   .detalhe-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
   .detalhe-field { margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--bo); }
@@ -182,7 +235,7 @@
   .client-info .info strong { font-size:13px; color:var(--dk); display:block; }
   .client-info .info span { font-size:11px; color:var(--mu); }
 
-  /* ===== P4: ENVIAR PROPOSTA ===== */
+  /* ===== ENVIAR PROPOSTA ===== */
   .prop-form { padding:16px; }
   .guarantee-box { background:var(--vi-lt); border-radius:12px; padding:14px 16px; margin-bottom:14px; display:flex; gap:10px; align-items:flex-start; }
   .guarantee-box .icon { font-size:24px; }
@@ -190,11 +243,13 @@
   .guarantee-box strong { font-size:13px; color:#4C2D8A; display:block; margin-bottom:4px; }
   .ai-tip { background:var(--bl-lt); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:12px; color:var(--bl); display:flex; gap:8px; align-items:flex-start; }
 
-  /* ===== P5: MINHAS PROPOSTAS ===== */
+  /* ===== MINHAS PROPOSTAS ===== */
   .proposta-card {
     background:var(--wh); border-radius:12px; padding:14px 16px;
     margin:0 16px 10px; display:flex; align-items:center; gap:12px;
+    cursor:pointer; transition:box-shadow 0.15s;
   }
+  .proposta-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
   .proposta-status { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
   .proposta-info { flex:1; }
   .proposta-info h4 { font-size:13px; font-weight:700; color:var(--dk); margin-bottom:2px; }
@@ -207,7 +262,45 @@
   .metric .num { font-size:18px; font-weight:700; color:var(--pri); }
   .metric .lbl { font-size:10px; color:var(--mu); margin-top:2px; }
 
-  /* ===== P6: CHAT COM CLIENTE ===== */
+  /* ===== CHAT LIST ===== */
+  .chat-list-header { padding:16px 16px 8px; }
+  .chat-list-header h1 { font-size:18px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .chat-list-header p { font-size:12px; color:var(--mu); }
+  .chat-list-item {
+    display:flex; align-items:center; gap:12px;
+    padding:14px 16px; background:var(--wh);
+    border-bottom:1px solid var(--bo); cursor:pointer;
+    transition:background 0.15s;
+  }
+  .chat-list-item:first-child { border-top:1px solid var(--bo); }
+  .chat-list-item:hover { background:var(--gr); }
+  .chat-list-avatar {
+    width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:700; color:#fff; flex-shrink:0;
+    position:relative;
+  }
+  .chat-list-avatar .online-dot {
+    position:absolute; bottom:1px; right:1px;
+    width:12px; height:12px; background:var(--su);
+    border-radius:50%; border:2px solid var(--wh);
+  }
+  .chat-list-info { flex:1; min-width:0; }
+  .chat-list-info strong { font-size:13px; font-weight:700; color:var(--dk); display:block; }
+  .chat-list-info .service { font-size:11px; color:var(--mu); margin-bottom:2px; }
+  .chat-list-info .preview { font-size:12px; color:var(--mu); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chat-list-meta { text-align:right; flex-shrink:0; }
+  .chat-list-meta .time { font-size:11px; color:var(--mu); }
+  .chat-list-meta .unread {
+    width:18px; height:18px; background:var(--pri); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; color:#fff; margin-top:4px; margin-left:auto;
+  }
+  .chat-empty { padding:40px 20px; text-align:center; }
+  .chat-empty .icon { font-size:40px; margin-bottom:12px; }
+  .chat-empty p { font-size:13px; color:var(--mu); }
+
+  /* ===== CHAT COM CLIENTE ===== */
   .chat-wrap { display:flex; flex-direction:column; min-height:100%; }
   .chat-header {
     background:var(--wh); padding:12px 16px;
@@ -248,7 +341,7 @@
   }
   .chat-contract-btn { padding:12px 16px; background:var(--wh); border-top:1px solid var(--bo); }
 
-  /* ===== P7: SMART CONTRACT ===== */
+  /* ===== SMART CONTRACT ===== */
   .contract-section { padding:16px; }
   .contract-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
   .contract-parties { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
@@ -276,7 +369,7 @@
   .checkbox-row span { font-size:13px; color:var(--dk); }
   .contract-status { border-radius:10px; padding:10px 14px; font-size:12px; text-align:center; margin-bottom:12px; }
 
-  /* ===== P8: SERVICO EM ANDAMENTO ===== */
+  /* ===== SERVICO EM ANDAMENTO ===== */
   .service-section { padding:16px; }
   .service-summary { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
   .service-summary h3 { font-size:15px; font-weight:700; color:var(--dk); margin-bottom:8px; }
@@ -298,7 +391,7 @@
   .upload-area .icon { font-size:28px; margin-bottom:6px; }
   .upload-area p { font-size:12px; color:var(--mu); }
 
-  /* ===== P9: RECEBIMENTO + AVALIACAO ===== */
+  /* ===== RECEBIMENTO ===== */
   .receipt-section { padding:16px; text-align:center; }
   .receipt-check { width:72px; height:72px; background:var(--su); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff; margin:16px auto; }
   .receipt-section h2 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:4px; }
@@ -345,13 +438,58 @@
 
   <div class="screen-content">
 
-    <!-- ===== P1: ONBOARDING ===== -->
-    <div id="page-onboarding" class="page active">
-      <div class="onb-header">
-        <h1>Cadastro de Prestador</h1>
-        <p>Complete seu perfil em 3 passos rapidos</p>
+    <!-- ===== WELCOME ===== -->
+    <div id="page-welcome" class="page active">
+      <div style="background:linear-gradient(160deg,#0F1C2E 0%,#1a2d44 100%);min-height:768px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;">
+        <div class="welcome-logo">
+          <div class="welcome-logo-icon">R</div>
+          <h1>Resolv<span>AI</span></h1>
+          <p>Conectando quem resolve ao trabalho certo</p>
+        </div>
+        <div class="welcome-role-badge">🔧 Area do Prestador</div>
+        <div class="welcome-actions">
+          <button class="btn btn-pri btn-full" style="font-size:15px;padding:14px" onclick="goTo('onboarding')">Criar Conta</button>
+          <div class="welcome-divider">ou</div>
+          <button class="btn btn-outline-pri btn-full" style="font-size:15px;padding:14px;color:#FF5C1A;border:1.5px solid #FF5C1A;background:rgba(255,92,26,0.08);" onclick="goTo('login')">Fazer Login</button>
+        </div>
+        <div style="margin-top:28px;text-align:center;">
+          <p style="font-size:12px;color:rgba(255,255,255,0.35);">Ao continuar, voce concorda com os</p>
+          <p style="font-size:12px;color:rgba(255,92,26,0.7);margin-top:2px;">Termos de Uso e Politica de Privacidade</p>
+        </div>
       </div>
-      <div class="onb-progress">
+    </div>
+
+    <!-- ===== LOGIN ===== -->
+    <div id="page-login" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('welcome')">←</button>
+        <div><h2>Entrar</h2><div class="subtitle">Acesse sua conta de prestador</div></div>
+      </div>
+      <div class="login-header">
+        <h1>Bem-vindo de volta!</h1>
+        <p>Entre com suas credenciais para continuar</p>
+      </div>
+      <div class="login-form">
+        <div class="form-field"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="form-field"><label>Senha</label><input type="password" placeholder="Sua senha"></div>
+        <div style="text-align:right;margin-bottom:20px;">
+          <span style="font-size:12px;color:var(--pri);cursor:pointer;font-weight:600;">Esqueci minha senha</span>
+        </div>
+        <button class="btn btn-pri btn-full" style="font-size:15px;padding:14px" onclick="goTo('home','home')">Entrar →</button>
+      </div>
+      <div class="login-footer">
+        <p>Ainda nao tem conta?</p>
+        <a onclick="goTo('onboarding')">Criar conta de prestador</a>
+      </div>
+    </div>
+
+    <!-- ===== ONBOARDING (Criar Conta) ===== -->
+    <div id="page-onboarding" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('welcome')">←</button>
+        <div><h2>Cadastro</h2><div class="subtitle">Prestador de servicos</div></div>
+      </div>
+      <div class="onb-progress" style="padding:12px 20px 12px;">
         <div class="onb-step current" data-step="0"></div>
         <div class="onb-step" data-step="1"></div>
         <div class="onb-step" data-step="2"></div>
@@ -394,30 +532,31 @@
       </div>
     </div>
 
-    <!-- ===== P2: FEED DE PEDIDOS ===== -->
-    <div id="page-feed" class="page">
+    <!-- ===== HOME: OPORTUNIDADES ===== -->
+    <div id="page-home" class="page">
       <div class="feed-header">
-        <h1>Pedidos para voce</h1>
+        <h1>Pedidos para voce 🔍</h1>
         <p>Oportunidades compativeis com seu perfil</p>
       </div>
       <div class="feed-kpis">
         <div class="feed-kpi"><div class="num">R$12.4k</div><div class="lbl">Receita do mes</div></div>
-        <div class="feed-kpi"><div class="num">8</div><div class="lbl">Servicos ativos</div></div>
         <div class="feed-kpi"><div class="num">4.9 ★</div><div class="lbl">Avaliacao</div></div>
         <div class="feed-kpi"><div class="num">5</div><div class="lbl">Novas oport.</div></div>
       </div>
       <div class="filter-scroll">
-        <span class="filter-pill active" onclick="setFilter(this)">Todas</span>
-        <span class="filter-pill" onclick="setFilter(this)">Impermeabilizacao</span>
-        <span class="filter-pill" onclick="setFilter(this)">Hidraulica</span>
-        <span class="filter-pill" onclick="setFilter(this)">Alvenaria</span>
-        <span class="filter-pill" onclick="setFilter(this)">Pintura</span>
+        <span class="filter-pill active" data-filter="todas" onclick="setFilter(this,'home')">Todas</span>
+        <span class="filter-pill" data-filter="impermeabilizacao" onclick="setFilter(this,'home')">Impermeabilizacao</span>
+        <span class="filter-pill" data-filter="hidraulica" onclick="setFilter(this,'home')">Hidraulica</span>
+        <span class="filter-pill" data-filter="alvenaria" onclick="setFilter(this,'home')">Alvenaria</span>
+        <span class="filter-pill" data-filter="pintura" onclick="setFilter(this,'home')">Pintura</span>
       </div>
-      <div class="pedido-card" onclick="goTo('detalhe-pedido')">
+
+      <!-- Card 1: Infiltracao -->
+      <div class="pedido-card" data-filter-item="impermeabilizacao" onclick="openDetalhe('p1')">
         <h3>Infiltracao no teto da sala</h3>
-        <div class="desc">Ap. 3o andar, area de servico do vizinho. Mancha de 80x60cm, gotejamento.</div>
+        <div class="desc">Ap. 3o andar, area de servico. Mancha de 80x60cm, gotejamento em dias de chuva.</div>
         <div class="pedido-tags">
-          <span class="pedido-tag">Impermeabilizacao</span>
+          <span class="pedido-tag">💧 Impermeabilizacao</span>
           <span class="badge badge-da">🔴 Urgente</span>
           <span class="pedido-tag">📍 Aldeota</span>
           <span class="pedido-tag">2 propostas</span>
@@ -428,16 +567,19 @@
         </div>
         <div class="pedido-actions">
           <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('p1')">Ver detalhes</button>
         </div>
       </div>
-      <div class="pedido-card" onclick="goTo('detalhe-pedido')">
+
+      <!-- Card 2: Encanamento -->
+      <div class="pedido-card" data-filter-item="hidraulica" onclick="openDetalhe('p2')">
         <h3>Troca de encanamento — Cozinha</h3>
         <div class="desc">Cano estourado, agua desligada. Precisa de reparo imediato.</div>
         <div class="pedido-tags">
-          <span class="pedido-tag">Hidraulica</span>
+          <span class="pedido-tag">🔧 Hidraulica</span>
           <span class="badge badge-da">🔴 Urgente</span>
           <span class="pedido-tag">📍 Meireles</span>
+          <span class="pedido-tag">0 propostas</span>
         </div>
         <div class="pedido-footer">
           <span class="budget">R$ 800 – 1.200</span>
@@ -445,16 +587,39 @@
         </div>
         <div class="pedido-actions">
           <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('p2')">Ver detalhes</button>
         </div>
       </div>
-      <div class="pedido-card" style="border-left-color:var(--wa)" onclick="goTo('detalhe-pedido')">
+
+      <!-- Card 3: Reparo alvenaria -->
+      <div class="pedido-card" data-filter-item="alvenaria" style="border-left-color:var(--wa)" onclick="openDetalhe('p3')">
+        <h3>Reparo de trinca na parede</h3>
+        <div class="desc">Trinca estrutural na parede da sala, aproximadamente 3m de extensao.</div>
+        <div class="pedido-tags">
+          <span class="pedido-tag">🧱 Alvenaria</span>
+          <span class="badge badge-wa">🟡 Normal</span>
+          <span class="pedido-tag">📍 Fatima</span>
+          <span class="pedido-tag">1 proposta</span>
+        </div>
+        <div class="pedido-footer">
+          <span class="budget">R$ 1.200 – 2.000</span>
+          <span class="compat">🤖 80% compativel</span>
+        </div>
+        <div class="pedido-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('p3')">Ver detalhes</button>
+        </div>
+      </div>
+
+      <!-- Card 4: Pintura -->
+      <div class="pedido-card" data-filter-item="pintura" style="border-left-color:var(--wa)" onclick="openDetalhe('p4')">
         <h3>Pintura fachada residencial</h3>
         <div class="desc">Casa 2 pavimentos, calafetacao antes da pintura. 180m².</div>
         <div class="pedido-tags">
-          <span class="pedido-tag">Pintura</span>
+          <span class="pedido-tag">🎨 Pintura</span>
           <span class="badge badge-wa">🟡 Normal</span>
           <span class="pedido-tag">📍 Coco</span>
+          <span class="pedido-tag">4 propostas</span>
         </div>
         <div class="pedido-footer">
           <span class="budget">R$ 3.000 – 5.000</span>
@@ -462,28 +627,85 @@
         </div>
         <div class="pedido-actions">
           <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('proposta')">Enviar proposta</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe-pedido')">Ver detalhes</button>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('p4')">Ver detalhes</button>
         </div>
       </div>
+      <div style="height:16px"></div>
     </div>
 
-    <!-- ===== P3: DETALHE DO PEDIDO ===== -->
+    <!-- ===== PEDIDOS EM ANDAMENTO ===== -->
+    <div id="page-pedidos-andamento" class="page">
+      <div class="andamento-header">
+        <h1>Meus Pedidos 🔧</h1>
+        <p>Servicos aceitos e em execucao</p>
+      </div>
+
+      <div style="padding:8px 16px 4px">
+        <div style="font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Em andamento</div>
+      </div>
+
+      <div class="andamento-card" onclick="goTo('servico','pedidos')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <h3>Impermeabilizacao de Laje</h3>
+          <span class="badge badge-wa">Em andamento</span>
+        </div>
+        <div class="meta">👤 Ygor Chagas · 📍 Aldeota</div>
+        <div class="meta">📅 Prazo: 4 dias uteis · Iniciado: ontem</div>
+        <div class="andamento-card-footer">
+          <span class="value">R$ 1.850,00</span>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openChat('ygor')">💬 Chat</button>
+        </div>
+      </div>
+
+      <div class="andamento-card" onclick="goTo('servico','pedidos')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <h3>Reparo Hidraulico — Cozinha</h3>
+          <span class="badge badge-wa">Em andamento</span>
+        </div>
+        <div class="meta">👤 Marcos Freitas · 📍 Meireles</div>
+        <div class="meta">📅 Prazo: 2 dias uteis · Iniciado: hoje</div>
+        <div class="andamento-card-footer">
+          <span class="value">R$ 980,00</span>
+          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openChat('marcos')">💬 Chat</button>
+        </div>
+      </div>
+
+      <div style="padding:8px 16px 4px;margin-top:4px">
+        <div style="font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Concluidos</div>
+      </div>
+
+      <div class="andamento-card concluido">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <h3>Pintura Interna — Sala</h3>
+          <span class="badge badge-su">Concluido</span>
+        </div>
+        <div class="meta">👤 Ana Lima · 📍 Icarai</div>
+        <div class="meta">✅ Concluido ha 3 dias · Avaliacao: 5.0 ★</div>
+        <div class="andamento-card-footer">
+          <span class="value" style="color:var(--su)">R$ 2.100,00 recebido</span>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+
+    <!-- ===== DETALHE DO PEDIDO (dinamico) ===== -->
     <div id="page-detalhe-pedido" class="page">
       <div class="top-bar">
-        <button class="back" onclick="goTo('feed','oport')">←</button>
+        <button class="back" onclick="goTo('home','home')">←</button>
         <div><h2>Detalhe do Pedido</h2><div class="subtitle">Escopo gerado pela IA</div></div>
       </div>
       <div class="detalhe-section">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <span class="badge badge-da">🔴 Urgencia Alta</span>
-          <span style="font-size:11px;color:var(--mu)">2 propostas enviadas</span>
+          <span id="detalhe-urgency" class="badge badge-da">🔴 Urgencia Alta</span>
+          <span id="detalhe-proposals-count" style="font-size:11px;color:var(--mu)">2 propostas enviadas</span>
         </div>
         <div class="detalhe-card">
-          <div class="detalhe-field"><label>Tipo de servico</label><p>Impermeabilizacao de laje + Reparo de trinca</p></div>
-          <div class="detalhe-field"><label>Localizacao</label><p>Aldeota, Fortaleza — Laje entre 3o e 4o andar</p></div>
-          <div class="detalhe-field"><label>Problema</label><p>Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro da sala.</p></div>
-          <div class="detalhe-field"><label>Servicos esperados</label><p>• Inspecao visual e teste de estanqueidade<br>• Remocao do revestimento danificado<br>• Aplicacao de manta asfaltica<br>• Repintura final</p></div>
-          <div class="detalhe-field"><label>Prazo esperado</label><p>3 a 5 dias uteis</p></div>
+          <div class="detalhe-field"><label>Tipo de servico</label><p id="detalhe-tipo">—</p></div>
+          <div class="detalhe-field"><label>Localizacao</label><p id="detalhe-local">—</p></div>
+          <div class="detalhe-field"><label>Problema</label><p id="detalhe-problema">—</p></div>
+          <div class="detalhe-field"><label>Servicos esperados</label><p id="detalhe-servicos">—</p></div>
+          <div class="detalhe-field"><label>Orcamento estimado</label><p id="detalhe-budget">—</p></div>
+          <div class="detalhe-field"><label>Prazo esperado</label><p id="detalhe-prazo">—</p></div>
           <div class="detalhe-field">
             <label>Fotos do cliente</label>
             <div class="photo-grid">
@@ -494,19 +716,22 @@
           </div>
         </div>
         <div class="client-info">
-          <div class="client-avatar" style="background:var(--bl)">Y</div>
-          <div class="info"><strong>Ygor Chagas</strong><span>4.8 ★ · 5 servicos contratados</span></div>
+          <div class="client-avatar" id="detalhe-client-avatar" style="background:var(--bl)">Y</div>
+          <div class="info">
+            <strong id="detalhe-client-name">—</strong>
+            <span id="detalhe-client-rating">—</span>
+          </div>
         </div>
         <button class="btn btn-pri btn-full" onclick="goTo('proposta')">Enviar proposta →</button>
         <button class="btn btn-ghost btn-full" style="margin-top:8px">Pedir esclarecimento</button>
       </div>
     </div>
 
-    <!-- ===== P4: ENVIAR PROPOSTA ===== -->
+    <!-- ===== ENVIAR PROPOSTA ===== -->
     <div id="page-proposta" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('detalhe-pedido')">←</button>
-        <div><h2>Enviar Proposta</h2><div class="subtitle">Infiltracao no teto — Aldeota</div></div>
+        <div><h2>Enviar Proposta</h2><div class="subtitle" id="proposta-subtitle">Infiltracao no teto — Aldeota</div></div>
       </div>
       <div class="prop-form">
         <div class="ai-tip">💡 Pedidos similares nessa regiao fecham entre <strong style="margin:0 4px">R$1.500</strong> e <strong>R$2.500</strong></div>
@@ -522,62 +747,132 @@
         <div class="form-field"><label>Condicoes de cobertura</label><textarea placeholder="Ex: Cobertura contra infiltracao na area tratada..."></textarea></div>
         <div class="form-field"><label>Descricao da abordagem</label><textarea placeholder="Descreva como pretende executar o servico, materiais..."></textarea></div>
         <div style="font-size:12px;color:var(--mu);margin-bottom:12px">📋 Preview: e assim que o cliente vai ver sua proposta</div>
-        <button class="btn btn-pri btn-full" onclick="goTo('propostas','propostas')">🚀 Enviar proposta</button>
+        <button class="btn btn-pri btn-full" onclick="goTo('proposta-enviada')">🚀 Enviar proposta</button>
         <button class="btn btn-ghost btn-full" style="margin-top:8px">Salvar rascunho</button>
       </div>
     </div>
 
-    <!-- ===== P5: MINHAS PROPOSTAS ===== -->
+    <!-- ===== PROPOSTA ENVIADA (confirmacao) ===== -->
+    <div id="page-proposta-enviada" class="page">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;padding:32px 24px;text-align:center;background:var(--bg);">
+        <div style="width:88px;height:88px;background:var(--su);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;margin-bottom:24px;box-shadow:0 8px 24px rgba(16,185,129,0.35);">✓</div>
+        <h2 style="font-size:22px;font-weight:800;color:var(--dk);margin-bottom:8px;">Proposta enviada!</h2>
+        <p style="font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:28px;">Sua proposta foi enviada com sucesso ao cliente.<br>Voce sera notificado assim que ele responder.</p>
+        <div style="background:var(--wh);border-radius:14px;padding:18px;width:100%;margin-bottom:24px;text-align:left;">
+          <div style="font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Resumo da proposta</div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bo);font-size:13px;"><span style="color:var(--mu)">Servico</span><span style="font-weight:600;color:var(--dk)">Infiltracao no teto</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bo);font-size:13px;"><span style="color:var(--mu)">Localizacao</span><span style="font-weight:600;color:var(--dk)">Aldeota</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;"><span style="color:var(--mu)">Status</span><span class="badge badge-wa">⏳ Aguardando resposta</span></div>
+        </div>
+        <div style="background:var(--bl-lt);border-radius:12px;padding:14px 16px;width:100%;margin-bottom:28px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:20px;">💡</span>
+          <p style="font-size:12px;color:var(--bl);text-align:left;">Clientes respondem em media em <strong>2 a 4 horas</strong>. Enquanto isso, explore novas oportunidades na Home.</p>
+        </div>
+        <button class="btn btn-pri btn-full" style="font-size:15px;padding:14px;" onclick="goTo('home','home')">← Voltar para Home</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="goTo('propostas','propostas')">Ver minhas propostas</button>
+      </div>
+    </div>
+
+    <!-- ===== MINHAS PROPOSTAS ===== -->
     <div id="page-propostas" class="page">
-      <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Minhas Propostas</div></div>
+      <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Minhas Propostas 📝</div></div>
       <div class="metrics-bar">
         <div class="metric"><div class="num">12</div><div class="lbl">Enviadas</div></div>
         <div class="metric"><div class="num">67%</div><div class="lbl">Conversao</div></div>
+        <div class="metric"><div class="num">R$18k</div><div class="lbl">Em negociacao</div></div>
       </div>
       <div class="filter-scroll" style="padding-top:0">
-        <span class="filter-pill active" onclick="setFilter(this)">Todas</span>
-        <span class="filter-pill" onclick="setFilter(this)">Enviadas</span>
-        <span class="filter-pill" onclick="setFilter(this)">Escolhidas</span>
-        <span class="filter-pill" onclick="setFilter(this)">Nao selecionadas</span>
+        <span class="filter-pill active" data-filter="todas" onclick="setFilter(this,'propostas')">Todas</span>
+        <span class="filter-pill" data-filter="escolhida" onclick="setFilter(this,'propostas')">Escolhidas</span>
+        <span class="filter-pill" data-filter="visualizada" onclick="setFilter(this,'propostas')">Visualizadas</span>
+        <span class="filter-pill" data-filter="enviada" onclick="setFilter(this,'propostas')">Enviadas</span>
+        <span class="filter-pill" data-filter="nao-selecionada" onclick="setFilter(this,'propostas')">Nao selecionadas</span>
       </div>
-      <div class="proposta-card" onclick="goTo('chat-cliente','chat')">
+
+      <div class="proposta-card" data-filter-item="escolhida" onclick="openChat('ygor')">
         <div class="proposta-status" style="background:var(--su-lt)">✅</div>
         <div class="proposta-info"><h4>Impermeabilizacao laje — Ygor</h4><div class="meta">Aldeota · Enviada ha 2 dias</div></div>
         <div class="proposta-val"><div class="price">R$1.850</div><div class="status-text badge badge-su">Escolhida</div></div>
       </div>
-      <div class="proposta-card">
+
+      <div class="proposta-card" data-filter-item="visualizada">
         <div class="proposta-status" style="background:var(--bl-lt)">👁️</div>
         <div class="proposta-info"><h4>Reparo calha — Ana Lima</h4><div class="meta">Meireles · Enviada ha 3 dias</div></div>
         <div class="proposta-val"><div class="price">R$980</div><div class="status-text badge badge-bl">Visualizada</div></div>
       </div>
-      <div class="proposta-card">
+
+      <div class="proposta-card" data-filter-item="enviada">
         <div class="proposta-status" style="background:var(--pri-lt)">📤</div>
         <div class="proposta-info"><h4>Troca encanamento — Pedro</h4><div class="meta">Fatima · Enviada ha 5 dias</div></div>
         <div class="proposta-val"><div class="price">R$750</div><div class="status-text badge badge-pri">Enviada</div></div>
       </div>
-      <div class="proposta-card">
+
+      <div class="proposta-card" data-filter-item="nao-selecionada">
         <div class="proposta-status" style="background:var(--da-lt)">❌</div>
         <div class="proposta-info"><h4>Pintura fachada — Roberto</h4><div class="meta">Coco · Enviada ha 1 sem</div></div>
         <div class="proposta-val"><div class="price">R$3.200</div><div class="status-text badge badge-da">Nao selecionada</div></div>
       </div>
+
+      <div class="proposta-card" data-filter-item="enviada">
+        <div class="proposta-status" style="background:var(--pri-lt)">📤</div>
+        <div class="proposta-info"><h4>Reparo trinca — Carlos Melo</h4><div class="meta">Benfica · Enviada ha 6 dias</div></div>
+        <div class="proposta-val"><div class="price">R$1.400</div><div class="status-text badge badge-pri">Enviada</div></div>
+      </div>
+      <div style="height:16px"></div>
     </div>
 
-    <!-- ===== P6: CHAT COM CLIENTE ===== -->
+    <!-- ===== CHAT: LISTA ===== -->
+    <div id="page-chat-list" class="page">
+      <div class="chat-list-header">
+        <h1>Chat 💬</h1>
+        <p>Conversas com clientes ativos</p>
+      </div>
+      <div class="chat-list-item" onclick="openChat('ygor')">
+        <div class="chat-list-avatar" style="background:var(--bl)">
+          Y<div class="online-dot"></div>
+        </div>
+        <div class="chat-list-info">
+          <strong>Ygor Chagas</strong>
+          <div class="service">Impermeabilizacao de Laje · Aldeota</div>
+          <div class="preview">Otimo! Segunda as 8h estarei ai com todo o material.</div>
+        </div>
+        <div class="chat-list-meta">
+          <div class="time">14:32</div>
+          <div class="unread">2</div>
+        </div>
+      </div>
+      <div class="chat-list-item" onclick="openChat('marcos')">
+        <div class="chat-list-avatar" style="background:var(--su)">M</div>
+        <div class="chat-list-info">
+          <strong>Marcos Freitas</strong>
+          <div class="service">Reparo Hidraulico · Meireles</div>
+          <div class="preview">Pode chegar as 9h? Porteiro avisado.</div>
+        </div>
+        <div class="chat-list-meta">
+          <div class="time">11:15</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CHAT COM CLIENTE (Ygor) ===== -->
     <div id="page-chat-cliente" class="page">
       <div class="chat-wrap">
         <div class="chat-header">
-          <button class="back" onclick="goTo('propostas','propostas')">←</button>
-          <div class="avatar" style="background:var(--bl)">Y</div>
-          <div class="info"><strong>Ygor Chagas</strong><span>● Online</span></div>
+          <button class="back" onclick="goTo('chat-list','chat')">←</button>
+          <div class="avatar" id="chat-avatar" style="background:var(--bl)">Y</div>
+          <div class="info">
+            <strong id="chat-nome">Ygor Chagas</strong>
+            <span id="chat-status">● Online</span>
+          </div>
         </div>
-        <div class="system-msg">Ygor escolheu sua proposta! Alinhem os detalhes antes de assinar o contrato.</div>
+        <div class="system-msg" id="chat-system-msg">Ygor escolheu sua proposta! Alinhem os detalhes antes de assinar o contrato.</div>
         <div class="px section-title" style="margin-top:12px">Checklist de alinhamento</div>
         <div class="checklist">
           <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Data de inicio confirmada?</span></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais inclusos?</span></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco confirmado?</span></div>
         </div>
-        <div class="chat-msgs" style="flex:1">
+        <div class="chat-msgs" id="chat-msgs" style="flex:1">
           <div class="msg other">Ola Carlos! Pode comecar segunda de manha?</div>
           <div class="msg me">Perfeito! Segunda as 8h estarei ai com todo o material.</div>
           <div class="msg other">Otimo! O porteiro ja vai estar avisado.</div>
@@ -593,7 +888,7 @@
       </div>
     </div>
 
-    <!-- ===== P7: SMART CONTRACT ===== -->
+    <!-- ===== SMART CONTRACT ===== -->
     <div id="page-contract" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('chat-cliente','chat')">←</button>
@@ -604,13 +899,13 @@
           <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:14px">Partes envolvidas</div>
           <div class="contract-parties">
             <div class="contract-party">
-              <div class="avatar" style="background:var(--bl)">Y</div>
+              <div class="avatar" style="background:var(--bl);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 6px;">Y</div>
               <div class="name">Ygor Chagas</div>
               <div class="role">Contratante</div>
             </div>
             <div class="contract-arrow">⟷</div>
             <div class="contract-party">
-              <div class="avatar" style="background:var(--pri)">C</div>
+              <div class="avatar" style="background:var(--pri);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 6px;">C</div>
               <div class="name">Carlos Silva</div>
               <div class="role">Prestador</div>
             </div>
@@ -646,10 +941,10 @@
       </div>
     </div>
 
-    <!-- ===== P8: SERVICO EM ANDAMENTO ===== -->
+    <!-- ===== SERVICO EM ANDAMENTO ===== -->
     <div id="page-servico" class="page">
       <div class="top-bar">
-        <button class="back" onclick="goTo('feed','home')">←</button>
+        <button class="back" onclick="goTo('pedidos-andamento','pedidos')">←</button>
         <h2>Servico em Andamento</h2>
       </div>
       <div class="service-section">
@@ -673,14 +968,14 @@
           <p style="font-size:10px;color:var(--mu);margin-top:4px">Fotos protegem voce em caso de disputa</p>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:12px">
-          <button class="btn btn-ghost btn-sm" style="flex:1">💬 Chat com cliente</button>
+          <button class="btn btn-ghost btn-sm" style="flex:1" onclick="openChat('ygor')">💬 Chat com cliente</button>
           <button class="btn btn-ghost btn-sm" style="flex:1">📄 Ver contrato</button>
         </div>
         <button class="btn btn-su btn-full" onclick="goTo('recebimento')">✅ Marcar como concluido</button>
       </div>
     </div>
 
-    <!-- ===== P9: RECEBIMENTO + AVALIACAO ===== -->
+    <!-- ===== RECEBIMENTO + AVALIACAO ===== -->
     <div id="page-recebimento" class="page">
       <div class="receipt-section">
         <div class="receipt-check">✓</div>
@@ -703,9 +998,8 @@
             <span class="star" onclick="setRating(5)">★</span>
           </div>
           <textarea class="rating-comment" placeholder="Deixe um comentario sobre o cliente..."></textarea>
-          <button class="btn btn-pri btn-full" style="margin-top:12px">Publicar avaliacao</button>
+          <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('home','home')">Publicar e ver novos pedidos →</button>
         </div>
-        <button class="btn btn-pri-lt btn-full" onclick="goTo('feed','home')">Ver novos pedidos →</button>
       </div>
     </div>
 
@@ -756,23 +1050,24 @@
             <button class="btn btn-ghost btn-sm">🔒 Alterar Senha</button>
           </div>
         </div>
+        <div style="height:16px"></div>
       </div>
     </div>
 
   </div><!-- /screen-content -->
 
   <!-- BOTTOM NAV -->
-  <div class="bottom-nav" id="bottom-nav">
-    <button class="nav-tab active" data-section="home" onclick="goTo('feed','home')">
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
+    <button class="nav-tab active" data-section="home" onclick="goTo('home','home')">
       <span class="tab-icon">🏠</span>Home
     </button>
-    <button class="nav-tab" data-section="oport" onclick="goTo('feed','oport')">
-      <span class="tab-icon">🔍</span>Pedidos
+    <button class="nav-tab" data-section="pedidos" onclick="goTo('pedidos-andamento','pedidos')">
+      <span class="tab-icon">🔧</span>Pedidos
     </button>
     <button class="nav-tab" data-section="propostas" onclick="goTo('propostas','propostas')">
       <span class="tab-icon">📝</span>Propostas
     </button>
-    <button class="nav-tab" data-section="chat" onclick="goTo('chat-cliente','chat')">
+    <button class="nav-tab" data-section="chat" onclick="goTo('chat-list','chat')">
       <span class="tab-icon">💬</span>Chat
     </button>
     <button class="nav-tab" data-section="perfil" onclick="goTo('perfil','perfil')">
@@ -782,27 +1077,156 @@
 </div><!-- /phone-frame -->
 
 <script>
-let currentSection = 'home';
+let currentSection = null;
 let currentStep = 0;
+
+const pedidos = {
+  p1: {
+    urgency: '🔴 Urgencia Alta', urgencyClass: 'badge-da',
+    proposals: '2 propostas enviadas',
+    tipo: 'Impermeabilizacao de laje + Reparo de trinca',
+    local: 'Aldeota, Fortaleza — Laje entre 3o e 4o andar',
+    problema: 'Umidade ativa com gotejamento em dias de chuva. Mancha de aprox. 80x60cm no forro da sala.',
+    servicos: '• Inspecao visual e teste de estanqueidade\n• Remocao do revestimento danificado\n• Aplicacao de manta asfaltica\n• Repintura final',
+    budget: 'R$ 1.500 – 2.500',
+    prazo: '3 a 5 dias uteis',
+    client: { initial: 'Y', name: 'Ygor Chagas', rating: '4.8 ★ · 5 servicos contratados', color: 'var(--bl)' }
+  },
+  p2: {
+    urgency: '🔴 Urgencia Alta', urgencyClass: 'badge-da',
+    proposals: '0 propostas enviadas',
+    tipo: 'Reparo hidraulico de emergencia',
+    local: 'Meireles, Fortaleza — Cozinha do apartamento',
+    problema: 'Cano estourado com agua desligada. Precisa de reparo imediato para restabelecer o fornecimento.',
+    servicos: '• Identificacao do ponto de ruptura\n• Substituicao do trecho danificado\n• Teste de pressao\n• Restauracao do revestimento',
+    budget: 'R$ 800 – 1.200',
+    prazo: '1 a 2 dias uteis',
+    client: { initial: 'A', name: 'Ana Lima', rating: '4.5 ★ · 3 servicos contratados', color: 'var(--su)' }
+  },
+  p3: {
+    urgency: '🟡 Urgencia Normal', urgencyClass: 'badge-wa',
+    proposals: '1 proposta enviada',
+    tipo: 'Reparo estrutural — trinca em alvenaria',
+    local: 'Fatima, Fortaleza — Sala principal',
+    problema: 'Trinca estrutural de aproximadamente 3m de extensao na parede da sala. Precisa de avaliacao tecnica e reparo.',
+    servicos: '• Avaliacao e mapeamento da trinca\n• Abertura e limpeza do local\n• Injecao de selante estrutural\n• Reboco e acabamento',
+    budget: 'R$ 1.200 – 2.000',
+    prazo: '2 a 4 dias uteis',
+    client: { initial: 'M', name: 'Marcos Freitas', rating: '4.6 ★ · 2 servicos contratados', color: 'var(--vi)' }
+  },
+  p4: {
+    urgency: '🟡 Urgencia Normal', urgencyClass: 'badge-wa',
+    proposals: '4 propostas enviadas',
+    tipo: 'Pintura externa com calafetacao',
+    local: 'Coco, Fortaleza — Fachada casa 2 pavimentos',
+    problema: 'Casa necessita de pintura completa da fachada com calafetacao previa. Area total de 180m². Tinta atual desgastada e com manchas de umidade.',
+    servicos: '• Limpeza e preparacao da superficie\n• Calafetacao de juntas e trincas\n• Aplicacao de massa corrida\n• 2 demaos de tinta acrilica premium',
+    budget: 'R$ 3.000 – 5.000',
+    prazo: '5 a 8 dias uteis',
+    client: { initial: 'R', name: 'Roberto Mendes', rating: '4.2 ★ · 7 servicos contratados', color: '#E67E22' }
+  }
+};
+
+const chats = {
+  ygor: {
+    initial: 'Y', name: 'Ygor Chagas', status: '● Online',
+    color: 'var(--bl)',
+    service: 'Impermeabilizacao de Laje · Aldeota',
+    system: 'Ygor escolheu sua proposta! Alinhem os detalhes antes de assinar o contrato.',
+    emAndamento: false,
+    msgs: [
+      { type: 'other', text: 'Ola Carlos! Pode comecar segunda de manha?' },
+      { type: 'me', text: 'Perfeito! Segunda as 8h estarei ai com todo o material.' },
+      { type: 'other', text: 'Otimo! O porteiro ja vai estar avisado.' }
+    ]
+  },
+  marcos: {
+    initial: 'M', name: 'Marcos Freitas', status: 'Visto ha 1h',
+    color: 'var(--su)',
+    service: 'Reparo Hidraulico · Meireles',
+    system: 'Servico em andamento. Tire duvidas com o cliente diretamente aqui.',
+    emAndamento: true,
+    msgs: [
+      { type: 'other', text: 'Pode chegar as 9h? O porteiro ja vai estar avisado.' },
+      { type: 'me', text: 'Combinado, estarei la as 9h em ponto.' },
+      { type: 'other', text: 'Perfeito! Qualquer coisa me avisa.' }
+    ]
+  }
+};
 
 function goTo(pageId, section) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + pageId);
   if (target) target.classList.add('active');
-  if (section) currentSection = section;
 
+  const noNav = ['welcome', 'login', 'onboarding'];
   const nav = document.getElementById('bottom-nav');
-  nav.style.display = pageId === 'onboarding' ? 'none' : 'flex';
+  nav.style.display = noNav.includes(pageId) ? 'none' : 'flex';
 
+  if (section) currentSection = section;
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
-  if (activeTab) activeTab.classList.add('active');
+  if (currentSection) {
+    const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
+    if (activeTab) activeTab.classList.add('active');
+  }
   document.querySelector('.screen-content').scrollTop = 0;
+}
+
+function openDetalhe(id) {
+  const p = pedidos[id];
+  if (!p) return;
+  const urgEl = document.getElementById('detalhe-urgency');
+  urgEl.textContent = p.urgency;
+  urgEl.className = 'badge ' + p.urgencyClass;
+  document.getElementById('detalhe-proposals-count').textContent = p.proposals;
+  document.getElementById('detalhe-tipo').textContent = p.tipo;
+  document.getElementById('detalhe-local').textContent = p.local;
+  document.getElementById('detalhe-problema').textContent = p.problema;
+  document.getElementById('detalhe-servicos').innerHTML = p.servicos.split('\n').join('<br>');
+  document.getElementById('detalhe-budget').textContent = p.budget;
+  document.getElementById('detalhe-prazo').textContent = p.prazo;
+  const av = document.getElementById('detalhe-client-avatar');
+  av.style.background = p.client.color;
+  av.textContent = p.client.initial;
+  document.getElementById('detalhe-client-name').textContent = p.client.name;
+  document.getElementById('detalhe-client-rating').textContent = p.client.rating;
+  goTo('detalhe-pedido', 'home');
+}
+
+function openChat(id) {
+  const c = chats[id];
+  if (!c) return;
+  const av = document.getElementById('chat-avatar');
+  av.style.background = c.color;
+  av.textContent = c.initial;
+  document.getElementById('chat-nome').textContent = c.name;
+  document.getElementById('chat-status').textContent = c.status;
+  document.getElementById('chat-status').style.color = id === 'ygor' ? 'var(--su)' : 'var(--mu)';
+  document.getElementById('chat-system-msg').textContent = c.system;
+  document.getElementById('chat-system-msg').style.background = c.emAndamento ? 'var(--su-lt)' : 'var(--pri-lt)';
+  document.getElementById('chat-system-msg').style.color = c.emAndamento ? 'var(--su)' : 'var(--pri-dk)';
+  const msgsEl = document.getElementById('chat-msgs');
+  msgsEl.innerHTML = c.msgs.map(m =>
+    `<div class="msg ${m.type}">${m.text}</div>`
+  ).join('');
+  document.querySelector('.chat-contract-btn').style.display = c.emAndamento ? 'none' : 'block';
+  goTo('chat-cliente', 'chat');
+}
+
+function setFilter(el, context) {
+  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const filter = el.dataset.filter;
+  const page = el.closest('.page');
+  if (!page) return;
+  page.querySelectorAll('[data-filter-item]').forEach(card => {
+    card.style.display = (filter === 'todas' || card.dataset.filterItem === filter) ? '' : 'none';
+  });
 }
 
 function nextStep() {
   currentStep++;
-  if (currentStep > 2) { goTo('feed','home'); return; }
+  if (currentStep > 2) { goTo('home', 'home'); return; }
   updateSteps();
 }
 function prevStep() {
@@ -812,8 +1236,8 @@ function prevStep() {
 function updateSteps() {
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   document.querySelector(`.step-panel[data-panel="${currentStep}"]`).classList.add('active');
-  document.querySelectorAll('.onb-step').forEach((s,i) => {
-    s.classList.remove('done','current');
+  document.querySelectorAll('.onb-step').forEach((s, i) => {
+    s.classList.remove('done', 'current');
     if (i < currentStep) s.classList.add('done');
     if (i === currentStep) s.classList.add('current');
   });
@@ -821,17 +1245,11 @@ function updateSteps() {
   document.getElementById('onb-next').textContent = currentStep === 2 ? 'Concluir cadastro' : 'Continuar →';
 }
 
-function setFilter(el) {
-  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-}
-
 function toggleCat(el) { el.classList.toggle('selected'); }
 
 function toggleCheck(el) {
   el.classList.toggle('done');
-  const check = el.querySelector('.checklist-check');
-  check.textContent = el.classList.contains('done') ? '✓' : '';
+  el.querySelector('.checklist-check').textContent = el.classList.contains('done') ? '✓' : '';
 }
 
 function toggleCheckbox(el) {
@@ -848,9 +1266,7 @@ function signContractP() {
 }
 
 function setRating(n) {
-  document.querySelectorAll('.star').forEach((s,i) => {
-    s.classList.toggle('filled', i < n);
-  });
+  document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('filled', i < n));
 }
 </script>
 </body>
