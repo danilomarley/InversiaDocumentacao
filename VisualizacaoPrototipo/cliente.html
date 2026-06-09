@@ -17,83 +17,65 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family:'Inter',-apple-system,sans-serif;
-    background:#1a1a2e;
-    min-height:100vh;
-    display:flex; align-items:center; justify-content:center;
-    padding:20px;
+    background:#1a1a2e; min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:20px;
   }
   .back-link {
     position:fixed; top:20px; left:20px;
     color:rgba(255,255,255,0.5); font-size:13px; text-decoration:none;
-    display:flex; align-items:center; gap:6px; z-index:999;
-    transition: color 0.15s;
+    display:flex; align-items:center; gap:6px; z-index:999; transition:color 0.15s;
   }
   .back-link:hover { color:#fff; }
-
-  /* PHONE FRAME */
   .phone-frame {
-    width:375px; height:812px;
-    background:var(--bg);
-    border-radius:44px;
+    width:375px; height:812px; background:var(--bg); border-radius:44px;
     box-shadow: 0 0 0 10px #1a1a2e, 0 0 0 12px #333, 0 30px 80px rgba(0,0,0,0.5);
-    position:relative;
-    overflow:hidden;
+    position:relative; overflow:hidden;
   }
   .status-bar {
     height:44px; background:var(--wh);
     display:flex; align-items:flex-end; justify-content:space-between;
-    padding:0 24px 6px;
-    font-size:12px; font-weight:600; color:var(--dk);
+    padding:0 24px 6px; font-size:12px; font-weight:600; color:var(--dk);
     position:absolute; top:0; left:0; right:0; z-index:20;
   }
   .status-bar .time { font-weight:700; }
   .status-bar .icons { display:flex; gap:4px; font-size:11px; }
   .screen-content {
     position:absolute; top:44px; bottom:64px;
-    left:0; right:0;
-    overflow-y:auto; overflow-x:hidden;
+    left:0; right:0; overflow-y:auto; overflow-x:hidden;
   }
   .screen-content::-webkit-scrollbar { width:0; }
   .page { display:none; }
   .page.active { display:block; }
+  #page-onboarding.active { display:flex; flex-direction:column; }
 
-  /* TOP BAR (sub-screens) */
   .top-bar {
     background:var(--wh); padding:14px 16px;
     display:flex; align-items:center; gap:10px;
-    border-bottom:1px solid var(--bo);
-    position:sticky; top:0; z-index:10;
+    border-bottom:1px solid var(--bo); position:sticky; top:0; z-index:10;
   }
   .top-bar .back { font-size:18px; cursor:pointer; color:var(--pri); background:none; border:none; padding:0; }
   .top-bar h2 { font-size:16px; font-weight:700; color:var(--dk); flex:1; }
   .top-bar .subtitle { font-size:11px; color:var(--mu); margin-top:2px; }
 
-  /* BOTTOM NAV */
   .bottom-nav {
     position:absolute; bottom:0; left:0; right:0;
-    height:64px; background:var(--wh);
-    border-top:1px solid var(--bo);
-    display:flex; z-index:20;
-    padding-bottom:8px;
-    border-radius:0 0 44px 44px;
+    height:64px; background:var(--wh); border-top:1px solid var(--bo);
+    display:flex; z-index:20; padding-bottom:8px; border-radius:0 0 44px 44px;
   }
   .nav-tab {
-    flex:1; display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap:2px; cursor:pointer; border:none; background:none;
-    color:var(--mu); font-size:10px; font-weight:500;
-    transition: color 0.15s;
+    color:var(--mu); font-size:10px; font-weight:500; transition:color 0.15s;
   }
   .nav-tab .tab-icon { font-size:20px; }
   .nav-tab.active { color:var(--pri); font-weight:700; }
 
-  /* UTILITIES */
   .px { padding-left:16px; padding-right:16px; }
   .btn {
     display:inline-flex; align-items:center; justify-content:center;
     gap:6px; padding:12px 20px; border-radius:10px;
     font-size:14px; font-weight:600; cursor:pointer; border:none;
-    transition: opacity 0.15s; font-family:inherit;
+    transition:opacity 0.15s; font-family:inherit;
   }
   .btn:hover { opacity:0.85; }
   .btn-pri { background:var(--pri); color:#fff; }
@@ -103,6 +85,7 @@
   .btn-da { background:var(--da-lt); color:var(--da); }
   .btn-full { width:100%; }
   .btn-sm { padding:8px 14px; font-size:12px; border-radius:8px; }
+  .btn-outline-pri { background:transparent; border:1.5px solid var(--pri); color:var(--pri); }
   .badge { display:inline-block; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; }
   .badge-pri { background:var(--pri-lt); color:var(--pri); }
   .badge-su { background:var(--su-lt); color:var(--su); }
@@ -112,10 +95,20 @@
   .card { background:var(--wh); border-radius:14px; padding:16px; }
   .section-title { font-size:15px; font-weight:700; color:var(--dk); margin-bottom:10px; }
   .divider { height:1px; background:var(--bo); margin:16px 0; }
+  .form-field { margin-bottom:12px; }
+  .form-field label { display:block; font-size:10px; font-weight:600; color:var(--mu); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px; }
+  .form-field input, .form-field select {
+    width:100%; background:var(--gr); border:1px solid var(--bo); border-radius:8px;
+    padding:10px 12px; font-size:13px; color:var(--dk); font-family:inherit; outline:none;
+  }
+  .form-field input:focus { border-color:var(--pri); }
 
-  /* ========== C1: ONBOARDING ========== */
+  /* ===== WELCOME ===== */
+  #page-welcome { min-height:100%; }
+  #page-welcome.active { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+  /* ===== ONBOARDING ===== */
   #page-onboarding { background:var(--wh); min-height:100%; }
-  #page-onboarding.active { display:flex; flex-direction:column; }
   .onb-slides { flex:1; position:relative; overflow:hidden; }
   .onb-slide { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 32px; text-align:center; opacity:0; transition:opacity 0.4s,transform 0.4s; transform:translateX(60px); }
   .onb-slide.active { opacity:1; transform:translateX(0); }
@@ -124,11 +117,20 @@
   .onb-slide p { font-size:14px; color:var(--mu); line-height:1.6; }
   .onb-bottom { padding:20px 24px 32px; display:flex; flex-direction:column; gap:10px; }
   .onb-dots { display:flex; justify-content:center; gap:8px; margin-bottom:16px; }
-  .onb-dot { width:8px; height:8px; border-radius:50%; background:var(--bo); transition:all 0.3s; }
+  .onb-dot { width:8px; height:8px; border-radius:50%; background:var(--bo); transition:all 0.3s; cursor:pointer; }
   .onb-dot.active { width:24px; border-radius:4px; background:var(--pri); }
-  .onb-skip { text-align:center; font-size:12px; color:var(--mu); cursor:pointer; margin-top:4px; }
 
-  /* ========== C2: HOME ========== */
+  /* ===== LOGIN / CADASTRO ===== */
+  #page-login, #page-cadastro { background:var(--wh); min-height:100%; }
+  .auth-header { padding:24px 20px 16px; }
+  .auth-header h1 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .auth-header p { font-size:13px; color:var(--mu); }
+  .auth-form { padding:0 20px 20px; }
+  .auth-footer { text-align:center; padding:0 20px 24px; }
+  .auth-footer p { font-size:12px; color:var(--mu); margin-bottom:6px; }
+  .auth-footer a { font-size:13px; color:var(--pri); font-weight:600; cursor:pointer; text-decoration:none; }
+
+  /* ===== HOME ===== */
   .home-hero {
     background:linear-gradient(135deg, var(--pri), var(--pri-dk));
     margin:16px; border-radius:16px; padding:22px 20px;
@@ -142,15 +144,33 @@
   .order-card {
     background:var(--wh); border-radius:12px; padding:14px 16px;
     margin:0 16px 8px; display:flex; align-items:center; gap:12px;
-    border-left:4px solid transparent;
+    border-left:4px solid transparent; cursor:pointer; transition:box-shadow 0.15s;
   }
+  .order-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
   .order-card .info { flex:1; }
   .order-card .info strong { display:block; font-size:13px; color:var(--dk); margin-bottom:2px; }
   .order-card .info span { font-size:11px; color:var(--mu); }
   .order-card .time { font-size:10px; color:var(--mu); }
   .tip-box { background:var(--pri-lt); border-radius:12px; padding:14px 16px; margin:12px 16px; font-size:12px; color:var(--pri-dk); }
 
-  /* ========== C3: CHAT IA ========== */
+  /* ===== MEUS PEDIDOS ===== */
+  .pedidos-header { padding:16px 16px 8px; }
+  .pedidos-header h1 { font-size:18px; font-weight:700; color:var(--dk); margin-bottom:4px; }
+  .pedidos-header p { font-size:12px; color:var(--mu); }
+  .pedido-item {
+    background:var(--wh); border-radius:12px; padding:14px 16px;
+    margin:0 16px 8px; display:flex; align-items:center; gap:12px;
+    border-left:4px solid transparent; cursor:pointer; transition:box-shadow 0.15s;
+  }
+  .pedido-item:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+  .pedido-item .info { flex:1; }
+  .pedido-item .info strong { display:block; font-size:13px; color:var(--dk); margin-bottom:3px; }
+  .pedido-item .time { font-size:10px; color:var(--mu); flex-shrink:0; }
+
+  /* ===== SEM PROPOSTAS ===== */
+  #page-sem-propostas.active { display:flex; flex-direction:column; }
+
+  /* ===== CHAT IA ===== */
   .chat-wrap { display:flex; flex-direction:column; min-height:100%; }
   .chat-progress { padding:12px 16px 0; }
   .chat-progress-bar { height:6px; background:var(--bo); border-radius:3px; overflow:hidden; }
@@ -161,28 +181,30 @@
   .msg.ai { background:var(--wh); color:var(--dk); align-self:flex-start; border:1px solid var(--bo); border-bottom-left-radius:4px; }
   .msg.user { background:var(--pri); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
   .msg.ai-final { background:var(--su-lt); border:1px solid #A7F3D0; color:var(--dk); align-self:flex-start; border-bottom-left-radius:4px; }
-  .chat-chips { display:flex; gap:8px; flex-wrap:wrap; padding:0 16px 8px; }
-  .chip { padding:8px 14px; border-radius:20px; font-size:12px; font-weight:500; background:var(--pri-lt); color:var(--pri); cursor:pointer; border:1px solid transparent; transition:all 0.15s; }
+  .msg.other { background:var(--wh); color:var(--dk); align-self:flex-start; border:1px solid var(--bo); border-bottom-left-radius:4px; }
+  .msg.me { background:var(--pri); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+  .chat-chips { display:flex; gap:8px; flex-wrap:wrap; padding:8px 16px; }
+  .chip { padding:8px 14px; border-radius:20px; font-size:12px; font-weight:500; background:var(--pri-lt); color:var(--pri); cursor:pointer; border:1px solid transparent; transition:all 0.15s; white-space:nowrap; }
   .chip:hover { border-color:var(--pri); }
   .chat-input-bar {
     padding:10px 16px 12px; background:var(--wh);
-    border-top:1px solid var(--bo);
-    display:flex; gap:8px; align-items:center;
+    border-top:1px solid var(--bo); display:flex; gap:8px; align-items:center;
   }
   .chat-input {
     flex:1; border:1px solid var(--bo); border-radius:20px;
     padding:10px 16px; font-size:13px; color:var(--dk);
-    outline:none; font-family:inherit; background:var(--gr);
+    outline:none; font-family:inherit; background:var(--gr); min-width:0;
   }
   .chat-input:focus { border-color:var(--pri); background:var(--wh); }
   .chat-btn-icon {
-    width:38px; height:38px; border-radius:50%; border:none;
+    width:38px; height:38px; flex-shrink:0; border-radius:50%; border:none;
     display:flex; align-items:center; justify-content:center;
     font-size:16px; cursor:pointer; transition:opacity 0.15s;
   }
   .chat-btn-icon:hover { opacity:0.8; }
+  .escopo-btn-bar { padding:8px 16px 4px; }
 
-  /* ========== C4: ESCOPO ========== */
+  /* ===== ESCOPO ===== */
   .scope-section { padding:16px; }
   .scope-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
   .scope-field { margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--bo); }
@@ -197,15 +219,16 @@
   .photo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
   .photo-thumb { height:64px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-weight:600; }
 
-  /* ========== C5: PROPOSTAS ========== */
+  /* ===== PROPOSTAS ===== */
   .filter-scroll { display:flex; gap:8px; padding:12px 16px; overflow-x:auto; }
   .filter-scroll::-webkit-scrollbar { display:none; }
   .filter-pill { padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600; white-space:nowrap; cursor:pointer; background:var(--wh); color:var(--mu); border:1px solid var(--bo); transition:all 0.15s; flex-shrink:0; }
   .filter-pill.active { background:var(--pri-lt); color:var(--pri); border-color:var(--pri); }
   .prop-card {
     background:var(--wh); border-radius:14px; padding:16px;
-    margin:0 16px 10px;
+    margin:0 16px 10px; cursor:pointer; transition:box-shadow 0.15s;
   }
+  .prop-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
   .prop-top { display:flex; gap:12px; margin-bottom:10px; }
   .prop-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
   .prop-info h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:2px; }
@@ -216,10 +239,8 @@
   .prop-detail-item .lbl { font-size:10px; color:var(--mu); }
   .prop-actions { display:flex; gap:8px; }
   .prop-actions .btn { flex:1; }
-  .compare-bar { position:sticky; bottom:0; background:var(--pri); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; display:none; }
-  .compare-bar span { color:#fff; font-size:13px; font-weight:600; }
 
-  /* ========== C6: DETALHE PROPOSTA ========== */
+  /* ===== DETALHE PROPOSTA (perfil) ===== */
   .prov-profile { padding:16px; }
   .prov-header { background:var(--wh); border-radius:14px; padding:18px; display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
   .prov-avatar-lg { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -238,7 +259,7 @@
   .review-item .stars { font-size:12px; color:var(--wa); margin:2px 0; }
   .review-item .text { font-size:12px; color:var(--mu); }
 
-  /* ========== C7: COMPARAR ========== */
+  /* ===== COMPARAR ===== */
   .compare-scroll { overflow-x:auto; padding:16px; }
   .compare-scroll::-webkit-scrollbar { display:none; }
   .compare-table { display:flex; gap:10px; min-width:max-content; }
@@ -253,12 +274,11 @@
   .compare-row.best .row-val { color:var(--su); }
   .compare-col .col-footer { background:var(--wh); border-radius:0 0 12px 12px; padding:12px; }
 
-  /* ========== C8: CHAT PRESTADOR ========== */
+  /* ===== CHAT PRESTADOR ===== */
   .chat-prov-header {
     background:var(--wh); padding:12px 16px;
     display:flex; align-items:center; gap:12px;
-    border-bottom:1px solid var(--bo);
-    position:sticky; top:0; z-index:10;
+    border-bottom:1px solid var(--bo); position:sticky; top:0; z-index:10;
   }
   .chat-prov-header .back { font-size:18px; cursor:pointer; color:var(--pri); background:none; border:none; }
   .chat-prov-header .avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -273,7 +293,7 @@
   .checklist-item span { font-size:13px; color:var(--dk); }
   .chat-contract-btn { padding:12px 16px; background:var(--wh); border-top:1px solid var(--bo); }
 
-  /* ========== C9: SMART CONTRACT ========== */
+  /* ===== SMART CONTRACT ===== */
   .contract-section { padding:16px; }
   .contract-card { background:var(--wh); border-radius:14px; padding:18px; margin-bottom:12px; }
   .contract-parties { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
@@ -293,12 +313,8 @@
   .sign-area .pen { font-size:28px; margin-bottom:6px; }
   .sign-area p { font-size:12px; color:var(--mu); }
   .contract-status { background:var(--wa-lt); border-radius:10px; padding:10px 14px; font-size:12px; color:#92400E; text-align:center; margin-bottom:12px; }
-  .checkbox-row { display:flex; align-items:center; gap:10px; padding:12px 0; cursor:pointer; }
-  .checkbox { width:20px; height:20px; border-radius:6px; border:2px solid var(--bo); display:flex; align-items:center; justify-content:center; font-size:12px; transition:all 0.15s; flex-shrink:0; }
-  .checkbox.checked { background:var(--pri); border-color:var(--pri); color:#fff; }
-  .checkbox-row span { font-size:13px; color:var(--dk); }
 
-  /* ========== C10: CHECKOUT ========== */
+  /* ===== CHECKOUT ===== */
   .checkout-section { padding:16px; }
   .payment-method {
     background:var(--wh); border-radius:12px; padding:14px 16px;
@@ -317,16 +333,20 @@
   .pix-qr-block.visible { display:block; }
   .pix-qr-img { width:160px; height:160px; background:var(--gr); border:1px solid var(--bo); border-radius:10px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--mu); position:relative; overflow:hidden; }
   .pix-qr-img::before { content:''; position:absolute; inset:8px; background: repeating-linear-gradient(0deg, var(--bo) 0px, var(--bo) 2px, transparent 2px, transparent 8px), repeating-linear-gradient(90deg, var(--bo) 0px, var(--bo) 2px, transparent 2px, transparent 8px); opacity:0.6; }
-  .pix-qr-img .qr-corners { position:absolute; inset:0; }
   .pix-qr-label { font-size:11px; font-weight:600; color:var(--mu); margin-bottom:6px; }
   .pix-key-box { background:var(--gr); border:1px solid var(--bo); border-radius:8px; padding:10px 12px; font-size:11px; color:var(--dk); word-break:break-all; margin-bottom:8px; }
   .pix-copy-btn { font-size:12px; font-weight:600; color:var(--pri); background:var(--pri-lt); border:none; border-radius:8px; padding:8px 16px; cursor:pointer; }
   .pix-expiry { font-size:11px; color:var(--mu); margin-top:6px; }
+  .card-fields-block { display:none; margin-bottom:12px; }
+  .card-fields-block.visible { display:block; }
+  .installment-option { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--bo); cursor:pointer; font-size:13px; color:var(--dk); }
+  .installment-option:last-child { border-bottom:none; }
+  .installment-option.selected { font-weight:700; color:var(--pri); }
   .escrow-notice { background:var(--su-lt); border-radius:12px; padding:14px 16px; margin:12px 0; display:flex; gap:10px; align-items:flex-start; }
   .escrow-notice .icon { font-size:20px; }
   .escrow-notice p { font-size:12px; color:#065F46; line-height:1.5; }
 
-  /* ========== ACOMPANHAR PEDIDO ========== */
+  /* ===== ACOMPANHAR ===== */
   .acomp-section { padding:16px; }
   .acomp-status-card { background:var(--pri); color:#fff; border-radius:14px; padding:16px; margin-bottom:14px; }
   .acomp-status-card h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
@@ -348,7 +368,7 @@
   .acomp-escrow { background:var(--wa-lt); border-radius:12px; padding:14px 16px; display:flex; gap:10px; align-items:flex-start; margin-bottom:14px; }
   .acomp-escrow p { font-size:12px; color:#92400E; line-height:1.5; }
 
-  /* ========== C11: CONFIRMACAO + AVALIACAO ========== */
+  /* ===== AVALIACAO ===== */
   .confirm-screen { padding:32px 16px 16px; text-align:center; }
   .confirm-check { width:72px; height:72px; background:var(--su); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff; margin:0 auto 16px; }
   .confirm-screen h2 { font-size:20px; font-weight:700; color:var(--dk); margin-bottom:6px; }
@@ -370,7 +390,7 @@
   .dispute-section h4 { font-size:13px; font-weight:700; color:var(--da); margin-bottom:6px; }
   .dispute-section p { font-size:12px; color:#991B1B; }
 
-  /* ========== NOTIFICACOES ========== */
+  /* ===== NOTIFICACOES ===== */
   .notif-list { padding:16px; }
   .notif-card { background:var(--wh); border-radius:12px; padding:14px 16px; margin-bottom:8px; display:flex; gap:12px; position:relative; }
   .notif-card.unread { background:var(--pri-lt); border-left:3px solid var(--pri); }
@@ -381,7 +401,7 @@
   .notif-time { font-size:10px; color:var(--mu); white-space:nowrap; }
   .notif-dot { width:7px; height:7px; background:var(--pri); border-radius:50%; position:absolute; top:14px; right:14px; }
 
-  /* ========== PERFIL ========== */
+  /* ===== PERFIL ===== */
   .profile-section { padding:16px; }
   .profile-top { background:var(--wh); border-radius:14px; padding:20px; display:flex; gap:16px; align-items:center; margin-bottom:12px; }
   .profile-avatar { width:64px; height:64px; border-radius:50%; background:var(--pri); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -389,10 +409,6 @@
   .profile-top .info p { font-size:12px; color:var(--mu); margin-top:2px; }
   .form-card { background:var(--wh); border-radius:12px; padding:16px; margin-bottom:12px; }
   .form-card h3 { font-size:14px; font-weight:700; color:var(--dk); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--bo); }
-  .form-field { margin-bottom:12px; }
-  .form-field label { display:block; font-size:10px; font-weight:600; color:var(--mu); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px; }
-  .form-field input { width:100%; background:var(--gr); border:1px solid var(--bo); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--dk); font-family:inherit; outline:none; }
-  .form-field input:focus { border-color:var(--pri); }
 </style>
 </head>
 <body>
@@ -407,7 +423,50 @@
 
   <div class="screen-content">
 
-    <!-- ===== C1: ONBOARDING ===== -->
+    <!-- ===== WELCOME ===== -->
+    <div id="page-welcome" class="page">
+      <div style="background:linear-gradient(160deg,#0F1C2E 0%,#1a2d44 100%);min-height:768px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;">
+        <div style="text-align:center;margin-bottom:40px;">
+          <div style="width:72px;height:72px;background:var(--pri);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#fff;margin:0 auto 16px;box-shadow:0 8px 24px rgba(37,99,235,0.4);">R</div>
+          <div style="font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px;">Resolv<span style="color:var(--pri);">AI</span></div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:6px;">Conectando quem precisa a quem resolve</div>
+        </div>
+        <div style="background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);border-radius:20px;padding:6px 16px;margin-bottom:32px;font-size:12px;font-weight:600;color:var(--pri);display:inline-flex;align-items:center;gap:6px;">🏠 Area do Contratante</div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px;">
+          <button class="btn btn-pri btn-full" style="font-size:15px;padding:14px;" onclick="goTo('onboarding')">Criar Conta</button>
+          <div style="text-align:center;font-size:12px;color:rgba(255,255,255,0.3);">ou</div>
+          <button class="btn btn-full" style="font-size:15px;padding:14px;background:transparent;border:1.5px solid var(--pri);color:var(--pri);" onclick="goTo('login')">Login</button>
+        </div>
+        <div style="margin-top:28px;text-align:center;">
+          <p style="font-size:12px;color:rgba(255,255,255,0.35);">Ao continuar, voce concorda com os</p>
+          <p style="font-size:12px;color:rgba(37,99,235,0.7);margin-top:2px;">Termos de Uso e Politica de Privacidade</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LOGIN ===== -->
+    <div id="page-login" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('welcome')">←</button>
+        <div><h2>Login</h2><div class="subtitle">Acesse sua conta</div></div>
+      </div>
+      <div class="auth-header">
+        <h1>Bem-vindo de volta!</h1>
+        <p>Entre com suas credenciais para continuar</p>
+      </div>
+      <div class="auth-form">
+        <div class="form-field"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="form-field"><label>Senha</label><input type="password" placeholder="Sua senha"></div>
+        <div style="text-align:right;margin-bottom:20px;"><span style="font-size:12px;color:var(--pri);cursor:pointer;font-weight:600;">Esqueci minha senha</span></div>
+        <button class="btn btn-pri btn-full" style="font-size:15px;padding:14px;" onclick="goTo('home','home')">Entrar →</button>
+      </div>
+      <div class="auth-footer">
+        <p>Ainda nao tem conta?</p>
+        <a onclick="goTo('onboarding')">Criar conta gratuita</a>
+      </div>
+    </div>
+
+    <!-- ===== ONBOARDING (Criar Conta — slides) ===== -->
     <div id="page-onboarding" class="page active">
       <div class="onb-slides" id="onb-slides">
         <div class="onb-slide active" data-slide="0">
@@ -428,17 +487,41 @@
       </div>
       <div class="onb-bottom">
         <div class="onb-dots">
-          <div class="onb-dot active" data-dot="0"></div>
-          <div class="onb-dot" data-dot="1"></div>
-          <div class="onb-dot" data-dot="2"></div>
+          <div class="onb-dot active" data-dot="0" onclick="goToSlide(0)"></div>
+          <div class="onb-dot" data-dot="1" onclick="goToSlide(1)"></div>
+          <div class="onb-dot" data-dot="2" onclick="goToSlide(2)"></div>
         </div>
-        <button class="btn btn-pri btn-full" onclick="nextSlide()">Criar conta</button>
-        <button class="btn btn-pri-lt btn-full" onclick="goTo('home','home')">Ja tenho conta</button>
-        <div class="onb-skip" onclick="goTo('home','home')">Pular</div>
+        <button class="btn btn-pri btn-full" onclick="goTo('cadastro')">Criar Conta</button>
+        <button class="btn btn-pri-lt btn-full" onclick="goTo('login')">Login</button>
       </div>
     </div>
 
-    <!-- ===== C2: HOME ===== -->
+    <!-- ===== CADASTRO ===== -->
+    <div id="page-cadastro" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('onboarding')">←</button>
+        <div><h2>Criar Conta</h2><div class="subtitle">Contratante</div></div>
+      </div>
+      <div class="auth-header">
+        <h1>Crie sua conta</h1>
+        <p>Preencha os dados para comecar a usar o ResolvAI</p>
+      </div>
+      <div class="auth-form">
+        <div class="form-field"><label>Nome completo</label><input placeholder="Seu nome completo"></div>
+        <div class="form-field"><label>Email</label><input type="email" placeholder="seu@email.com"></div>
+        <div class="form-field"><label>Telefone</label><input placeholder="(85) 99999-0000"></div>
+        <div class="form-field"><label>CPF</label><input placeholder="000.000.000-00"></div>
+        <div class="form-field"><label>Senha</label><input type="password" placeholder="Minimo 8 caracteres"></div>
+        <div class="form-field"><label>Confirmar senha</label><input type="password" placeholder="Repita a senha"></div>
+        <button class="btn btn-pri btn-full" style="font-size:15px;padding:14px;margin-top:4px;" onclick="goTo('home','home')">Criar minha conta →</button>
+      </div>
+      <div class="auth-footer">
+        <p>Ja tem conta?</p>
+        <a onclick="goTo('login')">Fazer Login</a>
+      </div>
+    </div>
+
+    <!-- ===== HOME ===== -->
     <div id="page-home" class="page">
       <div class="home-hero">
         <h2>Ola, Ygor! 👋</h2>
@@ -447,38 +530,102 @@
       </div>
       <div class="home-stats">
         <div class="home-stat"><div class="num">3</div><div class="lbl">Pedidos ativos</div></div>
-        <div class="home-stat"><div class="num">1</div><div class="lbl">Propostas</div></div>
+        <div class="home-stat"><div class="num">3</div><div class="lbl">Propostas</div></div>
         <div class="home-stat"><div class="num">2</div><div class="lbl">Aguardando</div></div>
       </div>
       <div class="px section-title">Seus pedidos ativos</div>
-      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('propostas','pedidos')">
+      <div class="order-card" style="border-left-color:var(--wa)" onclick="goTo('sem-propostas','pedidos')">
         <div class="info"><strong>Infiltracao no teto da sala</strong><span class="badge badge-wa">Aguardando propostas</span></div>
         <span class="time">2 dias</span>
       </div>
       <div class="order-card" style="border-left-color:var(--su)" onclick="goTo('propostas','pedidos')">
-        <div class="info"><strong>Torneira com vazamento</strong><span class="badge badge-su">1 proposta recebida</span></div>
+        <div class="info"><strong>Torneira com vazamento</strong><span class="badge badge-su">3 propostas recebidas</span></div>
         <span class="time">5 dias</span>
       </div>
-      <div class="order-card" style="border-left-color:var(--vi)" onclick="goTo('chat-provider','chat')">
+      <div class="order-card" style="border-left-color:var(--vi)" onclick="goTo('acompanhar','pedidos')">
         <div class="info"><strong>Pintura area externa</strong><span class="badge badge-vi">Em andamento</span></div>
         <span class="time">1 sem</span>
       </div>
       <div class="tip-box">💡 <strong>Dica:</strong> Descreva com detalhes — a IA gera um escopo mais preciso e atrai prestadores qualificados.</div>
     </div>
 
-    <!-- ===== C3: CHAT IA ===== -->
+    <!-- ===== SEM PROPOSTAS ===== -->
+    <div id="page-sem-propostas" class="page">
+      <div class="top-bar">
+        <button class="back" onclick="goTo('home','home')">←</button>
+        <div><h2>Infiltracao no teto</h2><div class="subtitle">Aguardando propostas</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px;text-align:center;min-height:500px;">
+        <div style="width:88px;height:88px;background:var(--wa-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:24px;">⏳</div>
+        <h2 style="font-size:20px;font-weight:700;color:var(--dk);margin-bottom:10px;">Ainda nao ha propostas</h2>
+        <p style="font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:8px;">Seu pedido foi publicado com sucesso. Estamos aguardando os prestadores enviarem suas propostas.</p>
+        <p style="font-size:12px;color:var(--mu);margin-bottom:32px;">Isso costuma levar de <strong>1 a 24 horas</strong> dependendo da urgencia e categoria.</p>
+        <div style="background:var(--wh);border-radius:14px;padding:16px;width:100%;text-align:left;margin-bottom:24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Seu pedido</div>
+          <div style="font-size:13px;font-weight:700;color:var(--dk);margin-bottom:4px;">Infiltracao no teto da sala</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:4px;">📍 Aldeota, Fortaleza</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:8px;">🔴 Urgencia Alta · Publicado ha 2 dias</div>
+          <span class="badge badge-wa">⏳ Aguardando propostas</span>
+        </div>
+        <button class="btn btn-pri btn-full" onclick="goTo('home','home')">← Voltar para Home</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="goTo('chat','chat')">+ Criar novo pedido</button>
+      </div>
+    </div>
+
+    <!-- ===== MEUS PEDIDOS ===== -->
+    <div id="page-meus-pedidos" class="page">
+      <div class="pedidos-header">
+        <h1>Meus Pedidos 📋</h1>
+        <p>Todos os seus pedidos ativos e concluidos</p>
+      </div>
+      <div style="padding:4px 16px 4px;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;">Ativos</div>
+      <div class="pedido-item" style="border-left-color:var(--wa)" onclick="goTo('sem-propostas','pedidos')">
+        <div class="info">
+          <strong>Infiltracao no teto da sala</strong>
+          <span class="badge badge-wa" style="margin-top:4px;display:inline-block;">Aguardando propostas</span>
+        </div>
+        <span class="time">2 dias</span>
+      </div>
+      <div class="pedido-item" style="border-left-color:var(--su)" onclick="goTo('propostas','pedidos')">
+        <div class="info">
+          <strong>Torneira com vazamento</strong>
+          <span class="badge badge-su" style="margin-top:4px;display:inline-block;">1 proposta recebida</span>
+        </div>
+        <span class="time">5 dias</span>
+      </div>
+      <div class="pedido-item" style="border-left-color:var(--vi)" onclick="goTo('acompanhar','pedidos')">
+        <div class="info">
+          <strong>Pintura area externa</strong>
+          <span class="badge badge-vi" style="margin-top:4px;display:inline-block;">Em andamento</span>
+        </div>
+        <span class="time">1 sem</span>
+      </div>
+      <div style="padding:12px 16px 4px;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.5px;">Concluidos</div>
+      <div class="pedido-item" style="border-left-color:var(--su);opacity:0.7">
+        <div class="info">
+          <strong>Reparo no piso — Cozinha</strong>
+          <span class="badge badge-su" style="margin-top:4px;display:inline-block;">✅ Concluido</span>
+        </div>
+        <span class="time">3 sem</span>
+      </div>
+      <div style="height:16px;"></div>
+    </div>
+
+    <!-- ===== CHAT IA ===== -->
     <div id="page-chat" class="page">
       <div class="chat-wrap">
         <div class="top-bar">
           <button class="back" onclick="goTo('home','home')">←</button>
           <div><h2>Chat com IA</h2><div class="subtitle">Criacao do escopo</div></div>
         </div>
-        <div class="chat-progress"><div class="chat-progress-bar"><div class="chat-progress-fill" style="width:90%"></div></div><div class="chat-progress-label">90% do escopo</div></div>
+        <div class="chat-progress">
+          <div class="chat-progress-bar"><div class="chat-progress-fill" style="width:90%"></div></div>
+          <div class="chat-progress-label">90% do escopo</div>
+        </div>
         <div class="chat-msgs" id="chat-msgs">
           <div class="msg ai">Ola! Vou te ajudar a criar um pedido. Qual tipo de servico voce precisa? 🤖</div>
-          <div class="msg user">Tenho uma infiltracao no teto da sala de estar. Apareceu uma mancha de umidade grande e esta pingando quando chove.</div>
-          <div class="msg ai">Entendi. Vou fazer algumas perguntas para melhor diagnostico:
-
+          <div class="msg user">Tenho uma infiltracao no teto da sala. Apareceu uma mancha de umidade grande e esta pingando quando chove.</div>
+          <div class="msg ai">Entendi. Algumas perguntas para o diagnostico:
 • O imovel e casa ou apartamento?
 • A mancha esta em qual andar?
 • Tem laje ou telha acima da area?</div>
@@ -496,16 +643,18 @@ Urgencia: 🔴 Alta</div>
           <span class="chip">Pintura</span>
           <span class="chip">Alvenaria</span>
         </div>
+        <div class="escopo-btn-bar">
+          <button class="btn btn-su btn-full btn-sm" onclick="goTo('escopo')">Ver Escopo Gerado →</button>
+        </div>
         <div class="chat-input-bar">
           <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📷</button>
           <input class="chat-input" type="text" id="chat-input" placeholder="Digite sua resposta..." onkeydown="if(event.key==='Enter')sendMsg()">
           <button class="chat-btn-icon" style="background:var(--pri);color:#fff" onclick="sendMsg()">↑</button>
-          <button class="btn btn-su btn-sm" onclick="goTo('escopo')">Ver Escopo →</button>
         </div>
       </div>
     </div>
 
-    <!-- ===== C4: ESCOPO ===== -->
+    <!-- ===== ESCOPO ===== -->
     <div id="page-escopo" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('chat','chat')">←</button>
@@ -538,69 +687,71 @@ Urgencia: 🔴 Alta</div>
       </div>
     </div>
 
-    <!-- ===== C5: PROPOSTAS ===== -->
+    <!-- ===== PROPOSTAS ===== -->
     <div id="page-propostas" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('home','home')">←</button>
-        <div><h2>Propostas Recebidas</h2><div class="subtitle">3 propostas recebidas • 8 visualizaram</div></div>
+        <div><h2>Propostas Recebidas</h2><div class="subtitle">3 propostas · Torneira com vazamento</div></div>
       </div>
       <div class="filter-scroll">
-        <span class="filter-pill active" onclick="setFilter(this)">Melhor avaliacao</span>
-        <span class="filter-pill" onclick="setFilter(this)">Menor preco</span>
-        <span class="filter-pill" onclick="setFilter(this)">Menor prazo</span>
+        <span class="filter-pill active" data-sort="avaliacao" onclick="sortPropostas(this)">Melhor avaliacao</span>
+        <span class="filter-pill" data-sort="preco" onclick="sortPropostas(this)">Menor preco</span>
+        <span class="filter-pill" data-sort="prazo" onclick="sortPropostas(this)">Menor prazo</span>
       </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
-        <div class="prop-top">
-          <div class="prop-avatar" style="background:var(--pri)">C</div>
-          <div class="prop-info">
-            <h3>Carlos Impermeabilizacoes <span class="badge badge-wa">🏅 TOP</span></h3>
-            <div class="meta">4.9 ★ · 127 servicos · ✅ Verificado</div>
+      <div id="prop-cards-container">
+        <div class="prop-card" data-rating="4.9" data-price="1850" data-prazo="4" onclick="openDetalhe('carlos')">
+          <div class="prop-top">
+            <div class="prop-avatar" style="background:var(--pri)">C</div>
+            <div class="prop-info">
+              <h3>Carlos Impermeabilizacoes <span class="badge badge-wa">🏅 TOP</span></h3>
+              <div class="meta">4.9 ★ · 127 servicos · ✅ Verificado</div>
+            </div>
+          </div>
+          <div class="prop-details">
+            <div class="prop-detail-item"><div class="val">R$1.850</div><div class="lbl">Preco</div></div>
+            <div class="prop-detail-item"><div class="val">4 dias</div><div class="lbl">Prazo</div></div>
+            <div class="prop-detail-item"><div class="val" style="color:var(--su)">5 anos</div><div class="lbl">Garantia</div></div>
+          </div>
+          <div class="prop-actions">
+            <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();openChatProvider('carlos')">Escolher</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('carlos')">Ver perfil</button>
           </div>
         </div>
-        <div class="prop-details">
-          <div class="prop-detail-item"><div class="val">R$1.850</div><div class="lbl">Preco</div></div>
-          <div class="prop-detail-item"><div class="val">4 dias</div><div class="lbl">Prazo</div></div>
-          <div class="prop-detail-item"><div class="val" style="color:var(--su)">5 anos</div><div class="lbl">Garantia</div></div>
-        </div>
-        <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
-        </div>
-      </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
-        <div class="prop-top">
-          <div class="prop-avatar" style="background:var(--vi)">F</div>
-          <div class="prop-info">
-            <h3>Fix Construcoes</h3>
-            <div class="meta">4.7 ★ · 89 servicos</div>
+        <div class="prop-card" data-rating="4.7" data-price="1620" data-prazo="5" onclick="openDetalhe('fix')">
+          <div class="prop-top">
+            <div class="prop-avatar" style="background:var(--vi)">F</div>
+            <div class="prop-info">
+              <h3>Fix Construcoes</h3>
+              <div class="meta">4.7 ★ · 89 servicos · ✅ Verificado</div>
+            </div>
+          </div>
+          <div class="prop-details">
+            <div class="prop-detail-item"><div class="val">R$1.620</div><div class="lbl">Preco</div></div>
+            <div class="prop-detail-item"><div class="val">5 dias</div><div class="lbl">Prazo</div></div>
+            <div class="prop-detail-item"><div class="val" style="color:var(--su)">2 anos</div><div class="lbl">Garantia</div></div>
+          </div>
+          <div class="prop-actions">
+            <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();openChatProvider('fix')">Escolher</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('fix')">Ver perfil</button>
           </div>
         </div>
-        <div class="prop-details">
-          <div class="prop-detail-item"><div class="val">R$1.620</div><div class="lbl">Preco</div></div>
-          <div class="prop-detail-item"><div class="val">5 dias</div><div class="lbl">Prazo</div></div>
-          <div class="prop-detail-item"><div class="val" style="color:var(--su)">2 anos</div><div class="lbl">Garantia</div></div>
-        </div>
-        <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('contract')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
-        </div>
-      </div>
-      <div class="prop-card" onclick="goTo('detalhe')">
-        <div class="prop-top">
-          <div class="prop-avatar" style="background:var(--su)">R</div>
-          <div class="prop-info">
-            <h3>Reforma Express <span class="badge badge-pri">⚡ RAPIDO</span></h3>
-            <div class="meta">4.5 ★ · 54 servicos</div>
+        <div class="prop-card" data-rating="4.5" data-price="1400" data-prazo="3" onclick="openDetalhe('reforma')">
+          <div class="prop-top">
+            <div class="prop-avatar" style="background:var(--su)">R</div>
+            <div class="prop-info">
+              <h3>Reforma Express <span class="badge badge-pri">⚡ RAPIDO</span></h3>
+              <div class="meta">4.5 ★ · 54 servicos</div>
+            </div>
           </div>
-        </div>
-        <div class="prop-details">
-          <div class="prop-detail-item"><div class="val">R$1.400</div><div class="lbl">Preco</div></div>
-          <div class="prop-detail-item"><div class="val">3 dias</div><div class="lbl">Prazo</div></div>
-          <div class="prop-detail-item"><div class="val" style="color:var(--su)">90 dias</div><div class="lbl">Garantia</div></div>
-        </div>
-        <div class="prop-actions">
-          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Escolher</button>
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();goTo('detalhe')">Ver perfil</button>
+          <div class="prop-details">
+            <div class="prop-detail-item"><div class="val">R$1.400</div><div class="lbl">Preco</div></div>
+            <div class="prop-detail-item"><div class="val">3 dias</div><div class="lbl">Prazo</div></div>
+            <div class="prop-detail-item"><div class="val" style="color:var(--su)">90 dias</div><div class="lbl">Garantia</div></div>
+          </div>
+          <div class="prop-actions">
+            <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();openChatProvider('reforma')">Escolher</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetalhe('reforma')">Ver perfil</button>
+          </div>
         </div>
       </div>
       <div style="padding:0 16px 12px">
@@ -608,57 +759,42 @@ Urgencia: 🔴 Alta</div>
       </div>
     </div>
 
-    <!-- ===== C6: DETALHE PROPOSTA ===== -->
+    <!-- ===== DETALHE PROPOSTA (dinamico) ===== -->
     <div id="page-detalhe" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('propostas','pedidos')">←</button>
-        <h2>Carlos Impermeabilizacoes</h2>
+        <h2 id="det-title">Perfil do Prestador</h2>
       </div>
       <div class="prov-profile">
         <div class="prov-header">
-          <div class="prov-avatar-lg" style="background:var(--pri)">C</div>
+          <div class="prov-avatar-lg" id="det-avatar" style="background:var(--pri)">C</div>
           <div class="prov-detail">
-            <h2>Carlos Impermeabilizacoes</h2>
-            <div class="rating">4.9 ★ · 127 servicos · Fortaleza, CE</div>
-            <p style="font-size:12px;color:var(--mu)">Especialista em impermeabilizacao ha 12 anos.</p>
-            <div class="prov-badges">
-              <span class="badge badge-su">✅ Verificado</span>
-              <span class="badge badge-wa">🏅 Top Rated</span>
-            </div>
+            <h2 id="det-name">—</h2>
+            <div class="rating" id="det-rating">—</div>
+            <p id="det-bio" style="font-size:12px;color:var(--mu)">—</p>
+            <div class="prov-badges" id="det-badges"></div>
           </div>
         </div>
         <div class="prov-proposal-card">
           <div style="font-size:13px;font-weight:700;color:var(--dk)">Proposta para seu pedido</div>
-          <div class="big-price">R$ 1.850</div>
-          <div style="font-size:12px;color:var(--mu)">Prazo: 4 dias uteis</div>
-          <div style="font-size:12px;color:var(--su);margin-top:2px">✓ Garantia: 5 anos</div>
+          <div class="big-price" id="det-price">—</div>
+          <div style="font-size:12px;color:var(--mu)" id="det-prazo">—</div>
+          <div style="font-size:12px;color:var(--su);margin-top:2px" id="det-garantia">—</div>
           <div style="font-size:12px;font-weight:700;color:var(--dk);margin-top:12px">Incluso na proposta:</div>
-          <ul class="include-list">
-            <li>Inspecao visual e teste de estanqueidade</li>
-            <li>Remocao do revestimento danificado</li>
-            <li>Aplicacao de manta asfaltica</li>
-            <li>Emboco + tinta impermeavel</li>
-            <li>Laudo tecnico final</li>
-          </ul>
+          <ul class="include-list" id="det-includes"></ul>
         </div>
         <div class="section-title">📸 Portfolio</div>
-        <div class="portfolio-row">
-          <div class="portfolio-img" style="background:var(--pri)">Obra 1</div>
-          <div class="portfolio-img" style="background:var(--pri-dk)">Obra 2</div>
-          <div class="portfolio-img" style="background:#4F7CAC">Obra 3</div>
-        </div>
+        <div class="portfolio-row" id="det-portfolio"></div>
         <div class="section-title">Avaliacoes Recentes</div>
-        <div class="review-item"><div class="reviewer">Ana Lima</div><div class="stars">★★★★★</div><div class="text">Excelente servico! Problema resolvido em 3 dias.</div></div>
-        <div class="review-item"><div class="reviewer">Pedro Souza</div><div class="stars">★★★★★</div><div class="text">Cumpriu o prazo e o resultado ficou perfeito.</div></div>
-        <div class="review-item"><div class="reviewer">Maria Santos</div><div class="stars">★★★★☆</div><div class="text">Otimo custo-beneficio. Recomendo!</div></div>
-        <div style="padding-top:12px; display:flex; flex-direction:column; gap:8px;">
-          <button class="btn btn-pri btn-full" onclick="goTo('chat-provider')">✅ Escolher esta proposta</button>
-          <button class="btn btn-ghost btn-full" onclick="goTo('chat-provider')">💬 Enviar mensagem</button>
+        <div id="det-reviews"></div>
+        <div style="padding-top:12px;display:flex;flex-direction:column;gap:8px;">
+          <button class="btn btn-pri btn-full" onclick="openChatProvider(currentProviderId)">✅ Escolher esta proposta</button>
+          <button class="btn btn-ghost btn-full" onclick="openChatProvider(currentProviderId)">💬 Enviar mensagem</button>
         </div>
       </div>
     </div>
 
-    <!-- ===== C7: COMPARAR ===== -->
+    <!-- ===== COMPARAR ===== -->
     <div id="page-compare" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('propostas','pedidos')">←</button>
@@ -667,11 +803,7 @@ Urgencia: 🔴 Alta</div>
       <div class="compare-scroll">
         <div class="compare-table">
           <div class="compare-col">
-            <div class="col-header">
-              <div class="col-avatar" style="background:var(--pri)">C</div>
-              <div class="col-name">Carlos Imp.</div>
-              <div class="col-rating">4.9 ★</div>
-            </div>
+            <div class="col-header"><div class="col-avatar" style="background:var(--pri)">C</div><div class="col-name">Carlos Imp.</div><div class="col-rating">4.9 ★</div></div>
             <div class="compare-row"><div class="row-label">Preco</div><div class="row-val">R$1.850</div></div>
             <div class="compare-row best"><div class="row-label">Prazo</div><div class="row-val">4 dias</div></div>
             <div class="compare-row best"><div class="row-label">Garantia</div><div class="row-val">5 anos ✓</div></div>
@@ -681,66 +813,63 @@ Urgencia: 🔴 Alta</div>
             <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('chat-provider')">Escolher</button></div>
           </div>
           <div class="compare-col">
-            <div class="col-header">
-              <div class="col-avatar" style="background:var(--vi)">F</div>
-              <div class="col-name">Fix Const.</div>
-              <div class="col-rating">4.7 ★</div>
-            </div>
+            <div class="col-header"><div class="col-avatar" style="background:var(--vi)">F</div><div class="col-name">Fix Const.</div><div class="col-rating">4.7 ★</div></div>
             <div class="compare-row"><div class="row-label">Preco</div><div class="row-val">R$1.620</div></div>
             <div class="compare-row"><div class="row-label">Prazo</div><div class="row-val">5 dias</div></div>
             <div class="compare-row"><div class="row-label">Garantia</div><div class="row-val">2 anos</div></div>
             <div class="compare-row"><div class="row-label">Avaliacao</div><div class="row-val">4.7 ★</div></div>
             <div class="compare-row"><div class="row-label">Servicos</div><div class="row-val">89</div></div>
             <div class="compare-row"><div class="row-label">Verificado</div><div class="row-val">✅ Sim</div></div>
-            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('detalhe')">Escolher</button></div>
+            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('chat-provider')">Escolher</button></div>
           </div>
           <div class="compare-col">
-            <div class="col-header">
-              <div class="col-avatar" style="background:var(--su)">R</div>
-              <div class="col-name">Reforma Exp.</div>
-              <div class="col-rating">4.5 ★</div>
-            </div>
+            <div class="col-header"><div class="col-avatar" style="background:var(--su)">R</div><div class="col-name">Reforma Exp.</div><div class="col-rating">4.5 ★</div></div>
             <div class="compare-row best"><div class="row-label">Preco</div><div class="row-val">R$1.400 ✓</div></div>
             <div class="compare-row best"><div class="row-label">Prazo</div><div class="row-val">3 dias ✓</div></div>
             <div class="compare-row"><div class="row-label">Garantia</div><div class="row-val">90 dias</div></div>
             <div class="compare-row"><div class="row-label">Avaliacao</div><div class="row-val">4.5 ★</div></div>
             <div class="compare-row"><div class="row-label">Servicos</div><div class="row-val">54</div></div>
             <div class="compare-row"><div class="row-label">Verificado</div><div class="row-val">❌ Nao</div></div>
-            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('detalhe')">Escolher</button></div>
+            <div class="col-footer"><button class="btn btn-pri btn-sm btn-full" onclick="goTo('chat-provider')">Escolher</button></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ===== C8: VERIFICAR CONTRATO ===== -->
+    <!-- ===== CHAT COM PRESTADOR ===== -->
     <div id="page-chat-provider" class="page">
-      <div class="top-bar">
-        <button class="back" onclick="goTo('detalhe')">←</button>
-        <h2>Revisar Contrato</h2>
-      </div>
-      <div class="contract-section">
-        <div class="system-msg" style="margin:0 0 12px">Revise os detalhes combinados com Carlos antes de prosseguir para a assinatura.</div>
-        <div class="contract-card">
-          <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:10px">Resumo do combinado</div>
-          <div class="contract-term"><span class="icon">🔧</span><div><div class="label">Servico</div><div class="value">Impermeabilizacao de Laje</div></div></div>
-          <div class="contract-term"><span class="icon">💰</span><div><div class="label">Valor</div><div class="value">R$ 1.850,00</div></div></div>
-          <div class="contract-term"><span class="icon">📅</span><div><div class="label">Inicio previsto</div><div class="value">Segunda-feira, 20/Mai/2026 — 8h</div></div></div>
-          <div class="contract-term"><span class="icon">📍</span><div><div class="label">Local</div><div class="value">Rua das Orquideas, 450, Ap. 302 — Aldeota</div></div></div>
-          <div class="contract-term"><span class="icon">🛡️</span><div><div class="label">Garantia</div><div class="value">5 anos contra infiltracao</div></div></div>
-          <div class="contract-term" style="border-bottom:none"><span class="icon">📦</span><div><div class="label">Materiais</div><div class="value">Inclusos na proposta</div></div></div>
+      <div class="chat-wrap">
+        <div class="chat-prov-header">
+          <button class="back" onclick="goTo('propostas','pedidos')">←</button>
+          <div id="chat-prov-avatar" class="avatar" style="background:var(--pri);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;">C</div>
+          <div class="info"><strong id="chat-prov-name">Carlos Impermeabilizacoes</strong><span>● Online</span></div>
         </div>
-        <div class="px section-title" style="margin-top:4px">Checklist de verificacao</div>
+        <div class="system-msg">Voce escolheu esta proposta! Confirme os detalhes com o prestador antes de assinar o contrato.</div>
+        <div class="px section-title" style="margin-top:12px;">Checklist de confirmacao</div>
         <div class="checklist">
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Data e horario de inicio conferidos</span></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco e acesso confirmados</span></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais e garantia conferidos</span></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Valor e condicoes de pagamento ok</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Data e horario de inicio confirmados?</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Endereco e acesso ao local ok?</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Materiais e garantia conferidos?</span></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><div class="checklist-check"></div><span>Valor e forma de pagamento ok?</span></div>
         </div>
-        <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('contract')">Prosseguir para assinatura do contrato →</button>
+        <div class="chat-msgs" style="flex:1">
+          <div class="msg other">Ola Ygor! Vi que voce escolheu minha proposta. Posso comecar na segunda as 8h, tudo bem?</div>
+          <div class="msg me">Ola Carlos! Segunda as 8h esta otimo. O porteiro ja vai estar avisado.</div>
+          <div class="msg other">Perfeito! Vou chegar com todo o material necessario. Alguma duvida sobre o servico?</div>
+          <div class="msg me">Nao, tudo claro. Podemos prosseguir para o contrato.</div>
+        </div>
+        <div class="chat-contract-btn">
+          <button class="btn btn-pri btn-full" onclick="goTo('contract')">Prosseguir para assinatura →</button>
+        </div>
+        <div class="chat-input-bar">
+          <button class="chat-btn-icon" style="background:var(--pri-lt);color:var(--pri)">📎</button>
+          <input class="chat-input" type="text" placeholder="Digite sua mensagem...">
+          <button class="chat-btn-icon" style="background:var(--pri);color:#fff">↑</button>
+        </div>
       </div>
     </div>
 
-    <!-- ===== C9: SMART CONTRACT ===== -->
+    <!-- ===== SMART CONTRACT ===== -->
     <div id="page-contract" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('chat-provider')">←</button>
@@ -751,13 +880,13 @@ Urgencia: 🔴 Alta</div>
           <div style="font-size:14px;font-weight:700;color:var(--dk);margin-bottom:14px">Partes envolvidas</div>
           <div class="contract-parties">
             <div class="contract-party">
-              <div class="avatar" style="background:var(--pri)">Y</div>
+              <div class="avatar" style="background:var(--pri);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 6px;">Y</div>
               <div class="name">Ygor Chagas</div>
               <div class="role">Contratante</div>
             </div>
             <div class="contract-arrow">⟷</div>
             <div class="contract-party">
-              <div class="avatar" style="background:var(--su)">C</div>
+              <div class="avatar" style="background:var(--su);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 6px;">C</div>
               <div class="name">Carlos Impermeabilizacoes</div>
               <div class="role">Prestador</div>
             </div>
@@ -779,15 +908,11 @@ Urgencia: 🔴 Alta</div>
           <div class="pen">✍️</div>
           <p>Toque para assinar digitalmente</p>
         </div>
-        <div class="checkbox-row" onclick="toggleCheckbox(this)">
-          <div class="checkbox" id="terms-check"></div>
-          <span>Li e concordo com os termos</span>
-        </div>
-        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Assinar contrato →</button>
+        <button class="btn btn-pri btn-full" style="margin-top:12px" onclick="goTo('checkout')">Ir para pagamento →</button>
       </div>
     </div>
 
-    <!-- ===== C10: CHECKOUT ===== -->
+    <!-- ===== CHECKOUT ===== -->
     <div id="page-checkout" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('contract')">←</button>
@@ -807,20 +932,39 @@ Urgencia: 🔴 Alta</div>
         </div>
         <div class="payment-method" data-method="cartao" onclick="selectPayment(this)">
           <span class="pm-icon">💳</span>
-          <div class="pm-info"><strong>Cartao de Credito</strong><span>A vista · sem juros adicionais</span></div>
+          <div class="pm-info"><strong>Cartao de Credito</strong><span>Em ate 6x · parcele com juros a partir do 4o mes</span></div>
           <div class="pm-radio"></div>
         </div>
 
-        <!-- QR Code PIX (visivel quando PIX estiver selecionado) -->
+        <!-- PIX -->
         <div class="pix-qr-block visible" id="pix-qr-block">
           <div class="pix-qr-label">Escaneie o QR Code com o app do seu banco</div>
-          <div class="pix-qr-img">
-            <span style="z-index:1;font-size:10px;color:var(--mu)">QR Code</span>
-          </div>
+          <div class="pix-qr-img"><span style="z-index:1;font-size:10px;color:var(--mu)">QR Code</span></div>
           <div class="pix-qr-label" style="margin-top:2px">Ou copie a chave PIX:</div>
-          <div class="pix-key-box">00020126580014BR.GOV.BCB.PIX0136resolv-ai-pagamento@resolvai.com.br5204000053039865802BR5915ResolvAI Escrow6008Fortaleza62070503***6304A1B2</div>
+          <div class="pix-key-box">00020126580014BR.GOV.BCB.PIX0136resolv-ai@resolvai.com.br5204000053039865802BR5915ResolvAI Escrow6008Fortaleza62070503***6304A1B2</div>
           <button class="pix-copy-btn" onclick="this.textContent='✅ Copiado!'">📋 Copiar chave PIX</button>
           <div class="pix-expiry">⏱ Expira em <strong>15 minutos</strong></div>
+        </div>
+
+        <!-- Cartao de Credito -->
+        <div class="card-fields-block" id="card-fields-block">
+          <div class="card" style="margin-bottom:12px">
+            <div class="form-field"><label>Numero do cartao</label><input placeholder="0000 0000 0000 0000" maxlength="19"></div>
+            <div class="form-field"><label>Nome impresso no cartao</label><input placeholder="Como esta no cartao"></div>
+            <div style="display:flex;gap:10px">
+              <div class="form-field" style="flex:1"><label>Validade</label><input placeholder="MM/AA" maxlength="5"></div>
+              <div class="form-field" style="flex:1"><label>CVV</label><input placeholder="000" maxlength="3"></div>
+            </div>
+          </div>
+          <div class="section-title" style="font-size:14px;">Parcelamento — R$ 1.850,00</div>
+          <div class="card">
+            <div class="installment-option selected" onclick="selectInstallment(this)"><span>1x de R$ 1.850,00</span><span class="badge badge-su">Sem juros</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)"><span>2x de R$ 925,00</span><span class="badge badge-su">Sem juros</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)"><span>3x de R$ 616,67</span><span class="badge badge-su">Sem juros</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)"><span>4x de R$ 479,58</span><span style="font-size:10px;color:var(--mu)">Total: R$ 1.918,32</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)"><span>5x de R$ 392,03</span><span style="font-size:10px;color:var(--mu)">Total: R$ 1.960,15</span></div>
+            <div class="installment-option" onclick="selectInstallment(this)"><span>6x de R$ 334,97</span><span style="font-size:10px;color:var(--mu)">Total: R$ 2.009,82</span></div>
+          </div>
         </div>
 
         <div class="escrow-notice">
@@ -831,7 +975,7 @@ Urgencia: 🔴 Alta</div>
       </div>
     </div>
 
-    <!-- ===== C11: CONFIRMACAO + AVALIACAO ===== -->
+    <!-- ===== CONFIRMACAO ===== -->
     <div id="page-confirmacao" class="page">
       <div class="confirm-screen">
         <div class="confirm-check">✓</div>
@@ -869,44 +1013,26 @@ Urgencia: 🔴 Alta</div>
             <strong>Carlos Impermeabilizacoes</strong>
             <span>● Online agora · 4.9 ★</span>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="goTo('chat-provider')">Chat</button>
+          <button class="btn btn-ghost btn-sm" onclick="goTo('chat-provider')">💬 Chat</button>
         </div>
         <div class="acomp-timeline">
           <h3>Progresso do servico</h3>
-          <div class="timeline-item">
-            <div class="tl-dot done">✓</div>
-            <div class="tl-info"><strong>Contrato assinado</strong><span>11/Mai/2026 — Ambas as partes</span></div>
-          </div>
-          <div class="timeline-item">
-            <div class="tl-dot done">✓</div>
-            <div class="tl-info"><strong>Pagamento em escrow</strong><span>11/Mai/2026 — R$ 1.850 retidos</span></div>
-          </div>
-          <div class="timeline-item">
-            <div class="tl-dot done">✓</div>
-            <div class="tl-info"><strong>Visita tecnica realizada</strong><span>20/Mai/2026 — Diagnostico confirmado</span></div>
-          </div>
-          <div class="timeline-item">
-            <div class="tl-dot active">→</div>
-            <div class="tl-info"><strong>Execucao em andamento</strong><span>Em progresso — Aplicacao da manta asfaltica</span></div>
-          </div>
-          <div class="timeline-item">
-            <div class="tl-dot pending">○</div>
-            <div class="tl-info"><strong>Conclusao e revisao</strong><span>Previsto: 24/Mai/2026</span></div>
-          </div>
-          <div class="timeline-item">
-            <div class="tl-dot pending">○</div>
-            <div class="tl-info"><strong>Confirmacao e liberacao do pagamento</strong><span>Aguardando conclusao</span></div>
-          </div>
+          <div class="timeline-item"><div class="tl-dot done">✓</div><div class="tl-info"><strong>Contrato assinado</strong><span>11/Mai/2026 — Ambas as partes</span></div></div>
+          <div class="timeline-item"><div class="tl-dot done">✓</div><div class="tl-info"><strong>Pagamento em escrow</strong><span>11/Mai/2026 — R$ 1.850 retidos</span></div></div>
+          <div class="timeline-item"><div class="tl-dot done">✓</div><div class="tl-info"><strong>Visita tecnica realizada</strong><span>20/Mai/2026 — Diagnostico confirmado</span></div></div>
+          <div class="timeline-item"><div class="tl-dot active">→</div><div class="tl-info"><strong>Execucao em andamento</strong><span>Em progresso — Aplicacao da manta asfaltica</span></div></div>
+          <div class="timeline-item"><div class="tl-dot pending">○</div><div class="tl-info"><strong>Conclusao e revisao</strong><span>Previsto: 24/Mai/2026</span></div></div>
+          <div class="timeline-item"><div class="tl-dot pending">○</div><div class="tl-info"><strong>Confirmacao e liberacao do pagamento</strong><span>Aguardando conclusao</span></div></div>
         </div>
         <div class="acomp-escrow">
           <span style="font-size:18px">🔒</span>
-          <p><strong>R$ 1.850 em escrow.</strong> O valor sera liberado para o prestador somente apos voce confirmar a conclusao do servico.</p>
+          <p><strong>R$ 1.850 em escrow.</strong> O valor sera liberado para o prestador somente apos voce confirmar a conclusao.</p>
         </div>
         <button class="btn btn-su btn-full" onclick="goTo('rating')">✅ Confirmar conclusao do servico</button>
       </div>
     </div>
 
-    <!-- ===== C11b: AVALIACAO ===== -->
+    <!-- ===== AVALIACAO ===== -->
     <div id="page-rating" class="page">
       <div class="top-bar">
         <button class="back" onclick="goTo('home','home')">←</button>
@@ -918,8 +1044,7 @@ Urgencia: 🔴 Alta</div>
           <p>Voce confirma que o servico foi realizado?</p>
         </div>
         <button class="btn btn-su btn-full" onclick="document.getElementById('rating-form').style.display='block';this.style.display='none'">✅ Sim, confirmar conclusao</button>
-        <div style="font-size:11px;color:var(--mu);text-align:center;margin:8px 0">Voce tem 7 dias para confirmar. Apos esse prazo, o sistema abrira verificacao automatica.</div>
-
+        <div style="font-size:11px;color:var(--mu);text-align:center;margin:8px 0">Voce tem 7 dias para confirmar.</div>
         <div id="rating-form" style="display:none;margin-top:16px">
           <div class="section-title">Como foi a experiencia?</div>
           <div class="stars-row">
@@ -930,12 +1055,9 @@ Urgencia: 🔴 Alta</div>
             <span class="star" onclick="setRating(5)">★</span>
           </div>
           <textarea class="rating-comment" placeholder="Deixe um comentario sobre o servico..."></textarea>
-          <div style="margin-top:12px">
-            <button class="btn btn-ghost btn-sm">📷 Adicionar fotos do resultado</button>
-          </div>
+          <div style="margin-top:12px"><button class="btn btn-ghost btn-sm">📷 Adicionar fotos do resultado</button></div>
           <button class="btn btn-pri btn-full" style="margin-top:16px" onclick="goTo('home','home')">Enviar avaliacao</button>
         </div>
-
         <div class="dispute-section">
           <h4>Algo deu errado?</h4>
           <p>Se o servico nao foi concluido conforme o combinado, voce pode abrir uma disputa.</p>
@@ -948,34 +1070,11 @@ Urgencia: 🔴 Alta</div>
     <div id="page-notificacoes" class="page">
       <div style="padding:16px 16px 8px"><div class="section-title" style="font-size:18px">Notificacoes</div><div style="font-size:12px;color:var(--mu)">3 nao lidas</div></div>
       <div class="notif-list">
-        <div class="notif-card unread">
-          <span class="notif-icon">💬</span>
-          <div class="notif-info"><h4>Nova proposta recebida</h4><p>Carlos Impermeabilizacoes enviou uma proposta.</p></div>
-          <span class="notif-time">10 min</span>
-          <div class="notif-dot"></div>
-        </div>
-        <div class="notif-card unread">
-          <span class="notif-icon">✅</span>
-          <div class="notif-info"><h4>Pedido confirmado</h4><p>Sua contratacao foi registrada com sucesso.</p></div>
-          <span class="notif-time">1h</span>
-          <div class="notif-dot"></div>
-        </div>
-        <div class="notif-card unread">
-          <span class="notif-icon">⭐</span>
-          <div class="notif-info"><h4>Avalie o servico</h4><p>Torneira com vazamento foi concluida.</p></div>
-          <span class="notif-time">2h</span>
-          <div class="notif-dot"></div>
-        </div>
-        <div class="notif-card">
-          <span class="notif-icon">📋</span>
-          <div class="notif-info"><h4>Escopo atualizado</h4><p>A IA atualizou o escopo do pedido de pintura.</p></div>
-          <span class="notif-time">Ontem</span>
-        </div>
-        <div class="notif-card">
-          <span class="notif-icon">🔔</span>
-          <div class="notif-info"><h4>Lembrete de visita</h4><p>Visita tecnica agendada para amanha as 14h.</p></div>
-          <span class="notif-time">Ontem</span>
-        </div>
+        <div class="notif-card unread"><span class="notif-icon">💬</span><div class="notif-info"><h4>Nova proposta recebida</h4><p>Carlos Impermeabilizacoes enviou uma proposta.</p></div><span class="notif-time">10 min</span><div class="notif-dot"></div></div>
+        <div class="notif-card unread"><span class="notif-icon">✅</span><div class="notif-info"><h4>Pedido confirmado</h4><p>Sua contratacao foi registrada com sucesso.</p></div><span class="notif-time">1h</span><div class="notif-dot"></div></div>
+        <div class="notif-card unread"><span class="notif-icon">⭐</span><div class="notif-info"><h4>Avalie o servico</h4><p>Torneira com vazamento foi concluida.</p></div><span class="notif-time">2h</span><div class="notif-dot"></div></div>
+        <div class="notif-card"><span class="notif-icon">📋</span><div class="notif-info"><h4>Escopo atualizado</h4><p>A IA atualizou o escopo do pedido de pintura.</p></div><span class="notif-time">Ontem</span></div>
+        <div class="notif-card"><span class="notif-icon">🔔</span><div class="notif-info"><h4>Lembrete de visita</h4><p>Visita tecnica agendada para amanha as 14h.</p></div><span class="notif-time">Ontem</span></div>
       </div>
     </div>
 
@@ -985,11 +1084,7 @@ Urgencia: 🔴 Alta</div>
       <div class="profile-section">
         <div class="profile-top">
           <div class="profile-avatar">Y</div>
-          <div class="info">
-            <h2>Ygor Chagas</h2>
-            <p>ygor@email.com</p>
-            <p>📍 Fortaleza, CE</p>
-          </div>
+          <div class="info"><h2>Ygor Chagas</h2><p>ygor@email.com</p><p>📍 Fortaleza, CE</p></div>
         </div>
         <div class="form-card">
           <h3>Informacoes Pessoais</h3>
@@ -1002,7 +1097,6 @@ Urgencia: 🔴 Alta</div>
           <h3>Preferencias de Servico</h3>
           <div class="form-field"><label>Tipos de servico</label><input value="Reparos, Hidraulica, Pintura, Impermeabilizacao"></div>
           <div class="form-field"><label>Localizacao</label><input value="Fortaleza, CE — raio de 15km"></div>
-          <div class="form-field"><label>Notificacoes</label><input value="Email + Push ativo"></div>
         </div>
         <div class="form-card">
           <h3>Seguranca</h3>
@@ -1012,20 +1106,21 @@ Urgencia: 🔴 Alta</div>
             <button class="btn btn-da btn-sm">Sair da conta</button>
           </div>
         </div>
+        <div style="height:16px;"></div>
       </div>
     </div>
 
   </div><!-- /screen-content -->
 
   <!-- BOTTOM NAV -->
-  <div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
     <button class="nav-tab active" data-section="home" onclick="goTo('home','home')">
       <span class="tab-icon">🏠</span>Home
     </button>
     <button class="nav-tab" data-section="chat" onclick="goTo('chat','chat')">
       <span class="tab-icon">💬</span>Chat IA
     </button>
-    <button class="nav-tab" data-section="pedidos" onclick="goTo('propostas','pedidos')">
+    <button class="nav-tab" data-section="pedidos" onclick="goTo('meus-pedidos','pedidos')">
       <span class="tab-icon">📋</span>Pedidos
     </button>
     <button class="nav-tab" data-section="notif" onclick="goTo('notificacoes','notif')">
@@ -1035,37 +1130,127 @@ Urgencia: 🔴 Alta</div>
       <span class="tab-icon">👤</span>Perfil
     </button>
   </div>
-</div><!-- /phone-frame -->
+</div>
 
 <script>
-let currentSection = 'home';
+let currentSection = null;
 let currentSlide = 0;
+
+const NO_NAV_PAGES = ['welcome','onboarding','login','cadastro'];
+
+const providers = {
+  carlos: {
+    initial:'C', color:'var(--pri)',
+    name:'Carlos Impermeabilizacoes',
+    rating:'4.9 ★ · 127 servicos · Fortaleza, CE',
+    bio:'Especialista em impermeabilizacao de lajes, telhados e fachadas ha 12 anos.',
+    badges:[{cls:'badge-su',txt:'✅ Verificado'},{cls:'badge-wa',txt:'🏅 Top Rated'}],
+    price:'R$ 1.850', prazo:'Prazo: 4 dias uteis', garantia:'✓ Garantia: 5 anos',
+    includes:['Inspecao visual e teste de estanqueidade','Remocao do revestimento danificado','Aplicacao de manta asfaltica','Emboco + tinta impermeavel','Laudo tecnico final'],
+    portfolioColors:['var(--pri)','var(--pri-dk)','#4F7CAC'],
+    reviews:[
+      {name:'Ana Lima',stars:'★★★★★',text:'Excelente servico! Problema resolvido em 3 dias.'},
+      {name:'Pedro Souza',stars:'★★★★★',text:'Cumpriu o prazo e o resultado ficou perfeito.'},
+      {name:'Maria Santos',stars:'★★★★☆',text:'Otimo custo-beneficio. Recomendo!'}
+    ]
+  },
+  fix: {
+    initial:'F', color:'var(--vi)',
+    name:'Fix Construcoes',
+    rating:'4.7 ★ · 89 servicos · Fortaleza, CE',
+    bio:'Empresa especializada em reformas e reparos residenciais ha 8 anos.',
+    badges:[{cls:'badge-su',txt:'✅ Verificado'}],
+    price:'R$ 1.620', prazo:'Prazo: 5 dias uteis', garantia:'✓ Garantia: 2 anos',
+    includes:['Avaliacao tecnica completa','Impermeabilizacao com produto premium','Acabamento e pintura final','Garantia documentada'],
+    portfolioColors:['var(--vi)','#9B7EC8','#C4AEED'],
+    reviews:[
+      {name:'Bruno Alves',stars:'★★★★★',text:'Muito profissionais e pontuais.'},
+      {name:'Carla Vieira',stars:'★★★★☆',text:'Bom servico, preco justo.'}
+    ]
+  },
+  reforma: {
+    initial:'R', color:'var(--su)',
+    name:'Reforma Express',
+    rating:'4.5 ★ · 54 servicos · Fortaleza, CE',
+    bio:'Servicos rapidos e eficientes para reparos urgentes.',
+    badges:[{cls:'badge-pri',txt:'⚡ RAPIDO'}],
+    price:'R$ 1.400', prazo:'Prazo: 3 dias uteis', garantia:'✓ Garantia: 90 dias',
+    includes:['Servico expresso em 3 dias','Materiais basicos inclusos','Garantia de 90 dias'],
+    portfolioColors:['var(--su)','#34D399','#6EE7B7'],
+    reviews:[
+      {name:'Luiz Mendes',stars:'★★★★★',text:'Super rapido! Resolveu em 2 dias.'},
+      {name:'Patricia Lima',stars:'★★★★☆',text:'Cumpriu o prazo prometido.'}
+    ]
+  }
+};
 
 function goTo(pageId, section) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + pageId);
   if (target) target.classList.add('active');
-
   if (section) currentSection = section;
-
   const nav = document.getElementById('bottom-nav');
-  const isOnboarding = pageId === 'onboarding';
-  nav.style.display = isOnboarding ? 'none' : 'flex';
-
+  nav.style.display = NO_NAV_PAGES.includes(pageId) ? 'none' : 'flex';
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
-  if (activeTab) activeTab.classList.add('active');
-
+  if (currentSection) {
+    const activeTab = document.querySelector(`.nav-tab[data-section="${currentSection}"]`);
+    if (activeTab) activeTab.classList.add('active');
+  }
   document.querySelector('.screen-content').scrollTop = 0;
 }
 
-function nextSlide() {
-  currentSlide++;
-  if (currentSlide > 2) { goTo('home','home'); return; }
+function goToSlide(n) {
+  currentSlide = n;
   document.querySelectorAll('.onb-slide').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.onb-dot').forEach(d => d.classList.remove('active'));
-  document.querySelector(`.onb-slide[data-slide="${currentSlide}"]`).classList.add('active');
-  document.querySelector(`.onb-dot[data-dot="${currentSlide}"]`).classList.add('active');
+  document.querySelector(`.onb-slide[data-slide="${n}"]`).classList.add('active');
+  document.querySelector(`.onb-dot[data-dot="${n}"]`).classList.add('active');
+}
+
+let currentProviderId = 'carlos';
+
+function openDetalhe(id) {
+  currentProviderId = id;
+  const p = providers[id];
+  if (!p) return;
+  document.getElementById('det-title').textContent = p.name;
+  const av = document.getElementById('det-avatar');
+  av.style.background = p.color;
+  av.textContent = p.initial;
+  document.getElementById('det-name').textContent = p.name;
+  document.getElementById('det-rating').textContent = p.rating;
+  document.getElementById('det-bio').textContent = p.bio;
+  document.getElementById('det-price').textContent = p.price;
+  document.getElementById('det-prazo').textContent = p.prazo;
+  document.getElementById('det-garantia').textContent = p.garantia;
+  document.getElementById('det-badges').innerHTML = p.badges.map(b =>
+    `<span class="badge ${b.cls}">${b.txt}</span>`
+  ).join('');
+  document.getElementById('det-includes').innerHTML = p.includes.map(i =>
+    `<li>${i}</li>`
+  ).join('');
+  document.getElementById('det-portfolio').innerHTML = p.portfolioColors.map((c,i) =>
+    `<div class="portfolio-img" style="background:${c}">Obra ${i+1}</div>`
+  ).join('');
+  document.getElementById('det-reviews').innerHTML = p.reviews.map(r =>
+    `<div class="review-item"><div class="reviewer">${r.name}</div><div class="stars">${r.stars}</div><div class="text">${r.text}</div></div>`
+  ).join('');
+  goTo('detalhe', 'pedidos');
+}
+
+function sortPropostas(el) {
+  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const sortBy = el.dataset.sort;
+  const container = document.getElementById('prop-cards-container');
+  const cards = Array.from(container.querySelectorAll('.prop-card'));
+  cards.sort((a, b) => {
+    if (sortBy === 'avaliacao') return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+    if (sortBy === 'preco') return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+    if (sortBy === 'prazo') return parseFloat(a.dataset.prazo) - parseFloat(b.dataset.prazo);
+    return 0;
+  });
+  cards.forEach(c => container.appendChild(c));
 }
 
 function sendMsg() {
@@ -1081,21 +1266,9 @@ function sendMsg() {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-function setFilter(el) {
-  el.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-}
-
 function toggleCheck(el) {
   el.classList.toggle('done');
-  const check = el.querySelector('.checklist-check');
-  check.textContent = el.classList.contains('done') ? '✓' : '';
-}
-
-function toggleCheckbox(el) {
-  const cb = el.querySelector('.checkbox');
-  cb.classList.toggle('checked');
-  cb.textContent = cb.classList.contains('checked') ? '✓' : '';
+  el.querySelector('.checklist-check').textContent = el.classList.contains('done') ? '✓' : '';
 }
 
 function signContract() {
@@ -1109,8 +1282,8 @@ function selectPayment(el) {
   document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
   el.classList.add('selected');
   const method = el.dataset.method;
-  const qrBlock = document.getElementById('pix-qr-block');
-  if (qrBlock) qrBlock.classList.toggle('visible', method === 'pix');
+  document.getElementById('pix-qr-block').classList.toggle('visible', method === 'pix');
+  document.getElementById('card-fields-block').classList.toggle('visible', method === 'cartao');
 }
 
 function selectInstallment(el) {
@@ -1118,10 +1291,17 @@ function selectInstallment(el) {
   el.classList.add('selected');
 }
 
+function openChatProvider(id) {
+  const p = providers[id];
+  if (!p) return;
+  document.getElementById('chat-prov-avatar').style.background = p.color;
+  document.getElementById('chat-prov-avatar').textContent = p.initial;
+  document.getElementById('chat-prov-name').textContent = p.name;
+  goTo('chat-provider');
+}
+
 function setRating(n) {
-  document.querySelectorAll('.star').forEach((s,i) => {
-    s.classList.toggle('filled', i < n);
-  });
+  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('filled', i < n));
 }
 </script>
 </body>

@@ -1,4 +1,7 @@
 Correções fluxo mobile 21/05/2026 Não resolvido
+--------------------------------------------------------
+Correções abaixo já foram realizadas!!
+
 #Mobile -- Cliente
 
 Na primeira tela está aparecendo a opção de criar conta mas não tem o fluxo de criação de conta
@@ -23,11 +26,6 @@ No "Chat com IA"os botões estão bem distorcidos.
 
 No menu de navegação, ao clicar em "Pedidos" está indo para a tela de Propostas Recebidas, deveria ir para uma tela onde mostra os pedidos do cliente.
 
-
-
-
---------------------------------------------------------
-Correções abaixo já foram realizadas!!
 
 #Mobile -- Prestador
 
